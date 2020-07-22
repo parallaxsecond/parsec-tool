@@ -12,3 +12,19 @@ edition = "2018"
 documentation = "https://docs.rs/crate/parsec-tool"
 
 [dependencies]
+ansi_term = "0.12"
+anyhow = "1.0.31"
+atty = "0.2"
+clap = "3.0.0-beta.1"
+parsec-client = "0.7.1"
+parsec-interface = "0.19.0"
+secrecy = { version = "0.6.0", features = ["serde"] }
+structopt = "0.3.15"
+thiserror = "1.0"
+
+[lib]
+name = "parsec_tool"
+path = "src/lib.rs"
+
+[[bin]]
+name = "parsec-tool"

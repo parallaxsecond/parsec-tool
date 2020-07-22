@@ -17,6 +17,7 @@
       "ionut-arm",
       "justincormack",
       "paulhowardarm",
+      "joechrisellis",
     ]
 
 [people]
@@ -43,3 +44,7 @@
     Email = "paul.howard@arm.com"
     GitHub = "paulhowardarm"
 
+    [people.joechrisellis]
+    Name = "Joe Ellis"
+    Email = "joe.ellis@arm.com"
+    GitHub = "joechrisellis"
