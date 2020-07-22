@@ -1,0 +1,5 @@
+# Executing our tests on Arm64 with Travis CI
+arch: arm64
+language: rust
+script:
+  - ./ci.sh
