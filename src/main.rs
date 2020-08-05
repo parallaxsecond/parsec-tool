@@ -1,38 +1,26 @@
 // Copyright 2020 Contributors to the Parsec project.
 // SPDX-License-Identifier: Apache-2.0
 
-#![deny(
-    nonstandard_style,
-    const_err,
-    dead_code,
-    improper_ctypes,
-    non_shorthand_field_patterns,
-    no_mangle_generic_items,
-    overflowing_literals,
-    path_statements,
-    patterns_in_fns_without_body,
-    private_in_public,
-    unconditional_recursion,
-    unused,
-    unused_allocation,
-    unused_comparisons,
-    unused_parens,
-    while_true,
-    missing_debug_implementations,
-    missing_docs,
-    trivial_casts,
-    trivial_numeric_casts,
-    unused_extern_crates,
-    unused_import_braces,
-    unused_qualifications,
-    unused_results,
-    missing_copy_implementations
-)]
-// This one is hard to avoid.
-#![allow(clippy::multiple_crate_versions)]
+//! parsec-tool: a tool for interfacing with the Parsec service from the command-line.
 
-//! Parsec Tool: a tool to communicate with Parsec from the command-line
+use parsec_tool::err;
+
+use anyhow::Context;
+use anyhow::Result;
+use parsec_tool::cli;
+use structopt::StructOpt;
+
+fn run() -> Result<()> {
+    let matches = cli::ParsecToolApp::from_args();
+    matches
+        .dispatch_subcommand()
+        .context("Executing subcommand failed.")?;
+    Ok(())
+}
 
 fn main() {
-    println!("Hello, Parsec!");
+    if let Err(err) = run() {
+        err!("{:?}", err);
+        std::process::exit(1);
+    }
 }
