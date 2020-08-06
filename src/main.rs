@@ -12,8 +12,9 @@ use structopt::StructOpt;
 
 fn run() -> Result<()> {
     let matches = cli::ParsecToolApp::from_args();
-    matches
-        .dispatch_subcommand()
+    let subcommand = matches.subcommand;
+    subcommand
+        .run(&matches)
         .context("Executing subcommand failed.")?;
     Ok(())
 }

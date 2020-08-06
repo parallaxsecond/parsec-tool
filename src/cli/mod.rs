@@ -4,8 +4,7 @@
 //! Base CLI implementation.
 
 use crate::common::{PROJECT_AUTHOR, PROJECT_DESC, PROJECT_NAME, PROJECT_VERSION};
-use crate::error::ParsecToolError;
-use crate::subcommands::{ParsecToolSubcommand, Subcommand};
+use crate::subcommands::Subcommand;
 use parsec_client::auth::AuthenticationData;
 use structopt::StructOpt;
 
@@ -27,19 +26,10 @@ pub struct ParsecToolApp {
 }
 
 impl ParsecToolApp {
-    /// Run the requested subcommand.
-    pub fn dispatch_subcommand(&self) -> Result<(), ParsecToolError> {
-        match &self.subcommand {
-            Subcommand::Ping(cmd) => cmd.run(self),
-            Subcommand::ListProviders(cmd) => cmd.run(self),
-            Subcommand::ListOpcodes(cmd) => cmd.run(self),
-        }
-    }
-
     /// Given an optional string, generate the corresponding AuthenticationData instance. This is
-    /// effectively a `FromStr` implementation for AuthenticationData. Passing in `None` will return
-    /// AuthenticationData::None. Passing in `Some(s)` will give you an app identity whose secret is
-    /// built from the string `s`.
+    /// effectively a `FromStr` implementation for AuthenticationData. Passing in `None` will
+    /// return AuthenticationData::None. Passing in `Some(s)` will give you an app identity whose
+    /// secret is built from the string `s`.
     pub fn authentication_data(&self) -> AuthenticationData {
         match &self.auth_secret {
             None => AuthenticationData::None,

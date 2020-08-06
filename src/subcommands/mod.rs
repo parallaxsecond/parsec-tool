@@ -41,3 +41,14 @@ pub enum Subcommand {
     /// Lists the supported opcodes for a given provider.
     ListOpcodes(ListOpcodesSubcommand),
 }
+
+impl Subcommand {
+    /// Runs the subcommand.
+    pub fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+        match &self {
+            Subcommand::Ping(cmd) => cmd.run(matches),
+            Subcommand::ListProviders(cmd) => cmd.run(matches),
+            Subcommand::ListOpcodes(cmd) => cmd.run(matches),
+        }
+    }
+}
