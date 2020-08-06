@@ -28,7 +28,7 @@
     unused_extern_crates,
     unused_import_braces,
     unused_qualifications,
-    unused_results,
+    unused_results
 )]
 // This one is hard to avoid.
 #![allow(clippy::multiple_crate_versions)]

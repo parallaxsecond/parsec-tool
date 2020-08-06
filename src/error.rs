@@ -11,6 +11,10 @@ use thiserror::Error;
 pub enum ParsecToolError {
     /// Error emanating from the parsec_client crate.
     #[error(transparent)]
+    IOError(#[from] std::io::Error),
+
+    /// Error emanating from the parsec_client crate.
+    #[error(transparent)]
     ParsecClientError(#[from] parsec_client::error::Error),
 
     /// Error emanating from the parsec_interface crate.
