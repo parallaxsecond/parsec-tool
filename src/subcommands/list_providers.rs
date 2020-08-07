@@ -58,7 +58,7 @@ impl ParsecToolSubcommand for ListProvidersSubcommand {
                         "Unspecified".to_string()
                     },
                 );
-                field!("Vendor", "{}", provider.uuid);
+                field!("UUID", "{}", provider.uuid);
                 println!();
             }
             Ok(())
