@@ -7,7 +7,7 @@ use structopt::StructOpt;
 
 /// Options for specifying a provider. Most, but not all subcommands require the user to do this,
 /// so it's useful to have these options shared.
-#[derive(Copy, Clone, Debug, StructOpt)]
+#[derive(Debug, StructOpt)]
 pub struct ProviderOpts {
     /// The provider to list opcodes for.
     #[structopt(short = "p", long = "provider", default_value = "0")]
