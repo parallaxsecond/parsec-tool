@@ -15,17 +15,17 @@ use std::convert::TryFrom;
 use structopt::StructOpt;
 
 /// Lists the supported opcodes for a given provider.
-#[derive(Copy, Clone, Debug, StructOpt)]
+#[derive(Debug, StructOpt)]
 #[structopt(name = "list_opcodes")]
 pub struct ListOpcodesSubcommand {
     #[structopt(flatten)]
     provider_opts: ProviderOpts,
 }
 
-impl TryFrom<ListOpcodesSubcommand> for NativeOperation {
+impl TryFrom<&ListOpcodesSubcommand> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(list_opcodes_subcommand: ListOpcodesSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(list_opcodes_subcommand: &ListOpcodesSubcommand) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListOpcodes(list_opcodes::Operation {
             provider_id: ProviderID::try_from(list_opcodes_subcommand.provider_opts.provider)?,
@@ -33,12 +33,12 @@ impl TryFrom<ListOpcodesSubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand for ListOpcodesSubcommand {
+impl ParsecToolSubcommand<'_> for ListOpcodesSubcommand {
     /// Lists the supported opcodes for a given provider.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(
-            NativeOperation::try_from(*self)?,
+            NativeOperation::try_from(self)?,
             // We still use the core provider beacuse listing opcodes is a core operation. Note the
             // distinction between the provider we're _using_ and the provider we're querying.
             ProviderID::Core,

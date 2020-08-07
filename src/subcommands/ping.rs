@@ -14,27 +14,27 @@ use std::convert::TryFrom;
 use structopt::StructOpt;
 
 /// Pings the Parsec service.
-#[derive(Copy, Clone, Debug, StructOpt)]
+#[derive(Debug, StructOpt)]
 #[structopt(name = "ping")]
 pub struct PingSubcommand {}
 
-impl TryFrom<PingSubcommand> for NativeOperation {
+impl TryFrom<&PingSubcommand> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(_ping_subcommand: PingSubcommand) -> Result<NativeOperation, Self::Error> {
+    fn try_from(_ping_subcommand: &PingSubcommand) -> Result<NativeOperation, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::Ping(ping::Operation {}))
     }
 }
 
-impl ParsecToolSubcommand for PingSubcommand {
+impl ParsecToolSubcommand<'_> for PingSubcommand {
     /// Pings the Parsec service and prints the wire protocol version.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Pinging Parsec service...");
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
-            NativeOperation::try_from(*self)?,
+            NativeOperation::try_from(self)?,
             ProviderID::Core,
             &matches.authentication_data(),
         )?;

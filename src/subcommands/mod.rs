@@ -24,13 +24,18 @@ use structopt::StructOpt;
 /// - They are convertible to a `NativeOperation` -- i.e. they can all be converted to messages to
 ///   the Parsec service. The conversion is fallible.
 /// - They implement `run`, which executes the subcommand.
-pub trait ParsecToolSubcommand: StructOpt + TryInto<NativeOperation> {
+pub trait ParsecToolSubcommand<'a>
+where
+    Self: 'a,
+    Self: StructOpt,
+    &'a Self: TryInto<NativeOperation>,
+{
     /// Run the subcommand.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError>;
 }
 
 /// Command-line interface to Parsec operations.
-#[derive(Copy, Clone, Debug, StructOpt)]
+#[derive(Debug, StructOpt)]
 pub enum Subcommand {
     /// Pings the Parsec service and prints the wire protocol version.
     Ping(PingSubcommand),
