@@ -7,6 +7,7 @@ pub mod common;
 pub mod list_opcodes;
 pub mod list_providers;
 pub mod ping;
+pub mod psa_export_key;
 pub mod psa_export_public_key;
 pub mod psa_generate_random;
 
@@ -14,7 +15,8 @@ use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
     list_opcodes::ListOpcodesSubcommand, list_providers::ListProvidersSubcommand,
-    ping::PingSubcommand, psa_export_public_key::PsaExportPublicKeySubcommand,
+    ping::PingSubcommand, psa_export_key::PsaExportKeySubcommand,
+    psa_export_public_key::PsaExportPublicKeySubcommand,
     psa_generate_random::PsaGenerateRandomSubcommand,
 };
 use anyhow::Result;
@@ -54,6 +56,9 @@ pub enum Subcommand {
 
     /// Lists the supported opcodes for a given provider.
     PsaExportPublicKey(PsaExportPublicKeySubcommand),
+
+    /// Lists the supported opcodes for a given provider.
+    PsaExportKey(PsaExportKeySubcommand),
 }
 
 impl Subcommand {
@@ -65,6 +70,7 @@ impl Subcommand {
             Subcommand::ListOpcodes(cmd) => cmd.run(matches),
             Subcommand::PsaGenerateRandom(cmd) => cmd.run(matches),
             Subcommand::PsaExportPublicKey(cmd) => cmd.run(matches),
+            Subcommand::PsaExportKey(cmd) => cmd.run(matches),
         }
     }
 }
