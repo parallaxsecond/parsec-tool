@@ -14,25 +14,25 @@ use std::convert::TryFrom;
 use structopt::StructOpt;
 
 /// Lists the available providers supported by the Parsec service.
-#[derive(Copy, Clone, Debug, StructOpt)]
+#[derive(Debug, StructOpt)]
 #[structopt(name = "list_providers")]
 pub struct ListProvidersSubcommand {}
 
-impl TryFrom<ListProvidersSubcommand> for NativeOperation {
+impl TryFrom<&ListProvidersSubcommand> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(_list_providers_subcommand: ListProvidersSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(_list_providers_subcommand: &ListProvidersSubcommand) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListProviders(list_providers::Operation {}))
     }
 }
 
-impl ParsecToolSubcommand for ListProvidersSubcommand {
+impl ParsecToolSubcommand<'_> for ListProvidersSubcommand {
     /// Lists the available providers supported by the Parsec service.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(
-            NativeOperation::try_from(*self)?,
+            NativeOperation::try_from(self)?,
             ProviderID::Core,
             &matches.authentication_data(),
         )?;

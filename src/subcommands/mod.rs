@@ -7,12 +7,13 @@ pub mod common;
 pub mod list_opcodes;
 pub mod list_providers;
 pub mod ping;
+pub mod psa_generate_random;
 
 use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
     list_opcodes::ListOpcodesSubcommand, list_providers::ListProvidersSubcommand,
-    ping::PingSubcommand,
+    ping::PingSubcommand, psa_generate_random::PsaGenerateRandomSubcommand,
 };
 use anyhow::Result;
 use parsec_interface::operations::NativeOperation;
@@ -24,13 +25,18 @@ use structopt::StructOpt;
 /// - They are convertible to a `NativeOperation` -- i.e. they can all be converted to messages to
 ///   the Parsec service. The conversion is fallible.
 /// - They implement `run`, which executes the subcommand.
-pub trait ParsecToolSubcommand: StructOpt + TryInto<NativeOperation> {
+pub trait ParsecToolSubcommand<'a>
+where
+    Self: 'a,
+    Self: StructOpt,
+    &'a Self: TryInto<NativeOperation>,
+{
     /// Run the subcommand.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError>;
 }
 
 /// Command-line interface to Parsec operations.
-#[derive(Copy, Clone, Debug, StructOpt)]
+#[derive(Debug, StructOpt)]
 pub enum Subcommand {
     /// Pings the Parsec service and prints the wire protocol version.
     Ping(PingSubcommand),
@@ -40,6 +46,9 @@ pub enum Subcommand {
 
     /// Lists the supported opcodes for a given provider.
     ListOpcodes(ListOpcodesSubcommand),
+
+    /// Generates a sequence of random bytes.
+    PsaGenerateRandom(PsaGenerateRandomSubcommand),
 }
 
 impl Subcommand {
@@ -49,6 +58,7 @@ impl Subcommand {
             Subcommand::Ping(cmd) => cmd.run(matches),
             Subcommand::ListProviders(cmd) => cmd.run(matches),
             Subcommand::ListOpcodes(cmd) => cmd.run(matches),
+            Subcommand::PsaGenerateRandom(cmd) => cmd.run(matches),
         }
     }
 }
