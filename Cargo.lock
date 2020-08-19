@@ -473,9 +473,9 @@ checksum = "2ac6fe3538f701e339953a3ebbe4f39941aababa8a3f6964635b24ab526daeac"
 
 [[package]]
 name = "parsec-client"
-version = "0.7.1"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c6865e56f4b709f8587ff757f30a2114bf62d027a84165728084b095ce5d0b9"
+checksum = "959ad03d4c03356957d78404050a806a8948c049101609f89193144751e04a78"
 dependencies = [
  "derivative",
  "log",
@@ -489,9 +489,9 @@ dependencies = [
 
 [[package]]
 name = "parsec-interface"
-version = "0.19.0"
+version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "477393496944c5305943c61042edc31836e1066d8720a2d54f8f5b7e96db9938"
+checksum = "61477e6e9b9371bbc577a791e6ddbff736a3d5813b3be60d9555a45f18fad045"
 dependencies = [
  "arbitrary",
  "bincode",
@@ -658,9 +658,9 @@ dependencies = [
 
 [[package]]
 name = "psa-crypto"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a644586f7205e6440e217153a4f2c1e16bb98680f19d6b3d7dc8887f652943f"
+checksum = "a01db857804332759bb536a38964f1367bb6524f5a09cbeac291bc40278e09ee"
 dependencies = [
  "log",
  "psa-crypto-sys",
@@ -670,13 +670,14 @@ dependencies = [
 
 [[package]]
 name = "psa-crypto-sys"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c914d1064a225733fa1b0b1845e6cc43b0b09cc4ceae25902d0d5721d645a418"
+checksum = "48ef3320908b79c38c94d49a4f6248e160c9ea2920aec9e86c4db816f0c3f2b5"
 dependencies = [
  "bindgen",
  "cc",
  "cmake",
+ "walkdir",
 ]
 
 [[package]]
@@ -773,6 +774,15 @@ name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
+
+[[package]]
+name = "same-file"
+version = "1.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
+dependencies = [
+ "winapi-util",
+]
 
 [[package]]
 name = "secrecy"
@@ -986,6 +996,17 @@ name = "version_check"
 version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5a972e5669d67ba988ce3dc826706fb0a8b01471c088cb0b6110b805cc36aed"
+
+[[package]]
+name = "walkdir"
+version = "2.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "777182bc735b6424e1a57516d35ed72cb8019d85c8c9bf536dccb3445c1a2f7d"
+dependencies = [
+ "same-file",
+ "winapi",
+ "winapi-util",
+]
 
 [[package]]
 name = "wasi"

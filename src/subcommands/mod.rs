@@ -7,13 +7,15 @@ pub mod common;
 pub mod list_opcodes;
 pub mod list_providers;
 pub mod ping;
+pub mod psa_export_public_key;
 pub mod psa_generate_random;
 
 use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
     list_opcodes::ListOpcodesSubcommand, list_providers::ListProvidersSubcommand,
-    ping::PingSubcommand, psa_generate_random::PsaGenerateRandomSubcommand,
+    ping::PingSubcommand, psa_export_public_key::PsaExportPublicKeySubcommand,
+    psa_generate_random::PsaGenerateRandomSubcommand,
 };
 use anyhow::Result;
 use parsec_interface::operations::NativeOperation;
@@ -49,6 +51,9 @@ pub enum Subcommand {
 
     /// Generates a sequence of random bytes.
     PsaGenerateRandom(PsaGenerateRandomSubcommand),
+
+    /// Lists the supported opcodes for a given provider.
+    PsaExportPublicKey(PsaExportPublicKeySubcommand),
 }
 
 impl Subcommand {
@@ -59,6 +64,7 @@ impl Subcommand {
             Subcommand::ListProviders(cmd) => cmd.run(matches),
             Subcommand::ListOpcodes(cmd) => cmd.run(matches),
             Subcommand::PsaGenerateRandom(cmd) => cmd.run(matches),
+            Subcommand::PsaExportPublicKey(cmd) => cmd.run(matches),
         }
     }
 }
