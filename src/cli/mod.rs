@@ -6,6 +6,7 @@
 use crate::common::{PROJECT_AUTHOR, PROJECT_DESC, PROJECT_NAME, PROJECT_VERSION};
 use crate::subcommands::Subcommand;
 use parsec_client::auth::AuthenticationData;
+use parsec_interface::secrecy::Secret;
 use structopt::StructOpt;
 
 /// Struct representing the command-line interface of parsec-tool.
@@ -33,7 +34,7 @@ impl ParsecToolApp {
     pub fn authentication_data(&self) -> AuthenticationData {
         match &self.auth_secret {
             None => AuthenticationData::None,
-            Some(s) => AuthenticationData::AppIdentity(secrecy::Secret::new(s.into())),
+            Some(s) => AuthenticationData::AppIdentity(Secret::new(s.into())),
         }
     }
 }
