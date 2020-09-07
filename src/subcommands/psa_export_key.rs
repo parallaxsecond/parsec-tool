@@ -11,7 +11,7 @@ use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
 use parsec_interface::operations::psa_export_key;
 use parsec_interface::operations::{NativeOperation, NativeResult};
-use secrecy::ExposeSecret;
+use parsec_interface::secrecy::ExposeSecret;
 use std::convert::TryFrom;
 use std::fs::File;
 use std::io::Write;
