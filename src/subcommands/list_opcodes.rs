@@ -9,8 +9,8 @@ use crate::subcommands::common::ProviderOpts;
 use crate::subcommands::ParsecToolSubcommand;
 use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
-use parsec_interface::operations::list_opcodes;
-use parsec_interface::operations::{NativeOperation, NativeResult};
+use parsec_client::core::interface::operations::list_opcodes;
+use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
