@@ -7,17 +7,19 @@ pub mod common;
 pub mod list_opcodes;
 pub mod list_providers;
 pub mod ping;
+pub mod psa_destroy_key;
 pub mod psa_export_key;
 pub mod psa_export_public_key;
+pub mod psa_generate_key;
 pub mod psa_generate_random;
 
 use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
     list_opcodes::ListOpcodesSubcommand, list_providers::ListProvidersSubcommand,
-    ping::PingSubcommand, psa_export_key::PsaExportKeySubcommand,
-    psa_export_public_key::PsaExportPublicKeySubcommand,
-    psa_generate_random::PsaGenerateRandomSubcommand,
+    ping::PingSubcommand, psa_destroy_key::PsaDestroyKeySubcommand,
+    psa_export_key::PsaExportKeySubcommand, psa_export_public_key::PsaExportPublicKeySubcommand,
+    psa_generate_key::PsaGenerateKeySubcommand, psa_generate_random::PsaGenerateRandomSubcommand,
 };
 use anyhow::Result;
 use parsec_client::core::interface::operations::NativeOperation;
@@ -59,6 +61,12 @@ pub enum Subcommand {
 
     /// Lists the supported opcodes for a given provider.
     PsaExportKey(PsaExportKeySubcommand),
+
+    /// Generates a key.
+    PsaGenerateKey(PsaGenerateKeySubcommand),
+
+    /// Destroys a key.
+    PsaDestroyKey(PsaDestroyKeySubcommand),
 }
 
 impl Subcommand {
@@ -71,6 +79,8 @@ impl Subcommand {
             Subcommand::PsaGenerateRandom(cmd) => cmd.run(matches),
             Subcommand::PsaExportPublicKey(cmd) => cmd.run(matches),
             Subcommand::PsaExportKey(cmd) => cmd.run(matches),
+            Subcommand::PsaGenerateKey(cmd) => cmd.run(matches),
+            Subcommand::PsaDestroyKey(cmd) => cmd.run(matches),
         }
     }
 }
