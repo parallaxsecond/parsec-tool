@@ -20,7 +20,7 @@ use crate::subcommands::{
     psa_generate_random::PsaGenerateRandomSubcommand,
 };
 use anyhow::Result;
-use parsec_interface::operations::NativeOperation;
+use parsec_client::core::interface::operations::NativeOperation;
 use std::convert::TryInto;
 use structopt::StructOpt;
 

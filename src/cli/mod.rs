@@ -6,7 +6,7 @@
 use crate::common::{PROJECT_AUTHOR, PROJECT_DESC, PROJECT_NAME, PROJECT_VERSION};
 use crate::subcommands::Subcommand;
 use parsec_client::auth::AuthenticationData;
-use parsec_interface::secrecy::Secret;
+use parsec_client::core::interface::secrecy::Secret;
 use structopt::StructOpt;
 
 /// Struct representing the command-line interface of parsec-tool.

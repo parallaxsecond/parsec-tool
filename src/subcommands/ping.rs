@@ -6,10 +6,10 @@
 pub use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::ParsecToolSubcommand;
+use parsec_client::core::interface::operations::ping;
+use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
-use parsec_interface::operations::ping;
-use parsec_interface::operations::{NativeOperation, NativeResult};
 use std::convert::TryFrom;
 use structopt::StructOpt;
 

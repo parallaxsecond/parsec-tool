@@ -3,7 +3,7 @@
 
 //! Error definitions/handling.
 
-use parsec_interface::operations::NativeResult;
+use parsec_client::core::interface::operations::NativeResult;
 use thiserror::Error;
 
 /// Errors in parsec-tool.
@@ -17,9 +17,9 @@ pub enum ParsecToolError {
     #[error(transparent)]
     ParsecClientError(#[from] parsec_client::error::Error),
 
-    /// Error emanating from the parsec_interface crate.
+    /// Error emanating from the parsec_client::core::interface crate.
     #[error(transparent)]
-    ParsecInterfaceError(#[from] parsec_interface::requests::ResponseStatus),
+    ParsecInterfaceError(#[from] parsec_client::core::interface::requests::ResponseStatus),
 
     /// Unexpected native result error, for when we expected a particular type of result but get
     /// something else.

@@ -449,9 +449,9 @@ checksum = "2ac6fe3538f701e339953a3ebbe4f39941aababa8a3f6964635b24ab526daeac"
 
 [[package]]
 name = "parsec-client"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "242314685f4d0514dc605e12a562c9a00fc0cc72aa0d97bf3aceaff54dc77d30"
+checksum = "778d18e6c3292ed673a9bf9f4b3f86b6bc22b32d24047d67ec6df430959b9de5"
 dependencies = [
  "derivative",
  "log",
@@ -491,7 +491,6 @@ dependencies = [
  "atty",
  "clap 3.0.0-beta.1",
  "parsec-client",
- "parsec-interface",
  "structopt",
  "thiserror",
 ]
