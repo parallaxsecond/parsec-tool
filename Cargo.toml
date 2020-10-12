@@ -16,7 +16,7 @@ ansi_term = "0.12.1"
 anyhow = "1.0.32"
 atty = "0.2.14"
 clap = "3.0.0-beta.1"
-parsec-client = "0.10.0"
+parsec-client = { git = "https://github.com/parallaxsecond/parsec-client-rust.git", rev = "dbd449a9e736f9f972e5489fb2d67949b93484dc" }
 structopt = "0.3.17"
 thiserror = "1.0.20"
 
