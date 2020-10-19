@@ -3,6 +3,10 @@
 
 //! Common facilities and options for subcommands.
 
+use crate::error::ParsecToolError;
+use parsec_client::core::interface::requests::ProviderID;
+use parsec_client::BasicClient;
+use std::convert::TryFrom;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -13,6 +17,23 @@ pub struct ProviderOpts {
     /// The provider to list opcodes for.
     #[structopt(short = "p", long = "provider", default_value = "0")]
     pub provider: u8,
+}
+
+impl ProviderOpts {
+    /// Get the ProviderID selected by the user or the service default if
+    /// no provider was selected.
+    ///
+    /// The Core Provider cannot be used and will be overriden by the
+    /// service default.
+    pub fn provider(&self) -> Result<ProviderID, ParsecToolError> {
+        if self.provider != 0 {
+            Ok(ProviderID::try_from(self.provider)?)
+        } else {
+            let mut client = BasicClient::new_naked();
+            client.set_default_provider()?;
+            Ok(client.implicit_provider())
+        }
+    }
 }
 
 /// Options for specifying an output file.

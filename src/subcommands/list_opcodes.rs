@@ -42,13 +42,13 @@ impl ParsecToolSubcommand<'_> for ListOpcodesSubcommand {
             // We still use the core provider beacuse listing opcodes is a core operation. Note the
             // distinction between the provider we're _using_ and the provider we're querying.
             ProviderID::Core,
-            &matches.authentication_data(),
+            &matches.authentication_data()?,
         )?;
 
         if let NativeResult::ListOpcodes(result) = native_result {
             info!(
                 "Available opcodes for provider {:?}:",
-                ProviderID::try_from(self.provider_opts.provider)?
+                self.provider_opts.provider()?
             );
             for provider_opcode in result.opcodes {
                 eprint_colored!(Blue, "*");
