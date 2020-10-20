@@ -4,9 +4,10 @@
 //! Base CLI implementation.
 
 use crate::common::{PROJECT_AUTHOR, PROJECT_DESC, PROJECT_NAME, PROJECT_VERSION};
+use crate::error::ParsecToolError;
 use crate::subcommands::Subcommand;
-use parsec_client::auth::AuthenticationData;
-use parsec_client::core::interface::secrecy::Secret;
+use parsec_client::auth::Authentication;
+use parsec_client::BasicClient;
 use structopt::StructOpt;
 
 /// Struct representing the command-line interface of parsec-tool.
@@ -17,9 +18,10 @@ pub struct ParsecToolApp {
     #[structopt(short = "v", multiple = true, default_value = "0")]
     pub verbosity: u8,
 
-    /// Sets the authentication secret -- will default to no authentication if unspecified.
-    #[structopt(short = "a", long = "auth-secret")]
-    pub auth_secret: Option<String>,
+    /// Sets the application name -- will default to "parsec-tool" if unspecified.
+    /// The app name is used when the service uses direct authentication.
+    #[structopt(short = "a", long = "app_name", default_value = "parsec-tool")]
+    pub app_name: String,
 
     /// The subcommand -- e.g., ping.
     #[structopt(subcommand)]
@@ -27,14 +29,12 @@ pub struct ParsecToolApp {
 }
 
 impl ParsecToolApp {
-    /// Given an optional string, generate the corresponding AuthenticationData instance. This is
-    /// effectively a `FromStr` implementation for AuthenticationData. Passing in `None` will
-    /// return AuthenticationData::None. Passing in `Some(s)` will give you an app identity whose
-    /// secret is built from the string `s`.
-    pub fn authentication_data(&self) -> AuthenticationData {
-        match &self.auth_secret {
-            None => AuthenticationData::None,
-            Some(s) => AuthenticationData::AppIdentity(Secret::new(s.into())),
-        }
+    /// Given an optional app name, generate the corresponding Authentication instance. This method
+    /// makes use of the authentication bootstrapping mechanism in `BasicClient` to obtain the
+    /// appropriate data for the tool.
+    pub fn authentication_data(&self) -> Result<Authentication, ParsecToolError> {
+        let mut client = BasicClient::new_naked();
+        client.set_default_auth(Some(self.app_name.clone()))?;
+        Ok(client.auth_data())
     }
 }

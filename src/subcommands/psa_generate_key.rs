@@ -19,7 +19,6 @@ use parsec_client::core::interface::operations::psa_key_attributes::{
     Attributes, Lifetime, Policy, Type, UsageFlags,
 };
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
-use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
@@ -75,8 +74,8 @@ impl ParsecToolSubcommand<'_> for PsaGenerateKeySubcommand {
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
-            ProviderID::try_from(self.provider_opts.provider)?,
-            &matches.authentication_data(),
+            self.provider_opts.provider()?,
+            &matches.authentication_data()?,
         )?;
 
         match native_result {

@@ -36,7 +36,7 @@ impl ParsecToolSubcommand<'_> for PingSubcommand {
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             ProviderID::Core,
-            &matches.authentication_data(),
+            &matches.authentication_data()?,
         )?;
 
         if let NativeResult::Ping(result) = native_result {

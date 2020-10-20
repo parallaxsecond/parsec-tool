@@ -34,7 +34,7 @@ impl ParsecToolSubcommand<'_> for ListProvidersSubcommand {
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             ProviderID::Core,
-            &matches.authentication_data(),
+            &matches.authentication_data()?,
         )?;
 
         if let NativeResult::ListProviders(result) = native_result {

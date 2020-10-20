@@ -9,7 +9,6 @@ use crate::subcommands::common::{OutputFileOpts, ProviderOpts};
 use crate::subcommands::ParsecToolSubcommand;
 use parsec_client::core::interface::operations::psa_export_public_key;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
-use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
 use std::convert::TryFrom;
 use std::fs::File;
@@ -53,8 +52,8 @@ impl ParsecToolSubcommand<'_> for PsaExportPublicKeySubcommand {
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
-            ProviderID::try_from(self.provider_opts.provider)?,
-            &matches.authentication_data(),
+            self.provider_opts.provider()?,
+            &matches.authentication_data()?,
         )?;
 
         let result = match native_result {
