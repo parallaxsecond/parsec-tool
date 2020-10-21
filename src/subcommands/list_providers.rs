@@ -6,6 +6,7 @@
 pub use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::ParsecToolSubcommand;
+use parsec_client::auth::Authentication;
 use parsec_client::core::interface::operations::list_providers;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::interface::requests::ProviderID;
@@ -29,12 +30,12 @@ impl TryFrom<&ListProvidersSubcommand> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for ListProvidersSubcommand {
     /// Lists the available providers supported by the Parsec service.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             ProviderID::Core,
-            &matches.authentication_data()?,
+            &Authentication::None,
         )?;
 
         if let NativeResult::ListProviders(result) = native_result {

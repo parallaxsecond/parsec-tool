@@ -6,6 +6,7 @@
 pub use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::ParsecToolSubcommand;
+use parsec_client::auth::Authentication;
 use parsec_client::core::interface::operations::ping;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::interface::requests::ProviderID;
@@ -29,14 +30,14 @@ impl TryFrom<&PingSubcommand> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for PingSubcommand {
     /// Pings the Parsec service and prints the wire protocol version.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Pinging Parsec service...");
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             ProviderID::Core,
-            &matches.authentication_data()?,
+            &Authentication::None,
         )?;
 
         if let NativeResult::Ping(result) = native_result {
