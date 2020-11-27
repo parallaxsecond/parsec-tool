@@ -5,23 +5,15 @@
 
 use parsec_tool::err;
 
-use anyhow::Context;
-use anyhow::Result;
 use parsec_tool::cli;
 use structopt::StructOpt;
 
-fn run() -> Result<()> {
-    let matches = cli::ParsecToolApp::from_args();
-    matches
-        .subcommand
-        .run(&matches)
-        .context("Executing subcommand failed.")?;
-    Ok(())
-}
+fn main() -> std::io::Result<()> {
+    env_logger::init();
 
-fn main() {
-    if let Err(err) = run() {
-        err!("{:?}", err);
-        std::process::exit(1);
-    }
+    let matches = cli::ParsecToolApp::from_args();
+    matches.subcommand.run(&matches).map_err(|e| {
+        err!("{:?}", e);
+        std::io::Error::new(std::io::ErrorKind::Other, "Executing subcommand failed.")
+    })
 }
