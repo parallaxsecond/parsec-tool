@@ -4,7 +4,9 @@
 //! Subcommand implementations. Interacts with parsec-client-rust.
 
 pub mod common;
+pub mod delete_client;
 pub mod list_authenticators;
+pub mod list_clients;
 pub mod list_keys;
 pub mod list_opcodes;
 pub mod list_providers;
@@ -18,7 +20,8 @@ pub mod psa_generate_random;
 use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
-    list_authenticators::ListAuthenticatorsSubcommand, list_keys::ListKeysSubcommand,
+    delete_client::DeleteClientSubcommand, list_authenticators::ListAuthenticatorsSubcommand,
+    list_clients::ListClientsSubcommand, list_keys::ListKeysSubcommand,
     list_opcodes::ListOpcodesSubcommand, list_providers::ListProvidersSubcommand,
     ping::PingSubcommand, psa_destroy_key::PsaDestroyKeySubcommand,
     psa_export_key::PsaExportKeySubcommand, psa_export_public_key::PsaExportPublicKeySubcommand,
@@ -61,6 +64,12 @@ pub enum Subcommand {
     /// Lists all keys belonging to the application.
     ListKeys(ListKeysSubcommand),
 
+    /// Lists all clients currently having data in the service (admin operation).
+    ListClients(ListClientsSubcommand),
+
+    /// Delete all data a client has in the service (admin operation).
+    DeleteClient(DeleteClientSubcommand),
+
     /// Generates a sequence of random bytes.
     PsaGenerateRandom(PsaGenerateRandomSubcommand),
 
@@ -85,6 +94,8 @@ impl Subcommand {
             Subcommand::ListProviders(cmd) => cmd.run(matches),
             Subcommand::ListAuthenticators(cmd) => cmd.run(matches),
             Subcommand::ListKeys(cmd) => cmd.run(matches),
+            Subcommand::ListClients(cmd) => cmd.run(matches),
+            Subcommand::DeleteClient(cmd) => cmd.run(matches),
             Subcommand::ListOpcodes(cmd) => cmd.run(matches),
             Subcommand::PsaGenerateRandom(cmd) => cmd.run(matches),
             Subcommand::PsaExportPublicKey(cmd) => cmd.run(matches),
