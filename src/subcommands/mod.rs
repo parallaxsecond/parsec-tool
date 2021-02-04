@@ -4,28 +4,33 @@
 //! Subcommand implementations. Interacts with parsec-client-rust.
 
 pub mod common;
+pub mod create_ecc_key;
+pub mod create_rsa_key;
+pub mod decrypt;
 pub mod delete_client;
+pub mod delete_key;
+pub mod encrypt;
+pub mod export_key;
+pub mod export_public_key;
+pub mod generate_random;
 pub mod list_authenticators;
 pub mod list_clients;
 pub mod list_keys;
 pub mod list_opcodes;
 pub mod list_providers;
 pub mod ping;
-pub mod psa_destroy_key;
-pub mod psa_export_key;
-pub mod psa_export_public_key;
-pub mod psa_generate_key;
-pub mod psa_generate_random;
+pub mod sign;
+pub mod verify;
 
 use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
-    delete_client::DeleteClientSubcommand, list_authenticators::ListAuthenticatorsSubcommand,
-    list_clients::ListClientsSubcommand, list_keys::ListKeysSubcommand,
-    list_opcodes::ListOpcodesSubcommand, list_providers::ListProvidersSubcommand,
-    ping::PingSubcommand, psa_destroy_key::PsaDestroyKeySubcommand,
-    psa_export_key::PsaExportKeySubcommand, psa_export_public_key::PsaExportPublicKeySubcommand,
-    psa_generate_key::PsaGenerateKeySubcommand, psa_generate_random::PsaGenerateRandomSubcommand,
+    create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey, decrypt::Decrypt,
+    delete_client::DeleteClient, delete_key::DeleteKey, encrypt::Encrypt, export_key::ExportKey,
+    export_public_key::ExportPublicKey, generate_random::GenerateRandom,
+    list_authenticators::ListAuthenticators, list_clients::ListClients, list_keys::ListKeys,
+    list_opcodes::ListOpcodes, list_providers::ListProviders, ping::Ping, sign::Sign,
+    verify::Verify,
 };
 use parsec_client::core::interface::operations::NativeOperation;
 use std::convert::TryInto;
@@ -49,41 +54,56 @@ where
 /// Command-line interface to Parsec operations.
 #[derive(Debug, StructOpt)]
 pub enum Subcommand {
-    /// Pings the Parsec service and prints the wire protocol version.
-    Ping(PingSubcommand),
+    /// Ping the Parsec service and prints the wire protocol version.
+    Ping(Ping),
 
-    /// Lists the available providers supported by the Parsec service.
-    ListProviders(ListProvidersSubcommand),
+    /// List the available providers supported by the Parsec service.
+    ListProviders(ListProviders),
 
-    /// Lists the available authenticators supported by the Parsec service.
-    ListAuthenticators(ListAuthenticatorsSubcommand),
+    /// List the available authenticators supported by the Parsec service.
+    ListAuthenticators(ListAuthenticators),
 
-    /// Lists the supported opcodes for a given provider.
-    ListOpcodes(ListOpcodesSubcommand),
+    /// List the supported opcodes for a given provider.
+    ListOpcodes(ListOpcodes),
 
-    /// Lists all keys belonging to the application.
-    ListKeys(ListKeysSubcommand),
+    /// List all keys belonging to the application.
+    ListKeys(ListKeys),
+
+    /// Generate a sequence of random bytes.
+    GenerateRandom(GenerateRandom),
+
+    /// Export the public part of the key pair
+    ExportPublicKey(ExportPublicKey),
+
+    /// Export the key
+    ExportKey(ExportKey),
+
+    /// Create a RSA key pair (2048 bits). Used by default for asymmetric encryption with RSA PKCS#1 v1.5 (SHA-256).
+    CreateRsaKey(CreateRsaKey),
+
+    /// Create a ECC key pair (curve secp256r1). Used by default for asymmetric signing with ECDSA (SHA-256).
+    CreateEccKey(CreateEccKey),
+
+    /// Encrypt data using the algorithm of the key
+    Encrypt(Encrypt),
+
+    /// Decrypt data using the algorithm of the key
+    Decrypt(Decrypt),
+
+    /// Sign data using the algorithm of the key
+    Sign(Sign),
+
+    /// Verify data using the algorithm of the key
+    Verify(Verify),
+
+    /// Delete a key.
+    DeleteKey(DeleteKey),
 
     /// Lists all clients currently having data in the service (admin operation).
-    ListClients(ListClientsSubcommand),
+    ListClients(ListClients),
 
     /// Delete all data a client has in the service (admin operation).
-    DeleteClient(DeleteClientSubcommand),
-
-    /// Generates a sequence of random bytes.
-    PsaGenerateRandom(PsaGenerateRandomSubcommand),
-
-    /// Lists the supported opcodes for a given provider.
-    PsaExportPublicKey(PsaExportPublicKeySubcommand),
-
-    /// Lists the supported opcodes for a given provider.
-    PsaExportKey(PsaExportKeySubcommand),
-
-    /// Generates a key.
-    PsaGenerateKey(PsaGenerateKeySubcommand),
-
-    /// Destroys a key.
-    PsaDestroyKey(PsaDestroyKeySubcommand),
+    DeleteClient(DeleteClient),
 }
 
 impl Subcommand {
@@ -97,11 +117,16 @@ impl Subcommand {
             Subcommand::ListClients(cmd) => cmd.run(matches),
             Subcommand::DeleteClient(cmd) => cmd.run(matches),
             Subcommand::ListOpcodes(cmd) => cmd.run(matches),
-            Subcommand::PsaGenerateRandom(cmd) => cmd.run(matches),
-            Subcommand::PsaExportPublicKey(cmd) => cmd.run(matches),
-            Subcommand::PsaExportKey(cmd) => cmd.run(matches),
-            Subcommand::PsaGenerateKey(cmd) => cmd.run(matches),
-            Subcommand::PsaDestroyKey(cmd) => cmd.run(matches),
+            Subcommand::GenerateRandom(cmd) => cmd.run(matches),
+            Subcommand::ExportPublicKey(cmd) => cmd.run(matches),
+            Subcommand::ExportKey(cmd) => cmd.run(matches),
+            Subcommand::CreateRsaKey(cmd) => cmd.run(matches),
+            Subcommand::CreateEccKey(cmd) => cmd.run(matches),
+            Subcommand::Sign(cmd) => cmd.run(matches),
+            Subcommand::Verify(cmd) => cmd.run(matches),
+            Subcommand::Encrypt(cmd) => cmd.run(matches),
+            Subcommand::Decrypt(cmd) => cmd.run(matches),
+            Subcommand::DeleteKey(cmd) => cmd.run(matches),
         }
     }
 }

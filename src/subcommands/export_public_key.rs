@@ -17,8 +17,7 @@ use structopt::StructOpt;
 
 /// Exports a public key.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "export-public-key")]
-pub struct PsaExportPublicKeySubcommand {
+pub struct ExportPublicKey {
     #[structopt(short = "k", long = "key-name")]
     key_name: String,
 
@@ -29,11 +28,11 @@ pub struct PsaExportPublicKeySubcommand {
     output_file_opts: OutputFileOpts,
 }
 
-impl TryFrom<&PsaExportPublicKeySubcommand> for NativeOperation {
+impl TryFrom<&ExportPublicKey> for NativeOperation {
     type Error = ParsecToolError;
 
     fn try_from(
-        psa_export_public_key_subcommand: &PsaExportPublicKeySubcommand,
+        psa_export_public_key_subcommand: &ExportPublicKey,
     ) -> Result<NativeOperation, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::PsaExportPublicKey(
@@ -44,7 +43,7 @@ impl TryFrom<&PsaExportPublicKeySubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for PsaExportPublicKeySubcommand {
+impl ParsecToolSubcommand<'_> for ExportPublicKey {
     /// Exports a public key.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Exporting public key...");

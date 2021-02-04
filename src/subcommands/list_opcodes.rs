@@ -17,16 +17,15 @@ use structopt::StructOpt;
 
 /// Lists the supported opcodes for a given provider.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "list_opcodes")]
-pub struct ListOpcodesSubcommand {
+pub struct ListOpcodes {
     #[structopt(flatten)]
     provider_opts: ProviderOpts,
 }
 
-impl TryFrom<&ListOpcodesSubcommand> for NativeOperation {
+impl TryFrom<&ListOpcodes> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(list_opcodes_subcommand: &ListOpcodesSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(list_opcodes_subcommand: &ListOpcodes) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListOpcodes(list_opcodes::Operation {
             provider_id: list_opcodes_subcommand.provider_opts.provider()?,
@@ -34,7 +33,7 @@ impl TryFrom<&ListOpcodesSubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for ListOpcodesSubcommand {
+impl ParsecToolSubcommand<'_> for ListOpcodes {
     /// Lists the supported opcodes for a given provider.
     fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();

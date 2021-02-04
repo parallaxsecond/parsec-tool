@@ -17,8 +17,7 @@ use structopt::StructOpt;
 
 /// Generates a sequence of random bytes.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "psa_generate_random")]
-pub struct PsaGenerateRandomSubcommand {
+pub struct GenerateRandom {
     #[structopt(short = "n", long = "nbytes")]
     nbytes: usize,
 
@@ -29,11 +28,11 @@ pub struct PsaGenerateRandomSubcommand {
     output_file_opts: OutputFileOpts,
 }
 
-impl TryFrom<&PsaGenerateRandomSubcommand> for NativeOperation {
+impl TryFrom<&GenerateRandom> for NativeOperation {
     type Error = ParsecToolError;
 
     fn try_from(
-        psa_generate_random_subcommand: &PsaGenerateRandomSubcommand,
+        psa_generate_random_subcommand: &GenerateRandom,
     ) -> Result<NativeOperation, Self::Error> {
         Ok(NativeOperation::PsaGenerateRandom(
             psa_generate_random::Operation {
@@ -43,7 +42,7 @@ impl TryFrom<&PsaGenerateRandomSubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for PsaGenerateRandomSubcommand {
+impl ParsecToolSubcommand<'_> for GenerateRandom {
     /// Generates a sequence of random bytes.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Generating {} random bytes...", self.nbytes);

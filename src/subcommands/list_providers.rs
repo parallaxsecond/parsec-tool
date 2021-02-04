@@ -16,19 +16,18 @@ use structopt::StructOpt;
 
 /// Lists the available providers supported by the Parsec service.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "list_providers")]
-pub struct ListProvidersSubcommand {}
+pub struct ListProviders {}
 
-impl TryFrom<&ListProvidersSubcommand> for NativeOperation {
+impl TryFrom<&ListProviders> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(_list_providers_subcommand: &ListProvidersSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(_list_providers_subcommand: &ListProviders) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListProviders(list_providers::Operation {}))
     }
 }
 
-impl ParsecToolSubcommand<'_> for ListProvidersSubcommand {
+impl ParsecToolSubcommand<'_> for ListProviders {
     /// Lists the available providers supported by the Parsec service.
     fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();

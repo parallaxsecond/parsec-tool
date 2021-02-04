@@ -14,19 +14,18 @@ use structopt::StructOpt;
 
 /// Lists all keys belonging to the application.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "list_keys")]
-pub struct ListKeysSubcommand {}
+pub struct ListKeys {}
 
-impl TryFrom<&ListKeysSubcommand> for NativeOperation {
+impl TryFrom<&ListKeys> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(_list_keys_subcommand: &ListKeysSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(_list_keys_subcommand: &ListKeys) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListKeys(list_keys::Operation {}))
     }
 }
 
-impl ParsecToolSubcommand<'_> for ListKeysSubcommand {
+impl ParsecToolSubcommand<'_> for ListKeys {
     /// Lists the available providers supported by the Parsec service.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();

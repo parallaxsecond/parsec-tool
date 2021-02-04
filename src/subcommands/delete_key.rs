@@ -15,8 +15,7 @@ use structopt::StructOpt;
 
 /// Destroys a key.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "destroy-key")]
-pub struct PsaDestroyKeySubcommand {
+pub struct DeleteKey {
     #[structopt(short = "k", long = "key-name")]
     key_name: String,
 
@@ -24,19 +23,17 @@ pub struct PsaDestroyKeySubcommand {
     provider_opts: ProviderOpts,
 }
 
-impl TryFrom<&PsaDestroyKeySubcommand> for NativeOperation {
+impl TryFrom<&DeleteKey> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(
-        psa_destroy_key_subcommand: &PsaDestroyKeySubcommand,
-    ) -> Result<NativeOperation, Self::Error> {
+    fn try_from(psa_destroy_key_subcommand: &DeleteKey) -> Result<NativeOperation, Self::Error> {
         Ok(NativeOperation::PsaDestroyKey(psa_destroy_key::Operation {
             key_name: psa_destroy_key_subcommand.key_name.clone(),
         }))
     }
 }
 
-impl ParsecToolSubcommand<'_> for PsaDestroyKeySubcommand {
+impl ParsecToolSubcommand<'_> for DeleteKey {
     /// Destroys a key.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Destroying a key...");

@@ -25,8 +25,7 @@ use structopt::StructOpt;
 
 /// Generates a key.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "generate-key")]
-pub struct PsaGenerateKeySubcommand {
+pub struct Decrypt {
     #[structopt(short = "k", long = "key-name")]
     key_name: String,
 
@@ -34,12 +33,10 @@ pub struct PsaGenerateKeySubcommand {
     provider_opts: ProviderOpts,
 }
 
-impl TryFrom<&PsaGenerateKeySubcommand> for NativeOperation {
+impl TryFrom<&Decrypt> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(
-        psa_generate_key_subcommand: &PsaGenerateKeySubcommand,
-    ) -> Result<NativeOperation, Self::Error> {
+    fn try_from(psa_generate_key_subcommand: &Decrypt) -> Result<NativeOperation, Self::Error> {
         //TODO: All of the parameters are currently hardcoded to make it easier to use on the
         //command line for testing/demos. In the future, we want to have more options and keep a
         //relative simplicity.
@@ -66,7 +63,7 @@ impl TryFrom<&PsaGenerateKeySubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for PsaGenerateKeySubcommand {
+impl ParsecToolSubcommand<'_> for Decrypt {
     /// Exports a key.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Generating key...");
