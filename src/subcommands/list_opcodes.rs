@@ -29,7 +29,7 @@ impl TryFrom<&ListOpcodesSubcommand> for NativeOperation {
     fn try_from(list_opcodes_subcommand: &ListOpcodesSubcommand) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListOpcodes(list_opcodes::Operation {
-            provider_id: ProviderID::try_from(list_opcodes_subcommand.provider_opts.provider)?,
+            provider_id: list_opcodes_subcommand.provider_opts.provider()?,
         }))
     }
 }
@@ -40,7 +40,7 @@ impl ParsecToolSubcommand<'_> for ListOpcodesSubcommand {
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
-            // We still use the core provider beacuse listing opcodes is a core operation. Note the
+            // We still use the core provider because listing opcodes is a core operation. Note the
             // distinction between the provider we're _using_ and the provider we're querying.
             ProviderID::Core,
             &Authentication::None,
