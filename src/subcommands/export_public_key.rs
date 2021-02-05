@@ -10,6 +10,7 @@ use crate::subcommands::ParsecToolSubcommand;
 use parsec_client::core::interface::operations::psa_export_public_key;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::operation_client::OperationClient;
+use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use std::fs::File;
 use std::io::Write;
@@ -45,14 +46,18 @@ impl TryFrom<&ExportPublicKey> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for ExportPublicKey {
     /// Exports a public key.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(
+        &self,
+        _matches: &ParsecToolApp,
+        basic_client: BasicClient,
+    ) -> Result<(), ParsecToolError> {
         info!("Exporting public key...");
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             self.provider_opts.provider()?,
-            &matches.authentication_data()?,
+            &basic_client.auth_data(),
         )?;
 
         let result = match native_result {

@@ -20,6 +20,7 @@ use parsec_client::core::interface::operations::psa_key_attributes::{
 };
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::operation_client::OperationClient;
+use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
@@ -65,14 +66,18 @@ impl TryFrom<&Sign> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for Sign {
     /// Exports a key.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(
+        &self,
+        _matches: &ParsecToolApp,
+        basic_client: BasicClient,
+    ) -> Result<(), ParsecToolError> {
         info!("Generating key...");
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             self.provider_opts.provider()?,
-            &matches.authentication_data()?,
+            &basic_client.auth_data(),
         )?;
 
         match native_result {
