@@ -14,9 +14,9 @@ use structopt::StructOpt;
 /// so it's useful to have these options shared.
 #[derive(Debug, StructOpt)]
 pub struct ProviderOpts {
-    /// The provider to list opcodes for.
-    #[structopt(short = "p", long = "provider", default_value = "0")]
-    pub provider: u8,
+    /// The provider to target for the operation.
+    #[structopt(short = "p", long = "provider")]
+    pub provider: Option<u8>,
 }
 
 impl ProviderOpts {
@@ -26,12 +26,13 @@ impl ProviderOpts {
     /// The Core Provider cannot be used and will be overriden by the
     /// service default.
     pub fn provider(&self) -> Result<ProviderID, ParsecToolError> {
-        if self.provider != 0 {
-            Ok(ProviderID::try_from(self.provider)?)
-        } else {
-            let mut client = BasicClient::new_naked();
-            client.set_default_provider()?;
-            Ok(client.implicit_provider())
+        match self.provider {
+            None => {
+                let mut client = BasicClient::new_naked();
+                client.set_default_provider()?;
+                Ok(client.implicit_provider())
+            }
+            Some(id) => Ok(ProviderID::try_from(id)?),
         }
     }
 }
