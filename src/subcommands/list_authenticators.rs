@@ -16,15 +16,12 @@ use structopt::StructOpt;
 
 /// List the authenticators supported by the Parsec service.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "list_authenticators")]
-pub struct ListAuthenticatorsSubcommand {}
+pub struct ListAuthenticators {}
 
-impl TryFrom<&ListAuthenticatorsSubcommand> for NativeOperation {
+impl TryFrom<&ListAuthenticators> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(
-        _list_authenticators_subcommand: &ListAuthenticatorsSubcommand,
-    ) -> Result<Self, Self::Error> {
+    fn try_from(_list_authenticators_subcommand: &ListAuthenticators) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListAuthenticators(
             list_authenticators::Operation {},
@@ -32,7 +29,7 @@ impl TryFrom<&ListAuthenticatorsSubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for ListAuthenticatorsSubcommand {
+impl ParsecToolSubcommand<'_> for ListAuthenticators {
     /// Lists the available authenticators supported by the Parsec service.
     fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();

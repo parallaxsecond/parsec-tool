@@ -15,19 +15,18 @@ use structopt::StructOpt;
 
 /// Lists all clients currently having data in the service (admin operation).
 #[derive(Debug, StructOpt)]
-#[structopt(name = "list_clients")]
-pub struct ListClientsSubcommand {}
+pub struct ListClients {}
 
-impl TryFrom<&ListClientsSubcommand> for NativeOperation {
+impl TryFrom<&ListClients> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(_list_clients_subcommand: &ListClientsSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(_list_clients_subcommand: &ListClients) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::ListClients(list_clients::Operation {}))
     }
 }
 
-impl ParsecToolSubcommand<'_> for ListClientsSubcommand {
+impl ParsecToolSubcommand<'_> for ListClients {
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(

@@ -15,16 +15,15 @@ use structopt::StructOpt;
 
 /// Delete all data a client has in the service (admin operation).
 #[derive(Debug, StructOpt)]
-#[structopt(name = "delete_client")]
-pub struct DeleteClientSubcommand {
+pub struct DeleteClient {
     #[structopt(short = "c", long = "client")]
     client: String,
 }
 
-impl TryFrom<&DeleteClientSubcommand> for NativeOperation {
+impl TryFrom<&DeleteClient> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(delete_client: &DeleteClientSubcommand) -> Result<Self, Self::Error> {
+    fn try_from(delete_client: &DeleteClient) -> Result<Self, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::DeleteClient(delete_client::Operation {
             client: delete_client.client.clone(),
@@ -32,7 +31,7 @@ impl TryFrom<&DeleteClientSubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for DeleteClientSubcommand {
+impl ParsecToolSubcommand<'_> for DeleteClient {
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(

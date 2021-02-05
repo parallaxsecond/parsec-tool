@@ -18,8 +18,7 @@ use structopt::StructOpt;
 
 /// Exports a key.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "export-key")]
-pub struct PsaExportKeySubcommand {
+pub struct ExportKey {
     #[structopt(short = "k", long = "key-name")]
     key_name: String,
 
@@ -30,12 +29,10 @@ pub struct PsaExportKeySubcommand {
     output_file_opts: OutputFileOpts,
 }
 
-impl TryFrom<&PsaExportKeySubcommand> for NativeOperation {
+impl TryFrom<&ExportKey> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(
-        psa_export_key_subcommand: &PsaExportKeySubcommand,
-    ) -> Result<NativeOperation, Self::Error> {
+    fn try_from(psa_export_key_subcommand: &ExportKey) -> Result<NativeOperation, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::PsaExportKey(psa_export_key::Operation {
             key_name: psa_export_key_subcommand.key_name.clone(),
@@ -43,7 +40,7 @@ impl TryFrom<&PsaExportKeySubcommand> for NativeOperation {
     }
 }
 
-impl ParsecToolSubcommand<'_> for PsaExportKeySubcommand {
+impl ParsecToolSubcommand<'_> for ExportKey {
     /// Exports a key.
     fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Exporting key...");

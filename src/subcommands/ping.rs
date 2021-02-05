@@ -16,19 +16,18 @@ use structopt::StructOpt;
 
 /// Pings the Parsec service.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "ping")]
-pub struct PingSubcommand {}
+pub struct Ping {}
 
-impl TryFrom<&PingSubcommand> for NativeOperation {
+impl TryFrom<&Ping> for NativeOperation {
     type Error = ParsecToolError;
 
-    fn try_from(_ping_subcommand: &PingSubcommand) -> Result<NativeOperation, Self::Error> {
+    fn try_from(_ping_subcommand: &Ping) -> Result<NativeOperation, Self::Error> {
         // Trivially converted to a `NativeOperation`.
         Ok(NativeOperation::Ping(ping::Operation {}))
     }
 }
 
-impl ParsecToolSubcommand<'_> for PingSubcommand {
+impl ParsecToolSubcommand<'_> for Ping {
     /// Pings the Parsec service and prints the wire protocol version.
     fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
         info!("Pinging Parsec service...");
