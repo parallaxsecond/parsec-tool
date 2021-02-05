@@ -10,6 +10,7 @@ use crate::subcommands::ParsecToolSubcommand;
 use parsec_client::core::interface::operations::psa_generate_random;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::operation_client::OperationClient;
+use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use std::fs::File;
 use std::io::Write;
@@ -44,14 +45,18 @@ impl TryFrom<&GenerateRandom> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for GenerateRandom {
     /// Generates a sequence of random bytes.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(
+        &self,
+        _matches: &ParsecToolApp,
+        basic_client: BasicClient,
+    ) -> Result<(), ParsecToolError> {
         info!("Generating {} random bytes...", self.nbytes);
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             self.provider_opts.provider()?,
-            &matches.authentication_data()?,
+            &basic_client.auth_data(),
         )?;
 
         let result = match native_result {

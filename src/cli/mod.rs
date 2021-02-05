@@ -4,10 +4,7 @@
 //! Base CLI implementation.
 
 use crate::common::{PROJECT_AUTHOR, PROJECT_DESC, PROJECT_NAME, PROJECT_VERSION};
-use crate::error::ParsecToolError;
 use crate::subcommands::Subcommand;
-use parsec_client::auth::Authentication;
-use parsec_client::BasicClient;
 use structopt::StructOpt;
 
 /// Struct representing the command-line interface of parsec-tool.
@@ -26,15 +23,4 @@ pub struct ParsecToolApp {
     /// The subcommand -- e.g., ping.
     #[structopt(subcommand)]
     pub subcommand: Subcommand,
-}
-
-impl ParsecToolApp {
-    /// Given an optional app name, generate the corresponding Authentication instance. This method
-    /// makes use of the authentication bootstrapping mechanism in `BasicClient` to obtain the
-    /// appropriate data for the tool.
-    pub fn authentication_data(&self) -> Result<Authentication, ParsecToolError> {
-        let mut client = BasicClient::new_naked();
-        client.set_default_auth(self.app_name.clone())?;
-        Ok(client.auth_data())
-    }
 }

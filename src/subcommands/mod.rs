@@ -33,6 +33,7 @@ use crate::subcommands::{
     verify::Verify,
 };
 use parsec_client::core::interface::operations::NativeOperation;
+use parsec_client::BasicClient;
 use std::convert::TryInto;
 use structopt::StructOpt;
 
@@ -48,7 +49,7 @@ where
     &'a Self: TryInto<NativeOperation>,
 {
     /// Run the subcommand.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError>;
+    fn run(&self, matches: &ParsecToolApp, client: BasicClient) -> Result<(), ParsecToolError>;
 }
 
 /// Command-line interface to Parsec operations.
@@ -108,25 +109,25 @@ pub enum Subcommand {
 
 impl Subcommand {
     /// Runs the subcommand.
-    pub fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    pub fn run(&self, matches: &ParsecToolApp, client: BasicClient) -> Result<(), ParsecToolError> {
         match &self {
-            Subcommand::Ping(cmd) => cmd.run(matches),
-            Subcommand::ListProviders(cmd) => cmd.run(matches),
-            Subcommand::ListAuthenticators(cmd) => cmd.run(matches),
-            Subcommand::ListKeys(cmd) => cmd.run(matches),
-            Subcommand::ListClients(cmd) => cmd.run(matches),
-            Subcommand::DeleteClient(cmd) => cmd.run(matches),
-            Subcommand::ListOpcodes(cmd) => cmd.run(matches),
-            Subcommand::GenerateRandom(cmd) => cmd.run(matches),
-            Subcommand::ExportPublicKey(cmd) => cmd.run(matches),
-            Subcommand::ExportKey(cmd) => cmd.run(matches),
-            Subcommand::CreateRsaKey(cmd) => cmd.run(matches),
-            Subcommand::CreateEccKey(cmd) => cmd.run(matches),
-            Subcommand::Sign(cmd) => cmd.run(matches),
-            Subcommand::Verify(cmd) => cmd.run(matches),
-            Subcommand::Encrypt(cmd) => cmd.run(matches),
-            Subcommand::Decrypt(cmd) => cmd.run(matches),
-            Subcommand::DeleteKey(cmd) => cmd.run(matches),
+            Subcommand::Ping(cmd) => cmd.run(matches, client),
+            Subcommand::ListProviders(cmd) => cmd.run(matches, client),
+            Subcommand::ListAuthenticators(cmd) => cmd.run(matches, client),
+            Subcommand::ListKeys(cmd) => cmd.run(matches, client),
+            Subcommand::ListClients(cmd) => cmd.run(matches, client),
+            Subcommand::DeleteClient(cmd) => cmd.run(matches, client),
+            Subcommand::ListOpcodes(cmd) => cmd.run(matches, client),
+            Subcommand::GenerateRandom(cmd) => cmd.run(matches, client),
+            Subcommand::ExportPublicKey(cmd) => cmd.run(matches, client),
+            Subcommand::ExportKey(cmd) => cmd.run(matches, client),
+            Subcommand::CreateRsaKey(cmd) => cmd.run(matches, client),
+            Subcommand::CreateEccKey(cmd) => cmd.run(matches, client),
+            Subcommand::Sign(cmd) => cmd.run(matches, client),
+            Subcommand::Verify(cmd) => cmd.run(matches, client),
+            Subcommand::Encrypt(cmd) => cmd.run(matches, client),
+            Subcommand::Decrypt(cmd) => cmd.run(matches, client),
+            Subcommand::DeleteKey(cmd) => cmd.run(matches, client),
         }
     }
 }

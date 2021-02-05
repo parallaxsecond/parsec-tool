@@ -11,6 +11,7 @@ use parsec_client::core::interface::operations::ping;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
+use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
@@ -29,7 +30,11 @@ impl TryFrom<&Ping> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for Ping {
     /// Pings the Parsec service and prints the wire protocol version.
-    fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(
+        &self,
+        _matches: &ParsecToolApp,
+        _basic_client: BasicClient,
+    ) -> Result<(), ParsecToolError> {
         info!("Pinging Parsec service...");
 
         let client = OperationClient::new();

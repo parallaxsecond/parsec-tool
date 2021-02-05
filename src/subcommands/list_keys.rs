@@ -9,6 +9,7 @@ use crate::subcommands::ParsecToolSubcommand;
 use parsec_client::core::interface::operations::{list_keys, NativeOperation, NativeResult};
 use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
+use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
@@ -27,12 +28,16 @@ impl TryFrom<&ListKeys> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for ListKeys {
     /// Lists the available providers supported by the Parsec service.
-    fn run(&self, matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(
+        &self,
+        _matches: &ParsecToolApp,
+        basic_client: BasicClient,
+    ) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
             ProviderID::Core,
-            &matches.authentication_data()?,
+            &basic_client.auth_data(),
         )?;
 
         if let NativeResult::ListKeys(result) = native_result {

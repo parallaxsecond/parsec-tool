@@ -11,6 +11,7 @@ use parsec_client::core::interface::operations::list_providers;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::interface::requests::ProviderID;
 use parsec_client::core::operation_client::OperationClient;
+use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
@@ -29,7 +30,11 @@ impl TryFrom<&ListProviders> for NativeOperation {
 
 impl ParsecToolSubcommand<'_> for ListProviders {
     /// Lists the available providers supported by the Parsec service.
-    fn run(&self, _matches: &ParsecToolApp) -> Result<(), ParsecToolError> {
+    fn run(
+        &self,
+        _matches: &ParsecToolApp,
+        _basic_client: BasicClient,
+    ) -> Result<(), ParsecToolError> {
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
