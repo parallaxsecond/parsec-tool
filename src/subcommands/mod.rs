@@ -79,7 +79,7 @@ pub enum Subcommand {
     /// Export the key
     ExportKey(ExportKey),
 
-    /// Create a RSA key pair (2048 bits). Used by default for asymmetric encryption with RSA PKCS#1 v1.5 (SHA-256).
+    /// Create a RSA key pair (2048 bits). Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
     CreateRsaKey(CreateRsaKey),
 
     /// Create a ECC key pair (curve secp256r1). Used by default for asymmetric signing with ECDSA (SHA-256).
