@@ -1,7 +1,7 @@
 // Copyright 2020 Contributors to the Parsec project.
 // SPDX-License-Identifier: Apache-2.0
 
-//! Destroys a key.
+//! Delete a key.
 
 pub use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
@@ -14,7 +14,7 @@ use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
-/// Destroys a key.
+/// Delete a key.
 #[derive(Debug, StructOpt)]
 pub struct DeleteKey {
     #[structopt(short = "k", long = "key-name")]
@@ -41,7 +41,7 @@ impl ParsecToolSubcommand<'_> for DeleteKey {
         _matches: &ParsecToolApp,
         basic_client: BasicClient,
     ) -> Result<(), ParsecToolError> {
-        info!("Destroying a key...");
+        info!("Deleting a key...");
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
@@ -57,7 +57,7 @@ impl ParsecToolSubcommand<'_> for DeleteKey {
             }
         };
 
-        success!("Key \"{}\" destroyed.", self.key_name);
+        success!("Key \"{}\" deleted.", self.key_name);
         Ok(())
     }
 }

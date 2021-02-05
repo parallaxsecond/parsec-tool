@@ -1,19 +1,15 @@
 // Copyright 2021 Contributors to the Parsec project.
 // SPDX-License-Identifier: Apache-2.0
 
-//! Generates a key.
+//! Create a RSA key pair
 //!
-//! Currently a lot of the parameters of the key generation are hardcoded because it is not clear
-//! on how it will be possible in the future to generate a key from the command line. This is
-//! currently useful for playing with the tool, and demonstrating the use of Parsec.
-//!
-//! This will generate a 2048 bits RSA key pair for signing.
+//! The key will be 2048 bits long. Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
 
 pub use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::common::ProviderOpts;
 use crate::subcommands::ParsecToolSubcommand;
-use parsec_client::core::interface::operations::psa_algorithm::{AsymmetricSignature, Hash};
+use parsec_client::core::interface::operations::psa_algorithm::AsymmetricEncryption;
 use parsec_client::core::interface::operations::psa_generate_key;
 use parsec_client::core::interface::operations::psa_key_attributes::{
     Attributes, Lifetime, Policy, Type, UsageFlags,
@@ -24,7 +20,7 @@ use parsec_client::BasicClient;
 use std::convert::TryFrom;
 use structopt::StructOpt;
 
-/// Generates a key.
+/// Create a RSA key pair.
 #[derive(Debug, StructOpt)]
 pub struct CreateRsaKey {
     #[structopt(short = "k", long = "key-name")]
@@ -40,9 +36,6 @@ impl TryFrom<&CreateRsaKey> for NativeOperation {
     fn try_from(
         psa_generate_key_subcommand: &CreateRsaKey,
     ) -> Result<NativeOperation, Self::Error> {
-        //TODO: All of the parameters are currently hardcoded to make it easier to use on the
-        //command line for testing/demos. In the future, we want to have more options and keep a
-        //relative simplicity.
         Ok(NativeOperation::PsaGenerateKey(
             psa_generate_key::Operation {
                 key_name: psa_generate_key_subcommand.key_name.clone(),
@@ -52,13 +45,11 @@ impl TryFrom<&CreateRsaKey> for NativeOperation {
                     bits: 2048,
                     policy: Policy {
                         usage_flags: UsageFlags {
-                            sign_hash: true,
+                            encrypt: true,
+                            decrypt: true,
                             ..Default::default()
                         },
-                        permitted_algorithms: AsymmetricSignature::RsaPkcs1v15Sign {
-                            hash_alg: Hash::Sha256.into(),
-                        }
-                        .into(),
+                        permitted_algorithms: AsymmetricEncryption::RsaPkcs1v15Crypt.into(),
                     },
                 },
             },
@@ -73,7 +64,7 @@ impl ParsecToolSubcommand<'_> for CreateRsaKey {
         _matches: &ParsecToolApp,
         basic_client: BasicClient,
     ) -> Result<(), ParsecToolError> {
-        info!("Generating key...");
+        info!("Creating RSA key...");
 
         let client = OperationClient::new();
         let native_result = client.process_operation(
@@ -89,7 +80,7 @@ impl ParsecToolSubcommand<'_> for CreateRsaKey {
             }
         };
 
-        success!("Key \"{}\" generated.", self.key_name);
+        success!("Key \"{}\" created.", self.key_name);
         Ok(())
     }
 }
