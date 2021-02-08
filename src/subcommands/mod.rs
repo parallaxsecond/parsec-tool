@@ -9,8 +9,6 @@ pub mod create_rsa_key;
 pub mod decrypt;
 pub mod delete_client;
 pub mod delete_key;
-pub mod encrypt;
-pub mod export_key;
 pub mod export_public_key;
 pub mod generate_random;
 pub mod list_authenticators;
@@ -20,17 +18,15 @@ pub mod list_opcodes;
 pub mod list_providers;
 pub mod ping;
 pub mod sign;
-pub mod verify;
 
 use crate::cli::ParsecToolApp;
 use crate::error::ParsecToolError;
 use crate::subcommands::{
     create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey, decrypt::Decrypt,
-    delete_client::DeleteClient, delete_key::DeleteKey, encrypt::Encrypt, export_key::ExportKey,
-    export_public_key::ExportPublicKey, generate_random::GenerateRandom,
-    list_authenticators::ListAuthenticators, list_clients::ListClients, list_keys::ListKeys,
-    list_opcodes::ListOpcodes, list_providers::ListProviders, ping::Ping, sign::Sign,
-    verify::Verify,
+    delete_client::DeleteClient, delete_key::DeleteKey, export_public_key::ExportPublicKey,
+    generate_random::GenerateRandom, list_authenticators::ListAuthenticators,
+    list_clients::ListClients, list_keys::ListKeys, list_opcodes::ListOpcodes,
+    list_providers::ListProviders, ping::Ping, sign::Sign,
 };
 use parsec_client::core::interface::operations::NativeOperation;
 use parsec_client::BasicClient;
@@ -76,26 +72,17 @@ pub enum Subcommand {
     /// Export the public part of the key pair
     ExportPublicKey(ExportPublicKey),
 
-    /// Export the key
-    ExportKey(ExportKey),
-
     /// Create a RSA key pair (2048 bits). Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
     CreateRsaKey(CreateRsaKey),
 
     /// Create a ECC key pair (curve secp256r1). Used by default for asymmetric signing with ECDSA (SHA-256).
     CreateEccKey(CreateEccKey),
 
-    /// Encrypt data using the algorithm of the key
-    Encrypt(Encrypt),
-
     /// Decrypt data using the algorithm of the key
     Decrypt(Decrypt),
 
     /// Sign data using the algorithm of the key
     Sign(Sign),
-
-    /// Verify data using the algorithm of the key
-    Verify(Verify),
 
     /// Delete a key.
     DeleteKey(DeleteKey),
@@ -120,12 +107,9 @@ impl Subcommand {
             Subcommand::ListOpcodes(cmd) => cmd.run(matches, client),
             Subcommand::GenerateRandom(cmd) => cmd.run(matches, client),
             Subcommand::ExportPublicKey(cmd) => cmd.run(matches, client),
-            Subcommand::ExportKey(cmd) => cmd.run(matches, client),
             Subcommand::CreateRsaKey(cmd) => cmd.run(matches, client),
             Subcommand::CreateEccKey(cmd) => cmd.run(matches, client),
             Subcommand::Sign(cmd) => cmd.run(matches, client),
-            Subcommand::Verify(cmd) => cmd.run(matches, client),
-            Subcommand::Encrypt(cmd) => cmd.run(matches, client),
             Subcommand::Decrypt(cmd) => cmd.run(matches, client),
             Subcommand::DeleteKey(cmd) => cmd.run(matches, client),
         }
