@@ -3,44 +3,20 @@
 
 //! Common facilities and options for subcommands.
 
-use crate::error::ParsecToolError;
-use parsec_client::core::interface::requests::ProviderID;
+use crate::error::{Error, Result};
+use parsec_client::core::interface::operations::psa_key_attributes::Attributes;
+use parsec_client::core::interface::requests::ResponseStatus;
 use parsec_client::BasicClient;
-use std::convert::TryFrom;
-use std::path::PathBuf;
-use structopt::StructOpt;
 
-/// Options for specifying a provider. Most, but not all subcommands require the user to do this,
-/// so it's useful to have these options shared.
-#[derive(Debug, StructOpt)]
-pub struct ProviderOpts {
-    /// The provider to target for the operation.
-    #[structopt(short = "p", long = "provider")]
-    pub provider: Option<u8>,
-}
-
-impl ProviderOpts {
-    /// Get the ProviderID selected by the user or the service default if
-    /// no provider was selected.
-    ///
-    /// The Core Provider cannot be used and will be overriden by the
-    /// service default.
-    pub fn provider(&self) -> Result<ProviderID, ParsecToolError> {
-        match self.provider {
-            None => {
-                let mut client = BasicClient::new_naked();
-                client.set_default_provider()?;
-                Ok(client.implicit_provider())
-            }
-            Some(id) => Ok(ProviderID::try_from(id)?),
-        }
-    }
-}
-
-/// Options for specifying an output file.
-#[derive(Debug, StructOpt)]
-pub struct OutputFileOpts {
-    /// The output file to write to.
-    #[structopt(parse(from_os_str), short = "o", long = "output")]
-    pub output_file_path: Option<PathBuf>,
+/// Get the key attributes.
+pub fn key_attributes(basic_client: &BasicClient, key_name: &str) -> Result<Attributes> {
+    // First let's find the key to find its algorithm
+    let keys = basic_client.list_keys()?;
+    let key_info = keys
+        .into_iter()
+        .find(|key_info| key_info.name == key_name)
+        .ok_or(Error::ParsecClientError(
+            parsec_client::error::Error::Service(ResponseStatus::PsaErrorDoesNotExist),
+        ))?;
+    Ok(key_info.attributes)
 }

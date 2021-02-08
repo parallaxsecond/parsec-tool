@@ -5,18 +5,33 @@
 
 use parsec_client::BasicClient;
 use parsec_tool::cli;
+use parsec_tool::common::PROJECT_NAME;
 use parsec_tool::err;
+use std::convert::TryInto;
 use structopt::StructOpt;
 
 fn main() -> std::io::Result<()> {
     env_logger::init();
 
     let matches = cli::ParsecToolApp::from_args();
-    let client = BasicClient::new(matches.app_name.clone()).map_err(|e| {
+
+    let mut client = BasicClient::new(Some(PROJECT_NAME.to_string())).map_err(|e| {
         err!("{:?}", e);
         std::io::Error::new(std::io::ErrorKind::Other, "Failed to spin up basic client.")
     })?;
-    matches.subcommand.run(&matches, client).map_err(|e| {
+
+    if let Some(provider) = matches.provider {
+        let provider = provider.try_into().map_err(|e| {
+            err!("{:?}", e);
+            std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Failed to find provider with ID entered.",
+            )
+        })?;
+        client.set_implicit_provider(provider);
+    }
+
+    matches.subcommand.run(client).map_err(|e| {
         err!("{:?}", e);
         std::io::Error::new(std::io::ErrorKind::Other, "Executing subcommand failed.")
     })

@@ -419,6 +419,7 @@ version = "0.1.0"
 dependencies = [
  "ansi_term 0.12.1",
  "atty",
+ "base64",
  "clap 3.0.0-beta.2",
  "env_logger",
  "parsec-client",

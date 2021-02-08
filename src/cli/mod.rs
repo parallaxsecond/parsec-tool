@@ -11,14 +11,9 @@ use structopt::StructOpt;
 #[derive(Debug, StructOpt)]
 #[structopt(name=PROJECT_NAME, about=PROJECT_DESC, author=PROJECT_AUTHOR, version=PROJECT_VERSION)]
 pub struct ParsecToolApp {
-    /// How verbose should we be?
-    #[structopt(short = "v", multiple = true)]
-    pub verbosity: Option<u8>,
-
-    /// Sets the application name -- will default to "parsec-tool" if unspecified.
-    /// The app name is used when the service uses direct authentication.
-    #[structopt(short = "a", long = "app_name")]
-    pub app_name: Option<String>,
+    /// The ID of the provider to target for the command. Will use the default provider if not specified.
+    #[structopt(short = "p", long = "provider")]
+    pub provider: Option<u8>,
 
     /// The subcommand -- e.g., ping.
     #[structopt(subcommand)]

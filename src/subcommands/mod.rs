@@ -3,24 +3,23 @@
 
 //! Subcommand implementations. Interacts with parsec-client-rust.
 
-pub mod common;
-pub mod create_ecc_key;
-pub mod create_rsa_key;
-pub mod decrypt;
-pub mod delete_client;
-pub mod delete_key;
-pub mod export_public_key;
-pub mod generate_random;
-pub mod list_authenticators;
-pub mod list_clients;
-pub mod list_keys;
-pub mod list_opcodes;
-pub mod list_providers;
-pub mod ping;
-pub mod sign;
+mod common;
+mod create_ecc_key;
+mod create_rsa_key;
+mod decrypt;
+mod delete_client;
+mod delete_key;
+mod export_public_key;
+mod generate_random;
+mod list_authenticators;
+mod list_clients;
+mod list_keys;
+mod list_opcodes;
+mod list_providers;
+mod ping;
+mod sign;
 
-use crate::cli::ParsecToolApp;
-use crate::error::ParsecToolError;
+use crate::error::Result;
 use crate::subcommands::{
     create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey, decrypt::Decrypt,
     delete_client::DeleteClient, delete_key::DeleteKey, export_public_key::ExportPublicKey,
@@ -28,25 +27,8 @@ use crate::subcommands::{
     list_clients::ListClients, list_keys::ListKeys, list_opcodes::ListOpcodes,
     list_providers::ListProviders, ping::Ping, sign::Sign,
 };
-use parsec_client::core::interface::operations::NativeOperation;
 use parsec_client::BasicClient;
-use std::convert::TryInto;
 use structopt::StructOpt;
-
-/// A trait to represent a `parsec-tool` subcommand. Subcommands have three important properties:
-/// - They have their own command-line interface, hence the dependency on `StructOpt`.
-/// - They are convertible to a `NativeOperation` -- i.e. they can all be converted to messages to
-///   the Parsec service. The conversion is fallible.
-/// - They implement `run`, which executes the subcommand.
-pub trait ParsecToolSubcommand<'a>
-where
-    Self: 'a,
-    Self: StructOpt,
-    &'a Self: TryInto<NativeOperation>,
-{
-    /// Run the subcommand.
-    fn run(&self, matches: &ParsecToolApp, client: BasicClient) -> Result<(), ParsecToolError>;
-}
 
 /// Command-line interface to Parsec operations.
 #[derive(Debug, StructOpt)]
@@ -69,7 +51,7 @@ pub enum Subcommand {
     /// Generate a sequence of random bytes.
     GenerateRandom(GenerateRandom),
 
-    /// Export the public part of the key pair
+    /// Export the public part of the key pair in PEM format
     ExportPublicKey(ExportPublicKey),
 
     /// Create a RSA key pair (2048 bits). Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
@@ -81,7 +63,7 @@ pub enum Subcommand {
     /// Decrypt data using the algorithm of the key
     Decrypt(Decrypt),
 
-    /// Sign data using the algorithm of the key
+    /// Sign data using the algorithm of the key (base64 signature)
     Sign(Sign),
 
     /// Delete a key.
@@ -96,22 +78,22 @@ pub enum Subcommand {
 
 impl Subcommand {
     /// Runs the subcommand.
-    pub fn run(&self, matches: &ParsecToolApp, client: BasicClient) -> Result<(), ParsecToolError> {
+    pub fn run(&self, client: BasicClient) -> Result<()> {
         match &self {
-            Subcommand::Ping(cmd) => cmd.run(matches, client),
-            Subcommand::ListProviders(cmd) => cmd.run(matches, client),
-            Subcommand::ListAuthenticators(cmd) => cmd.run(matches, client),
-            Subcommand::ListKeys(cmd) => cmd.run(matches, client),
-            Subcommand::ListClients(cmd) => cmd.run(matches, client),
-            Subcommand::DeleteClient(cmd) => cmd.run(matches, client),
-            Subcommand::ListOpcodes(cmd) => cmd.run(matches, client),
-            Subcommand::GenerateRandom(cmd) => cmd.run(matches, client),
-            Subcommand::ExportPublicKey(cmd) => cmd.run(matches, client),
-            Subcommand::CreateRsaKey(cmd) => cmd.run(matches, client),
-            Subcommand::CreateEccKey(cmd) => cmd.run(matches, client),
-            Subcommand::Sign(cmd) => cmd.run(matches, client),
-            Subcommand::Decrypt(cmd) => cmd.run(matches, client),
-            Subcommand::DeleteKey(cmd) => cmd.run(matches, client),
+            Subcommand::Ping(cmd) => cmd.run(client),
+            Subcommand::ListProviders(cmd) => cmd.run(client),
+            Subcommand::ListAuthenticators(cmd) => cmd.run(client),
+            Subcommand::ListKeys(cmd) => cmd.run(client),
+            Subcommand::ListClients(cmd) => cmd.run(client),
+            Subcommand::DeleteClient(cmd) => cmd.run(client),
+            Subcommand::ListOpcodes(cmd) => cmd.run(client),
+            Subcommand::GenerateRandom(cmd) => cmd.run(client),
+            Subcommand::ExportPublicKey(cmd) => cmd.run(client),
+            Subcommand::CreateRsaKey(cmd) => cmd.run(client),
+            Subcommand::CreateEccKey(cmd) => cmd.run(client),
+            Subcommand::Sign(cmd) => cmd.run(client),
+            Subcommand::Decrypt(cmd) => cmd.run(client),
+            Subcommand::DeleteKey(cmd) => cmd.run(client),
         }
     }
 }
