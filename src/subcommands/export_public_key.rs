@@ -8,6 +8,7 @@ use crate::error::ParsecToolError;
 use crate::subcommands::common::{OutputFileOpts, ProviderOpts};
 use crate::subcommands::ParsecToolSubcommand;
 use parsec_client::core::interface::operations::psa_export_public_key;
+use parsec_client::core::interface::operations::psa_key_attributes::Type;
 use parsec_client::core::interface::operations::{NativeOperation, NativeResult};
 use parsec_client::core::operation_client::OperationClient;
 use parsec_client::BasicClient;
@@ -16,7 +17,7 @@ use std::fs::File;
 use std::io::Write;
 use structopt::StructOpt;
 
-/// Exports a public key.
+/// Exports a PEM-encoded public key.
 #[derive(Debug, StructOpt)]
 pub struct ExportPublicKey {
     #[structopt(short = "k", long = "key-name")]
@@ -51,8 +52,6 @@ impl ParsecToolSubcommand<'_> for ExportPublicKey {
         _matches: &ParsecToolApp,
         basic_client: BasicClient,
     ) -> Result<(), ParsecToolError> {
-        info!("Exporting public key...");
-
         let client = OperationClient::new();
         let native_result = client.process_operation(
             NativeOperation::try_from(self)?,
@@ -67,16 +66,36 @@ impl ParsecToolSubcommand<'_> for ExportPublicKey {
             }
         };
 
+        let key_list = basic_client.list_keys()?;
+        let mut tag = String::from("PUBLIC KEY");
+        for key in key_list {
+            if key.name != self.key_name {
+                continue;
+            }
+
+            if key.attributes.key_type == Type::RsaKeyPair
+                || key.attributes.key_type == Type::RsaPublicKey
+            {
+                tag = String::from("RSA PUBLIC KEY");
+            }
+        }
+
+        let pem_encoded = pem::encode_config(
+            &pem::Pem {
+                tag,
+                contents: result.data.to_vec(),
+            },
+            pem::EncodeConfig {
+                line_ending: pem::LineEnding::LF,
+            },
+        );
+
         if let Some(output_file_path) = &self.output_file_opts.output_file_path {
             success!("Exported the key to {:?}.", output_file_path);
             let mut file = File::create(output_file_path)?;
-            file.write_all(&result.data)?;
+            file.write_all(&Vec::from(pem_encoded))?;
         } else {
-            success!("Key:");
-            for byte in &*result.data {
-                print!("{:02X} ", byte);
-            }
-            println!();
+            print!("{}", pem_encoded);
         }
         Ok(())
     }

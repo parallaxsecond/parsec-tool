@@ -19,6 +19,7 @@ parsec-client = { git = "https://github.com/parallaxsecond/parsec-client-rust", 
 structopt = "0.3.17"
 thiserror = "1.0.20"
 env_logger = "0.8.2"
+pem = "0.8.2"
 
 [lib]
 name = "parsec_tool"
