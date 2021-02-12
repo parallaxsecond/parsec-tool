@@ -3,7 +3,6 @@
 
 //! Subcommand implementations. Interacts with parsec-client-rust.
 
-mod common;
 mod create_ecc_key;
 mod create_rsa_key;
 mod decrypt;

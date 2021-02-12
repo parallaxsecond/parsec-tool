@@ -4,7 +4,6 @@
 //! Exports a public key.
 
 use crate::error::Result;
-use crate::subcommands::common::key_attributes;
 use parsec_client::core::interface::operations::psa_key_attributes::Type;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
@@ -21,7 +20,7 @@ impl ExportPublicKey {
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         let result = basic_client.psa_export_public_key(self.key_name.clone())?;
 
-        let tag = match key_attributes(&basic_client, &self.key_name)?.key_type {
+        let tag = match basic_client.key_attributes(&self.key_name)?.key_type {
             Type::RsaKeyPair | Type::RsaPublicKey => String::from("RSA PUBLIC KEY"),
             _ => String::from("PUBLIC KEY"),
         };

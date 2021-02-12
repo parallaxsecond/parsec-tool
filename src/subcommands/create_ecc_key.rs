@@ -34,6 +34,8 @@ impl CreateEccKey {
                 usage_flags: UsageFlags {
                     sign_hash: true,
                     sign_message: true,
+                    verify_hash: true,
+                    verify_message: true,
                     ..Default::default()
                 },
                 permitted_algorithms: AsymmetricSignature::Ecdsa {

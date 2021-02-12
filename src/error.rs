@@ -20,6 +20,18 @@ pub enum Error {
     #[error(transparent)]
     ParsecInterfaceError(#[from] parsec_client::core::interface::requests::ResponseStatus),
 
+    /// Error emanating from the parsec-tool.
+    #[error(transparent)]
+    ParsecToolError(#[from] ToolErrorKind),
+
+    /// Error emanating from the base64 crate.
+    #[error(transparent)]
+    Base64Decode(#[from] base64::DecodeError),
+}
+
+/// Errors originating in the parsec-tool.
+#[derive(Error, Debug)]
+pub enum ToolErrorKind {
     /// Operation not supported by the parsec-tool
     #[error("Operation not supported by the parsec-tool")]
     NotSupported,
@@ -31,10 +43,6 @@ pub enum Error {
     /// Expected input data was not given
     #[error("A command expected input data that was not given")]
     NoInput,
-
-    /// Error emanating from the base64 crate.
-    #[error(transparent)]
-    Base64Decode(#[from] base64::DecodeError),
 }
 
 /// A Result type with the Err variant set as a ParsecToolError
