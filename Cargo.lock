@@ -73,6 +73,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
+name = "block-buffer"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4152116fd6e9dadb291ae18fc1ec3575ed6d84c29642d97890f4b4a3417297e4"
+dependencies = [
+ "generic-array",
+]
+
+[[package]]
 name = "byteorder"
 version = "1.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -153,6 +162,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "cpuid-bool"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8aebca1129a03dc6dc2b127edd729435bbc4a37e1d5f4d7513165089ceb02634"
+
+[[package]]
 name = "derivative"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -161,6 +176,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "digest"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3dd60d1080a57a05ab032377049e0591415d2b31afd7028356dbf3cc6dcb066"
+dependencies = [
+ "generic-array",
 ]
 
 [[package]]
@@ -187,6 +211,16 @@ name = "fixedbitset"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37ab347416e802de484e4d03c7316c48f1ecb56574dfd4a46a80f173ce1de04d"
+
+[[package]]
+name = "generic-array"
+version = "0.14.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "501466ecc8a30d1d3b7fc9229b122b2ce8ed6e9d9223f1138d4babb253e51817"
+dependencies = [
+ "typenum",
+ "version_check",
+]
 
 [[package]]
 name = "getrandom"
@@ -369,10 +403,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "oid"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "293d5f18898078ea69ba1c84f3688d1f2b6744df8211da36197153157cee7055"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13bd41f508810a131401606d54ac32a467c97172d74ba7662562ebba5ad07fa0"
+
+[[package]]
+name = "opaque-debug"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "os_str_bytes"
@@ -383,7 +432,7 @@ checksum = "afb2e1c3ee07430c2cf76151675e583e0f19985fa6efae47d6848a3e2c824f85"
 [[package]]
 name = "parsec-client"
 version = "0.12.0"
-source = "git+https://github.com/parallaxsecond/parsec-client-rust?rev=06c52e2348ac55f46d240d2ab61a499effccffbd#06c52e2348ac55f46d240d2ab61a499effccffbd"
+source = "git+https://github.com/parallaxsecond/parsec-client-rust?rev=a915d9aacb9eed868b1afb4f206086561aa58e1f#a915d9aacb9eed868b1afb4f206086561aa58e1f"
 dependencies = [
  "derivative",
  "log",
@@ -395,8 +444,8 @@ dependencies = [
 
 [[package]]
 name = "parsec-interface"
-version = "0.22.0"
-source = "git+https://github.com/parallaxsecond/parsec-interface-rs?rev=c8a59544fac04df347f51d19323f4a0b5bb9580d#c8a59544fac04df347f51d19323f4a0b5bb9580d"
+version = "0.23.0"
+source = "git+https://github.com/parallaxsecond/parsec-interface-rs?rev=0a20255e5cb73d3c4499a73d147d7c4a2b45ac5f#0a20255e5cb73d3c4499a73d147d7c4a2b45ac5f"
 dependencies = [
  "bincode",
  "derivative",
@@ -419,10 +468,15 @@ version = "0.1.0"
 dependencies = [
  "ansi_term 0.12.1",
  "atty",
+ "base64",
  "clap 3.0.0-beta.2",
  "env_logger",
  "parsec-client",
  "pem",
+ "picky-asn1",
+ "picky-asn1-der",
+ "serde",
+ "sha2",
  "structopt",
  "thiserror",
 ]
@@ -446,6 +500,28 @@ checksum = "467d164a6de56270bd7c4d070df81d07beace25012d5103ced4e9ff08d6afdb7"
 dependencies = [
  "fixedbitset",
  "indexmap",
+]
+
+[[package]]
+name = "picky-asn1"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "90e3f783e3e499bdb8e66d2a48c9da561fc369f96853eb83fb31e28931e4a492"
+dependencies = [
+ "oid",
+ "serde",
+ "serde_bytes",
+]
+
+[[package]]
+name = "picky-asn1-der"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "233e556fc14cd42f38290ecd53f23a9fe047df2837d3d7494d27872b40a64bca"
+dependencies = [
+ "picky-asn1",
+ "serde",
+ "serde_bytes",
 ]
 
 [[package]]
@@ -540,9 +616,8 @@ dependencies = [
 
 [[package]]
 name = "psa-crypto"
-version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91c3a5990accd6b60d1be439217bace44981487173734598ff0f6744921b9b1b"
+version = "0.7.0"
+source = "git+https://github.com/parallaxsecond/rust-psa-crypto?rev=c3a73aa53b4a1c40cd3c33ec56f3a8332f3cde0a#c3a73aa53b4a1c40cd3c33ec56f3a8332f3cde0a"
 dependencies = [
  "log",
  "psa-crypto-sys",
@@ -552,9 +627,8 @@ dependencies = [
 
 [[package]]
 name = "psa-crypto-sys"
-version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a060d4d38d17bd0d4238660348653bad2365dec22eafac3c505ff319714c6b67"
+version = "0.7.0"
+source = "git+https://github.com/parallaxsecond/rust-psa-crypto?rev=c3a73aa53b4a1c40cd3c33ec56f3a8332f3cde0a#c3a73aa53b4a1c40cd3c33ec56f3a8332f3cde0a"
 dependencies = [
  "cc",
  "cmake",
@@ -675,6 +749,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_bytes"
+version = "0.11.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16ae07dd2f88a366f15bd0632ba725227018c69a1c8550a927324f8eb8368bb9"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "serde_derive"
 version = "1.0.123"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -683,6 +766,19 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "sha2"
+version = "0.9.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fa827a14b29ab7f44778d14a88d3cb76e949c45083f7dbfa507d0cb699dc12de"
+dependencies = [
+ "block-buffer",
+ "cfg-if",
+ "cpuid-bool",
+ "digest",
+ "opaque-debug",
 ]
 
 [[package]]
@@ -813,6 +909,12 @@ checksum = "d8208a331e1cb318dd5bd76951d2b8fc48ca38a69f5f4e4af1b6a9f8c6236915"
 dependencies = [
  "once_cell",
 ]
+
+[[package]]
+name = "typenum"
+version = "1.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "373c8a200f9e67a0c95e62a4f52fbf80c23b4381c05a17845531982fa99e6b33"
 
 [[package]]
 name = "unicode-segmentation"
