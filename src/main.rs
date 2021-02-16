@@ -31,6 +31,15 @@ fn main() -> std::io::Result<()> {
         client.set_implicit_provider(provider);
     }
 
+    if let Some(timeout) = matches.timeout {
+        let timeout = if timeout == 0 {
+            None
+        } else {
+            Some(std::time::Duration::from_secs(timeout.into()))
+        };
+        client.set_timeout(timeout);
+    }
+
     matches.subcommand.run(client).map_err(|e| {
         err!("{:?}", e);
         std::io::Error::new(std::io::ErrorKind::Other, "Executing subcommand failed.")

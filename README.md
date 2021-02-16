@@ -7,6 +7,15 @@
 This repository contains a tool to communicate with the [Parsec
 service](https://github.com/parallaxsecond/parsec) on the command-line.
 
+For demos and to test the Parsec service, you might want to change the Parsec endpoint location.
+For that, set the `PARSEC_SERVICE_ENDPOINT` environment variable to correction endpoint.
+
+To set a Unix Domain Socket Listener endpoint at `/tmp/parsec.sock`:
+
+```
+$ export PARSEC_SERVICE_ENDPOINT=unix:/tmp/parsec.sock
+```
+
 # Demo
 
 [![asciicast](https://asciinema.org/a/bGRK4lFZnCq3UZQSWa7vQfuT5.svg)](https://asciinema.org/a/bGRK4lFZnCq3UZQSWa7vQfuT5)
