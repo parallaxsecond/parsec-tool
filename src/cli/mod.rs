@@ -15,6 +15,11 @@ pub struct ParsecToolApp {
     #[structopt(short = "p", long = "provider")]
     pub provider: Option<u8>,
 
+    /// The timeout time used for all commands in seconds. Will use the client's default if not specified. If
+    /// set to 0, will not use any timeout and will block indefinitely.
+    #[structopt(short = "t", long = "timeout")]
+    pub timeout: Option<u32>,
+
     /// The subcommand -- e.g., ping.
     #[structopt(subcommand)]
     pub subcommand: Subcommand,
