@@ -4,6 +4,7 @@
 //! Lists all clients currently having data in the service (admin operation).
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -21,9 +22,7 @@ impl ListClients {
         }
         info!("Parsec clients:");
         for client in clients {
-            eprint_colored!(Blue, "*");
-            eprint_colored!(Yellow, " '{}'", client);
-            eprintln!();
+            println!("{}", client);
         }
         Ok(())
     }

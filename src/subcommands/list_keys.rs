@@ -4,6 +4,7 @@
 //! Lists all keys belonging to the application.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -22,11 +23,13 @@ impl ListKeys {
         }
         info!("Available keys:");
         for key in keys {
-            eprint_colored!(Blue, "*");
-            eprint_colored!(Yellow, " '{}'", key.name);
-            eprintln!(
-                " ({}, {} bit {:?})",
-                key.provider_id, key.attributes.bits, key.attributes.key_type
+            println!(
+                "* {} ({}, {:?}, {} bits, permitted algorithm: {:?})",
+                key.name,
+                key.provider_id,
+                key.attributes.key_type,
+                key.attributes.bits,
+                key.attributes.policy.permitted_algorithms
             );
         }
         Ok(())

@@ -459,7 +459,7 @@ checksum = "afb2e1c3ee07430c2cf76151675e583e0f19985fa6efae47d6848a3e2c824f85"
 [[package]]
 name = "parsec-client"
 version = "0.12.0"
-source = "git+https://github.com/parallaxsecond/parsec-client-rust?rev=2d71624a6fd4a5fdf9ee2eaef34eb94751313442#2d71624a6fd4a5fdf9ee2eaef34eb94751313442"
+source = "git+https://github.com/parallaxsecond/parsec-client-rust?rev=8c02c93b5a1d2017e24eb706002559ed160e611a#8c02c93b5a1d2017e24eb706002559ed160e611a"
 dependencies = [
  "derivative",
  "log",
@@ -473,7 +473,7 @@ dependencies = [
 [[package]]
 name = "parsec-interface"
 version = "0.23.0"
-source = "git+https://github.com/parallaxsecond/parsec-interface-rs?rev=0769c6a88345781cb2a168e2f8c5d5e88561fb88#0769c6a88345781cb2a168e2f8c5d5e88561fb88"
+source = "git+https://github.com/parallaxsecond/parsec-interface-rs?rev=ccff61b242756d07ed4b140966979e44cb7c5cf0#ccff61b242756d07ed4b140966979e44cb7c5cf0"
 dependencies = [
  "bincode",
  "derivative",
@@ -499,6 +499,7 @@ dependencies = [
  "base64",
  "clap 3.0.0-beta.2",
  "env_logger",
+ "log",
  "parsec-client",
  "pem",
  "picky-asn1",

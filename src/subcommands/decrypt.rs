@@ -6,6 +6,7 @@
 //! Will use the algorithm set to the key's policy during creation.
 
 use crate::error::{Result, ToolErrorKind};
+use log::{error, info};
 use parsec_client::core::interface::operations::psa_algorithm::Algorithm;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
@@ -32,18 +33,18 @@ impl Decrypt {
 
         let plaintext = match alg {
             Algorithm::AsymmetricEncryption(alg) => {
-                info!("Decrypting data with asymmetric decryption...");
+                info!("Decrypting data with {:?}...", alg);
                 basic_client.psa_asymmetric_decrypt(self.key_name.clone(), alg, &input, None)?
             }
             Algorithm::Cipher(_) | Algorithm::Aead(_) => {
-                err!(
+                error!(
                     "Key's algorithm is {:?} which is not currently supported for decryption.",
                     alg
                 );
                 return Err(ToolErrorKind::NotSupported.into());
             }
             other => {
-                err!(
+                error!(
                     "Key's algorithm is {:?} which can not be used for decryption.",
                     other
                 );

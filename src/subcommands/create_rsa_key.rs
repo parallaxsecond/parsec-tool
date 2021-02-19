@@ -6,6 +6,7 @@
 //! The key will be 2048 bits long. Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::core::interface::operations::psa_algorithm::AsymmetricEncryption;
 use parsec_client::core::interface::operations::psa_key_attributes::{
     Attributes, Lifetime, Policy, Type, UsageFlags,
@@ -41,7 +42,7 @@ impl CreateRsaKey {
 
         basic_client.psa_generate_key(self.key_name.clone(), attributes)?;
 
-        success!("Key \"{}\" created.", self.key_name);
+        info!("Key \"{}\" created.", self.key_name);
         Ok(())
     }
 }

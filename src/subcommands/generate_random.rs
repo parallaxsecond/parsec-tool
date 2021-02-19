@@ -4,6 +4,7 @@
 //! Generates a sequence of random bytes.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -21,7 +22,7 @@ impl GenerateRandom {
 
         let result = basic_client.psa_generate_random(self.nbytes)?;
 
-        success!("Random bytes:");
+        info!("Random bytes:");
         for byte in result {
             print!("{:02X} ", byte);
         }
