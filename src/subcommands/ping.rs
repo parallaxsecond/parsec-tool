@@ -4,6 +4,7 @@
 //! Pings the Parsec service.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -16,10 +17,9 @@ impl Ping {
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         let result = basic_client.ping()?;
 
-        success!(
+        info!(
             "Service wire protocol version is {}.{}.",
-            result.0,
-            result.1,
+            result.0, result.1,
         );
         Ok(())
     }

@@ -4,6 +4,7 @@
 //! Lists the available providers supported by the Parsec service.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -18,25 +19,21 @@ impl ListProviders {
 
         info!("Available providers:");
         for provider in providers {
-            title!("0x{:02x} ({})", provider.id as u32, provider.id);
-            field!("Description", "{}", provider.description);
-            field!(
-                "Version",
-                "{}.{}.{}",
-                provider.version_maj,
-                provider.version_min,
-                provider.version_rev
+            println!("ID: 0x{:02x} ({})", provider.id as u32, provider.id);
+            println!("Description: {}", provider.description);
+            println!(
+                "Version: {}.{}.{}",
+                provider.version_maj, provider.version_min, provider.version_rev
             );
-            field!(
-                "Vendor",
-                "{}",
+            println!(
+                "Vendor: {}",
                 if !provider.vendor.is_empty() {
                     provider.vendor
                 } else {
                     "Unspecified".to_string()
                 },
             );
-            field!("UUID", "{}", provider.uuid);
+            println!("UUID: {}", provider.uuid);
             println!();
         }
         Ok(())

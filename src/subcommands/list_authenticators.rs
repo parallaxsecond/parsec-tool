@@ -4,6 +4,7 @@
 //! List the authenticators supported by the Parsec service.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -18,14 +19,14 @@ impl ListAuthenticators {
 
         info!("Available authenticators:");
         for authenticator in authenticators {
-            title!("0x{:02x} ({:?})", authenticator.id as u32, authenticator.id);
-            field!("Description", "{}", authenticator.description);
-            field!(
-                "Version",
-                "{}.{}.{}",
-                authenticator.version_maj,
-                authenticator.version_min,
-                authenticator.version_rev
+            println!(
+                "ID: 0x{:02x} ({})",
+                authenticator.id as u32, authenticator.id
+            );
+            println!("Description: {}", authenticator.description);
+            println!(
+                "Version: {}.{}.{}",
+                authenticator.version_maj, authenticator.version_min, authenticator.version_rev
             );
             println!();
         }

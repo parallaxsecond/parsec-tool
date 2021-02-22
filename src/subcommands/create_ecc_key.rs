@@ -4,6 +4,7 @@
 //! Create an ECC key pair.
 //!
 use crate::error::Result;
+use log::info;
 /// The curve will be secp256r1. Used by default for asymmetric signing with ECDSA (SHA-256).
 use parsec_client::core::interface::operations::psa_algorithm::{AsymmetricSignature, Hash};
 use parsec_client::core::interface::operations::psa_key_attributes::{
@@ -47,7 +48,7 @@ impl CreateEccKey {
 
         basic_client.psa_generate_key(self.key_name.clone(), attributes)?;
 
-        success!("Key \"{}\" created.", self.key_name);
+        info!("Key \"{}\" created.", self.key_name);
         Ok(())
     }
 }

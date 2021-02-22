@@ -33,9 +33,6 @@
 // This one is hard to avoid.
 #![allow(clippy::multiple_crate_versions)]
 
-#[macro_use]
-pub mod util;
-
 pub mod cli;
 pub mod common;
 pub mod error;

@@ -6,6 +6,7 @@
 //! Will use the algorithm set to the key's policy during creation.
 
 use crate::error::{Result, ToolErrorKind};
+use log::{error, info};
 use parsec_client::core::interface::operations::psa_algorithm::{Algorithm, Hash, SignHash};
 use parsec_client::BasicClient;
 use picky_asn1::wrapper::IntegerAsn1;
@@ -39,21 +40,20 @@ impl Sign {
 
         let signature = match alg {
             Algorithm::AsymmetricSignature(alg) => {
-                info!("Hashing data...");
                 let hash = match alg.hash() {
                     Some(SignHash::Specific(hash)) => hash_data(self.input_data.as_bytes(), hash)?,
                     _ => {
-                        err!("Asymmetric signing algorithm ({:?}) is not supported", alg);
+                        error!("Asymmetric signing algorithm ({:?}) is not supported", alg);
                         return Err(ToolErrorKind::NotSupported.into());
                     }
                 };
-                info!("Signing data...");
+                info!("Signing data with {:?}...", alg);
                 let mut sig = basic_client.psa_sign_hash(self.key_name.clone(), &hash, alg)?;
                 if alg.is_ecc_alg() {
-                    let r = IntegerAsn1::from_bytes_be_unsigned(sig.split_off(sig.len() / 2));
+                    let s = IntegerAsn1::from_bytes_be_unsigned(sig.split_off(sig.len() / 2));
                     sig = picky_asn1_der::to_vec(&EccSignature {
-                        r,
-                        s: IntegerAsn1::from_bytes_be_unsigned(sig),
+                        r: IntegerAsn1::from_bytes_be_unsigned(sig),
+                        s,
                     })
                     .unwrap();
                 }
@@ -61,7 +61,7 @@ impl Sign {
                 sig
             }
             other => {
-                err!(
+                error!(
                     "Key's algorithm is {:?} which can not be used for signing.",
                     other
                 );
@@ -84,10 +84,11 @@ fn hash_data(data: &[u8], alg: Hash) -> Result<Vec<u8>> {
         Hash::Sha384 => Box::from(sha2::Sha384::new()),
         Hash::Sha512 => Box::from(sha2::Sha512::new()),
         _ => {
-            err!("Hashing algorithm ({:?}) not supported", alg);
+            error!("Hashing algorithm ({:?}) not supported", alg);
             return Err(ToolErrorKind::NotSupported.into());
         }
     };
+    info!("Hashing data with {:?}...", alg);
     hasher.update(&data);
     Ok(hasher.finalize().to_vec())
 }

@@ -5,6 +5,7 @@
 
 use crate::error::Result;
 
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -19,7 +20,7 @@ impl DeleteClient {
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         basic_client.delete_client(self.client.clone())?;
 
-        success!("Client \"{}\" deleted.", self.client);
+        info!("Client \"{}\" deleted.", self.client);
         Ok(())
     }
 }

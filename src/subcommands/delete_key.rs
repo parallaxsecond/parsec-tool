@@ -4,6 +4,7 @@
 //! Delete a key.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use structopt::StructOpt;
 
@@ -21,7 +22,7 @@ impl DeleteKey {
 
         basic_client.psa_destroy_key(self.key_name.clone())?;
 
-        success!("Key \"{}\" deleted.", self.key_name);
+        info!("Key \"{}\" deleted.", self.key_name);
         Ok(())
     }
 }

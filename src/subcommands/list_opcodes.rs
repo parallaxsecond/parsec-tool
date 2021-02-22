@@ -4,6 +4,7 @@
 //! Lists the supported opcodes for a given provider.
 
 use crate::error::Result;
+use log::info;
 use parsec_client::BasicClient;
 use std::convert::TryInto;
 use structopt::StructOpt;
@@ -22,10 +23,9 @@ impl ListOpcodes {
         let provider = self.provider.try_into()?;
         let opcodes = basic_client.list_opcodes(provider)?;
 
-        info!("Available opcodes for provider {:?}:", provider);
+        info!("Available opcodes for {}:", provider);
         for provider_opcode in opcodes {
-            eprint_colored!(Blue, "*");
-            eprintln!(" {:?}", provider_opcode);
+            println!("0x{:02x} ({:?})", provider_opcode as u32, provider_opcode);
         }
         Ok(())
     }
