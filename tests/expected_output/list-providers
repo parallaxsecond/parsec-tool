@@ -1,0 +1,12 @@
+ID: 0x01 (Mbed Crypto provider)
+Description: User space software provider, based on Mbed Crypto - the reference implementation of the PSA crypto API
+Version: 0.1.0
+Vendor: Arm
+UUID: 1c1139dc-ad7c-47dc-ad6b-db6fdb466552
+
+ID: 0x00 (Core provider)
+Description: Software provider that implements only administrative (i.e. no cryptographic) operations
+Version: 0.6.0
+Vendor: Unspecified
+UUID: 47049873-2a43-4845-9d72-831eab668784
+

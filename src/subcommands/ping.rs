@@ -17,10 +17,8 @@ impl Ping {
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         let result = basic_client.ping()?;
 
-        info!(
-            "Service wire protocol version is {}.{}.",
-            result.0, result.1,
-        );
+        info!("Service wire protocol version",);
+        println!("{}.{}", result.0, result.1);
         Ok(())
     }
 }

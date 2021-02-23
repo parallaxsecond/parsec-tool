@@ -1,0 +1,4 @@
+ID: 0x03 (Unix Peer Credentials authentication)
+Description: Uses Unix peer credentials to authenticate the client. Verifies that the self-declared Unix user identifier (UID) in the request's authentication header matches that which is found from the peer credentials.
+Version: 0.1.0
+

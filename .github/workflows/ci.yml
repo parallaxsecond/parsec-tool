@@ -8,8 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install and run Parsec with the Mbed Crypto provider
+        run: |
+          git clone https://github.com/parallaxsecond/parsec.git
+          cd parsec
+          # TODO: replace with the latest version
+          git checkout 52458f7124e3cc5b87df44a91a884e578e60bc5c
+          cargo build --features "mbed-crypto-provider"
+          ./target/debug/parsec -c ../tests/test_config.toml &
       - name: Execute CI script
-        run: ./ci.sh
+        run: ./tests/ci.sh
 
   links:
     name: Check links
