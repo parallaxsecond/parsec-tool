@@ -3,7 +3,15 @@
 # Copyright 2020 Contributors to the Parsec project.
 # SPDX-License-Identifier: Apache-2.0
 
-set -euf -o pipefail
+set -xeuf -o pipefail
+
+cleanup() {
+	# Remove created keys in case we failed somewhere
+	./target/debug/parsec-tool delete-key -k ecc-key 2>/dev/null || true
+	./target/debug/parsec-tool delete-key -k rsa-key 2>/dev/null || true
+}
+
+trap cleanup EXIT
 
 # Points to Parsec's Unix Domain Socket on the CI
 export PARSEC_SERVICE_ENDPOINT="unix:/tmp/parsec.sock"
@@ -42,16 +50,16 @@ git diff --exit-code /tmp/list-providers tests/expected_output/list-providers
 # Just checking if the command works as the output list can change
 ./target/debug/parsec-tool list-opcodes -p 1
 
-./target/debug/parsec-tool create-ecc-key -k toto
-./target/debug/parsec-tool create-rsa-key -k tata
+./target/debug/parsec-tool create-ecc-key -k ecc-key
+./target/debug/parsec-tool create-rsa-key -k rsa-key
 
 ./target/debug/parsec-tool list-keys > /tmp/list-keys
 git diff --exit-code /tmp/list-keys tests/expected_output/list-keys
 
-./target/debug/parsec-tool export-public-key -k toto
-./target/debug/parsec-tool export-public-key -k tata
+./target/debug/parsec-tool export-public-key -k ecc-key
+./target/debug/parsec-tool export-public-key -k rsa-key
 ./target/debug/parsec-tool generate-random -n 50
-./target/debug/parsec-tool sign -k toto "Les carottes sont cuites!"
+./target/debug/parsec-tool sign -k ecc-key "Les carottes sont cuites!"
 
-./target/debug/parsec-tool delete-key -k toto
-./target/debug/parsec-tool delete-key -k tata
+./target/debug/parsec-tool delete-key -k ecc-key
+./target/debug/parsec-tool delete-key -k rsa-key
