@@ -46,7 +46,9 @@ Book](https://parallaxsecond.github.io/parsec-book/parsec_client/operations/inde
 - Plaintext data is expected/shown as a UTF-8 string (input data of `sign`, output data of
    `decrypt`).
 - Ciphertext data is expected/shown as base 64 (output data of `sign`, input data of `decrypt`).
-- Exported public keys are formatted in PEM.
+- Exported public keys are formatted in PEM. RSA keys are encoded in [`RSAPublicKey`](https://tools.ietf.org/html/rfc3279.html#section-2.3.1)
+   ASN.1 format. EC keys are encoded in the uncompressed format described in 
+   [_SEC 1: Elliptic Curve Cryptography_ §2.3.3](https://www.secg.org/sec1-v2.pdf).
 
 # Demo
 
