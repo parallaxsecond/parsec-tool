@@ -54,8 +54,7 @@ git diff --exit-code /tmp/list-providers tests/expected_output/list-providers
 ./target/debug/parsec-tool create-ecc-key -k ecc-key
 ./target/debug/parsec-tool create-rsa-key -k rsa-key
 
-./target/debug/parsec-tool list-keys > /tmp/list-keys
-git diff --exit-code /tmp/list-keys tests/expected_output/list-keys
+./target/debug/parsec-tool list-keys
 
 ./target/debug/parsec-tool export-public-key -k ecc-key
 ./target/debug/parsec-tool export-public-key -k rsa-key
