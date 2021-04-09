@@ -49,6 +49,7 @@ git diff --exit-code /tmp/list-providers tests/expected_output/list-providers
 
 # Just checking if the command works as the output list can change
 ./target/debug/parsec-tool list-opcodes -p 1
+./target/debug/parsec-tool list-opcodes
 
 ./target/debug/parsec-tool create-ecc-key -k ecc-key
 ./target/debug/parsec-tool create-rsa-key -k rsa-key
