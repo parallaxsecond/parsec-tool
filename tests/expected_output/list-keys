@@ -1,2 +1,0 @@
-* ecc-key (Mbed Crypto provider, EccKeyPair { curve_family: SecpR1 }, 256 bits, permitted algorithm: AsymmetricSignature(Ecdsa { hash_alg: Specific(Sha256) }))
-* rsa-key (Mbed Crypto provider, RsaKeyPair, 2048 bits, permitted algorithm: AsymmetricEncryption(RsaPkcs1v15Crypt))

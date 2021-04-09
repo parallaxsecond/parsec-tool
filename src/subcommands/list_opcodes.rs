@@ -14,13 +14,16 @@ use structopt::StructOpt;
 pub struct ListOpcodes {
     /// ID of the provider.
     #[structopt(short = "p", long = "provider")]
-    pub provider: u8,
+    pub provider: Option<u8>,
 }
 
 impl ListOpcodes {
     /// Lists the supported opcodes for a given provider.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
-        let provider = self.provider.try_into()?;
+        let provider = match self.provider {
+            Some(provider) => provider.try_into()?,
+            None => basic_client.implicit_provider(),
+        };
         let opcodes = basic_client.list_opcodes(provider)?;
 
         info!("Available opcodes for {}:", provider);
