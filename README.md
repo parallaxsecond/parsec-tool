@@ -1,5 +1,10 @@
 # Parsec Tool
 
+<p align="center">
+  <a href="https://crates.io/crates/parsec-tool"><img alt="Crates.io" src="https://img.shields.io/crates/v/parsec-tool"></a>
+  <a href="https://docs.rs/parsec-tool"><img src="https://docs.rs/parsec-tool/badge.svg" alt="Code documentation"/></a>
+</p>
+
 This repository contains a tool to communicate with the [Parsec
 service](https://github.com/parallaxsecond/parsec) on the command-line.
 
@@ -50,9 +55,15 @@ Book](https://parallaxsecond.github.io/parsec-book/parsec_client/operations/inde
    ASN.1 format. EC keys are encoded in the uncompressed format described in 
    [_SEC 1: Elliptic Curve Cryptography_ §2.3.3](https://www.secg.org/sec1-v2.pdf).
 
+## SPIFFE based authenticator
+
+To be able to authenticate with the [JWT-SVID
+authenticator](https://parallaxsecond.github.io/parsec-book/parsec_service/authenticators.html#jwt-spiffe-verifiable-identity-document-authenticator),
+compile this crate with the `spiffe-auth` feature.
+
 # Demo
 
-[![asciicast](https://asciinema.org/a/bGRK4lFZnCq3UZQSWa7vQfuT5.svg)](https://asciinema.org/a/bGRK4lFZnCq3UZQSWa7vQfuT5)
+[![asciicast](https://asciinema.org/a/RNPjvbgKDlQ0FRFUUKjjNUom6.svg)](https://asciinema.org/a/RNPjvbgKDlQ0FRFUUKjjNUom6)
 
 # License
 

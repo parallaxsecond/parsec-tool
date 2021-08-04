@@ -18,7 +18,7 @@ pub struct DeleteClient {
 
 impl DeleteClient {
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
-        basic_client.delete_client(self.client.clone())?;
+        basic_client.delete_client(&self.client)?;
 
         info!("Client \"{}\" deleted.", self.client);
         Ok(())

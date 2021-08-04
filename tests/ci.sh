@@ -21,6 +21,7 @@ export RUST_LOG=error
 # Build #
 #########
 RUST_BACKTRACE=1 cargo build
+RUST_BACKTRACE=1 cargo build --features spiffe-auth
 
 #################
 # Static checks #

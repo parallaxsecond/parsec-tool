@@ -18,7 +18,7 @@ pub struct ExportPublicKey {
 impl ExportPublicKey {
     /// Exports a public key.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
-        let result = basic_client.psa_export_public_key(self.key_name.clone())?;
+        let result = basic_client.psa_export_public_key(&self.key_name)?;
 
         let tag = match basic_client.key_attributes(&self.key_name)?.key_type {
             Type::RsaKeyPair | Type::RsaPublicKey => String::from("RSA PUBLIC KEY"),

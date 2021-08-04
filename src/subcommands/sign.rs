@@ -48,7 +48,7 @@ impl Sign {
                     }
                 };
                 info!("Signing data with {:?}...", alg);
-                let mut sig = basic_client.psa_sign_hash(self.key_name.clone(), &hash, alg)?;
+                let mut sig = basic_client.psa_sign_hash(&self.key_name, &hash, alg)?;
                 if alg.is_ecc_alg() {
                     let s = IntegerAsn1::from_bytes_be_unsigned(sig.split_off(sig.len() / 2));
                     sig = picky_asn1_der::to_vec(&EccSignature {
@@ -89,6 +89,6 @@ fn hash_data(data: &[u8], alg: Hash) -> Result<Vec<u8>> {
         }
     };
     info!("Hashing data with {:?}...", alg);
-    hasher.update(&data);
+    hasher.update(data);
     Ok(hasher.finalize().to_vec())
 }
