@@ -34,7 +34,7 @@ impl Decrypt {
         let plaintext = match alg {
             Algorithm::AsymmetricEncryption(alg) => {
                 info!("Decrypting data with {:?}...", alg);
-                basic_client.psa_asymmetric_decrypt(self.key_name.clone(), alg, &input, None)?
+                basic_client.psa_asymmetric_decrypt(&self.key_name, alg, &input, None)?
             }
             Algorithm::Cipher(_) | Algorithm::Aead(_) => {
                 error!(

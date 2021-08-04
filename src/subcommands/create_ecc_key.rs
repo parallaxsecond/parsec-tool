@@ -32,12 +32,14 @@ impl CreateEccKey {
             },
             bits: 256,
             policy: Policy {
-                usage_flags: UsageFlags {
-                    sign_hash: true,
-                    sign_message: true,
-                    verify_hash: true,
-                    verify_message: true,
-                    ..Default::default()
+                usage_flags: {
+                    let mut usage_flags = UsageFlags::default();
+                    let _ = usage_flags
+                        .set_sign_hash()
+                        .set_sign_message()
+                        .set_verify_hash()
+                        .set_verify_message();
+                    usage_flags
                 },
                 permitted_algorithms: AsymmetricSignature::Ecdsa {
                     hash_alg: Hash::Sha256.into(),
@@ -46,7 +48,7 @@ impl CreateEccKey {
             },
         };
 
-        basic_client.psa_generate_key(self.key_name.clone(), attributes)?;
+        basic_client.psa_generate_key(&self.key_name, attributes)?;
 
         info!("Key \"{}\" created.", self.key_name);
         Ok(())

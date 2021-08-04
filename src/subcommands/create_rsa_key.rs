@@ -31,16 +31,16 @@ impl CreateRsaKey {
             key_type: Type::RsaKeyPair,
             bits: 2048,
             policy: Policy {
-                usage_flags: UsageFlags {
-                    encrypt: true,
-                    decrypt: true,
-                    ..Default::default()
+                usage_flags: {
+                    let mut usage_flags = UsageFlags::default();
+                    let _ = usage_flags.set_encrypt().set_decrypt();
+                    usage_flags
                 },
                 permitted_algorithms: AsymmetricEncryption::RsaPkcs1v15Crypt.into(),
             },
         };
 
-        basic_client.psa_generate_key(self.key_name.clone(), attributes)?;
+        basic_client.psa_generate_key(&self.key_name, attributes)?;
 
         info!("Key \"{}\" created.", self.key_name);
         Ok(())

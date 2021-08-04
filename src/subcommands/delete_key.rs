@@ -20,7 +20,7 @@ impl DeleteKey {
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         info!("Deleting a key...");
 
-        basic_client.psa_destroy_key(self.key_name.clone())?;
+        basic_client.psa_destroy_key(&self.key_name)?;
 
         info!("Key \"{}\" deleted.", self.key_name);
         Ok(())
