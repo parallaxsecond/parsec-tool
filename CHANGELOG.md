@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.3.1](https://github.com/parallaxsecond/parsec-tool/tree/0.3.1) (2021-08-04)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.3.0...0.3.1)
+
+**Implemented enhancements:**
+
+- --provider option for list-opcodes is not consistent [\#53](https://github.com/parallaxsecond/parsec-tool/issues/53)
+- Use the implicit provider for list\_opcodes [\#54](https://github.com/parallaxsecond/parsec-tool/pull/54) ([hug-dev](https://github.com/hug-dev))
+
+**Fixed bugs:**
+
+- Update sha2 version [\#57](https://github.com/parallaxsecond/parsec-tool/pull/57) ([hug-dev](https://github.com/hug-dev))
+
+**Closed issues:**
+
+- Update the demo with most recent contents [\#44](https://github.com/parallaxsecond/parsec-tool/issues/44)
+
+**Merged pull requests:**
+
+- Prepare for the next release [\#58](https://github.com/parallaxsecond/parsec-tool/pull/58) ([hug-dev](https://github.com/hug-dev))
+- Add cargo-audit config file [\#56](https://github.com/parallaxsecond/parsec-tool/pull/56) ([ionut-arm](https://github.com/ionut-arm))
+- Update the CHANGELOG file [\#51](https://github.com/parallaxsecond/parsec-tool/pull/51) ([hug-dev](https://github.com/hug-dev))
+
 ## [0.3.0](https://github.com/parallaxsecond/parsec-tool/tree/0.3.0) (2021-03-18)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.2.0...0.3.0)
