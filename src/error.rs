@@ -43,6 +43,10 @@ pub enum ToolErrorKind {
     /// Expected input data was not given
     #[error("A command expected input data that was not given")]
     NoInput,
+
+    /// Cannot serialise or deserialise data
+    #[error("Incorrect data format")]
+    IncorrectData,
 }
 
 /// A Result type with the Err variant set as a ParsecToolError

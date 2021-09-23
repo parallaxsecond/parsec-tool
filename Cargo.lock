@@ -719,9 +719,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.98"
+version = "0.2.102"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "320cfe77175da3a483efed4bc0adc1968ca050b098ce4f2f1c13a56626128790"
+checksum = "a2a5ac8f984bfcf3a823267e5fde638acc3325f6496633a5da6bb6eb2171e103"
 
 [[package]]
 name = "libloading"
@@ -1030,10 +1030,12 @@ dependencies = [
  "clap 3.0.0-beta.2",
  "env_logger",
  "log",
+ "oid",
  "parsec-client",
  "pem",
  "picky-asn1",
  "picky-asn1-der",
+ "picky-asn1-x509",
  "serde",
  "sha2",
  "structopt",
@@ -1083,6 +1085,19 @@ dependencies = [
  "picky-asn1",
  "serde",
  "serde_bytes",
+]
+
+[[package]]
+name = "picky-asn1-x509"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f3033675030de806aba1d5470949701b7c9f1dbf77e3bb17bd12e5f945e560ba"
+dependencies = [
+ "base64 0.13.0",
+ "oid",
+ "picky-asn1",
+ "picky-asn1-der",
+ "serde",
 ]
 
 [[package]]
