@@ -29,23 +29,29 @@ impl ExportPublicKey {
     /// Exports a public key.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         let mut tag = String::from("PUBLIC KEY");
-        let psa_public_key = basic_client.psa_export_public_key(&self.key_name)?;
-        let mut public_key = psa_public_key.clone();
+        let mut psa_public_key = basic_client.psa_export_public_key(&self.key_name)?;
+        let psa_key_attributes = basic_client.key_attributes(&self.key_name)?;
 
-        match basic_client.key_attributes(&self.key_name)?.key_type {
+        match psa_key_attributes.key_type {
             Type::RsaKeyPair | Type::RsaPublicKey => {
                 if self.pkcs1 {
                     tag = String::from("RSA PUBLIC KEY");
                 } else {
-                    let pkcs8_public_key = SubjectPublicKeyInfo {
+                    psa_public_key = picky_asn1_der::to_vec(&SubjectPublicKeyInfo {
                         algorithm: AlgorithmIdentifier::new_rsa_encryption(),
                         subject_public_key: PublicKey::Rsa(
                             picky_asn1_der::from_bytes::<RsaPublicKey>(&psa_public_key)
-                                .unwrap()
+                                .map_err(|_| {
+                                    error!("Could not deserialise RSA key");
+                                    ToolErrorKind::IncorrectData
+                                })?
                                 .into(),
                         ),
-                    };
-                    public_key = picky_asn1_der::to_vec(&pkcs8_public_key).unwrap();
+                    })
+                    .map_err(|_| {
+                        error!("Could not serialise RSA key");
+                        ToolErrorKind::IncorrectData
+                    })?;
                 }
             }
             Type::EccKeyPair {
@@ -58,16 +64,20 @@ impl ExportPublicKey {
                     error!("PKCS1 format doesn't support ECC keys");
                     return Err(ToolErrorKind::WrongKeyAlgorithm.into());
                 } else {
-                    let key_bits = basic_client.key_attributes(&self.key_name)?.bits;
-                    let pkcs8_public_key = SubjectPublicKeyInfo {
+                    psa_public_key = picky_asn1_der::to_vec(&SubjectPublicKeyInfo {
                         algorithm: AlgorithmIdentifier::new_elliptic_curve(
-                            EcParameters::NamedCurve(curve_oid(curve, key_bits).unwrap().into()),
+                            EcParameters::NamedCurve(
+                                curve_oid(curve, psa_key_attributes.bits)?.into(),
+                            ),
                         ),
                         subject_public_key: PublicKey::Ec(
                             BitString::with_bytes(psa_public_key).into(),
                         ),
-                    };
-                    public_key = picky_asn1_der::to_vec(&pkcs8_public_key).unwrap();
+                    })
+                    .map_err(|_| {
+                        error!("Could not serialise ECC key");
+                        ToolErrorKind::IncorrectData
+                    })?;
                 }
             }
             _ => {
@@ -79,7 +89,7 @@ impl ExportPublicKey {
         let pem_encoded = pem::encode_config(
             &pem::Pem {
                 tag,
-                contents: public_key,
+                contents: psa_public_key,
             },
             pem::EncodeConfig {
                 line_ending: pem::LineEnding::LF,

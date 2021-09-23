@@ -51,8 +51,11 @@ Book](https://parallaxsecond.github.io/parsec-book/parsec_client/operations/inde
 - Plaintext data is expected/shown as a UTF-8 string (input data of `sign`, output data of
    `decrypt`).
 - Ciphertext data is expected/shown as base 64 (output data of `sign`, input data of `decrypt`).
-- Exported public keys are encoded in PEM. By default PKCS#8 format is used for RSA and ECC
-  public keys. With `--pkcs1` parameter RSA keys exported in PKCS#1 format.
+- Exported public keys are encoded in PEM. By default PKCS#8 format
+  is used for RSA [RFC 3279](https://datatracker.ietf.org/doc/html/rfc3279#section-2.3.1)
+  and ECC [RFC 5480](https://datatracker.ietf.org/doc/html/rfc5480#section-2)
+  public keys. With `--pkcs1` parameter RSA keys exported in PKCS#1 format
+  [RFC 2313](https://datatracker.ietf.org/doc/html/rfc2313#section-7.1).
 
 ## SPIFFE based authenticator
 
