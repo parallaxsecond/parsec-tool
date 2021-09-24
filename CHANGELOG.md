@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.4.0](https://github.com/parallaxsecond/parsec-tool/tree/0.4.0) (2021-09-24)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.3.1...0.4.0)
+
+**Implemented enhancements:**
+
+- Add round-trip testing [\#47](https://github.com/parallaxsecond/parsec-tool/issues/47)
+
+**Merged pull requests:**
+
+- Bump version to 0.4.0 [\#62](https://github.com/parallaxsecond/parsec-tool/pull/62) ([anta5010](https://github.com/anta5010))
+- Bash wrapper for parsec-tool to run basic e2e Parsec tests [\#61](https://github.com/parallaxsecond/parsec-tool/pull/61) ([anta5010](https://github.com/anta5010))
+- Update CHaNGELOG [\#59](https://github.com/parallaxsecond/parsec-tool/pull/59) ([hug-dev](https://github.com/hug-dev))
+
 ## [0.3.1](https://github.com/parallaxsecond/parsec-tool/tree/0.3.1) (2021-08-04)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.3.0...0.3.1)
