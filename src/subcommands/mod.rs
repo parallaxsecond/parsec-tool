@@ -109,12 +109,16 @@ impl Subcommand {
     /// Get BasicClient for operation
     pub fn create_client(&self, app_name: Option<String>) -> Result<BasicClient> {
         if self.authentication_required() {
+            // BasicClient::new will do default config including setting up authenticator
             match BasicClient::new(app_name) {
                 Ok(client) => Ok(client),
                 Err(err) =>Err(ParsecClientError(err)),
             }
         } else {
-            Ok(BasicClient::new_naked())
+            // Create a naked client and set upthe default provider, leaving authenticator unset
+            let mut client = BasicClient::new_naked();
+            client.set_default_provider()?;
+            Ok(client)
         }
     }
 }
