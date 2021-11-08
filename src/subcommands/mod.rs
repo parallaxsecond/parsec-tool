@@ -115,10 +115,8 @@ impl Subcommand {
                 Err(err) =>Err(ParsecClientError(err)),
             }
         } else {
-            // Create a naked client and set upthe default provider, leaving authenticator unset
-            let mut client = BasicClient::new_naked();
-            client.set_default_provider()?;
-            Ok(client)
+            // Create a naked client which should be set up for core operations
+            Ok(BasicClient::new_naked())
         }
     }
 }
