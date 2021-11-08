@@ -18,7 +18,7 @@ mod list_providers;
 mod ping;
 mod sign;
 
-use crate::error::Result;
+use crate::error::{Result,Error::ParsecClientError};
 use crate::subcommands::{
     create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey, decrypt::Decrypt,
     delete_client::DeleteClient, delete_key::DeleteKey, export_public_key::ExportPublicKey,
@@ -28,6 +28,7 @@ use crate::subcommands::{
 };
 use parsec_client::BasicClient;
 use structopt::StructOpt;
+
 
 /// Command-line interface to Parsec operations.
 #[derive(Debug, StructOpt)]
@@ -93,6 +94,27 @@ impl Subcommand {
             Subcommand::Sign(cmd) => cmd.run(client),
             Subcommand::Decrypt(cmd) => cmd.run(client),
             Subcommand::DeleteKey(cmd) => cmd.run(client),
+        }
+    }
+    /// Indicates if subcommand requires authentication
+    fn authentication_required(&self) -> bool {
+        // Subcommands below don't need authentication - all others do.
+        ! matches!(&self, 
+            Subcommand::Ping(_) | 
+            Subcommand::ListProviders(_) | 
+            Subcommand::ListAuthenticators(_) |
+            Subcommand::ListOpcodes(_))
+    }
+
+    /// Get BasicClient for operation
+    pub fn create_client(&self, app_name: Option<String>) -> Result<BasicClient> {
+        if self.authentication_required() {
+            match BasicClient::new(app_name) {
+                Ok(client) => Ok(client),
+                Err(err) =>Err(ParsecClientError(err)),
+            }
+        } else {
+            Ok(BasicClient::new_naked())
         }
     }
 }
