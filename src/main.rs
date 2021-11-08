@@ -22,8 +22,10 @@ fn main() {
 
     let matches = cli::ParsecToolApp::from_args();
 
-    let mut client =
-        match matches.subcommand.create_client(Some(PROJECT_NAME.to_string())) {
+    let mut client = match matches
+        .subcommand
+        .create_client(Some(PROJECT_NAME.to_string()))
+    {
         Err(e) => {
             error!("Error spinning up the BasicClient: {}", e);
             std::process::exit(1);
