@@ -15,7 +15,7 @@ documentation = "https://docs.rs/crate/parsec-tool"
 ansi_term = "0.12.1"
 atty = "0.2.14"
 clap = "3.0.0-beta.1"
-parsec-client = { git = "https://github.com/parallaxsecond/parsec-client-rust", rev = "4579ec1df97531f31d4f55eab4e9b55f2b26399b" }
+parsec-client = { git = "https://github.com/parallaxsecond/parsec-client-rust", rev = "9e7dd111e77afa9168c1bff84963125057568b6f" }
 structopt = "0.3.17"
 thiserror = "1.0.20"
 env_logger = "0.8.2"

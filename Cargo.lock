@@ -882,7 +882,7 @@ dependencies = [
 [[package]]
 name = "parsec-client"
 version = "0.13.0"
-source = "git+https://github.com/parallaxsecond/parsec-client-rust?rev=4579ec1df97531f31d4f55eab4e9b55f2b26399b#4579ec1df97531f31d4f55eab4e9b55f2b26399b"
+source = "git+https://github.com/parallaxsecond/parsec-client-rust?rev=9e7dd111e77afa9168c1bff84963125057568b6f#9e7dd111e77afa9168c1bff84963125057568b6f"
 dependencies = [
  "derivative",
  "log",
@@ -897,7 +897,7 @@ dependencies = [
 [[package]]
 name = "parsec-interface"
 version = "0.25.0"
-source = "git+https://github.com/parallaxsecond/parsec-interface-rs?rev=e5b7f17ac192722befd37698a07a7eb4ffabd2a4#e5b7f17ac192722befd37698a07a7eb4ffabd2a4"
+source = "git+https://github.com/parallaxsecond/parsec-interface-rs?rev=9173f06b46ce583983b0df36a51fcb268ea818cd#9173f06b46ce583983b0df36a51fcb268ea818cd"
 dependencies = [
  "bincode",
  "derivative",
