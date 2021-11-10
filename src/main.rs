@@ -4,7 +4,6 @@
 //! parsec-tool: a tool for interfacing with the Parsec service from the command-line.
 
 use log::error;
-use parsec_client::BasicClient;
 use parsec_tool::cli;
 use parsec_tool::common::PROJECT_NAME;
 use std::convert::TryInto;
@@ -23,7 +22,10 @@ fn main() {
 
     let matches = cli::ParsecToolApp::from_args();
 
-    let mut client = match BasicClient::new(Some(PROJECT_NAME.to_string())) {
+    let mut client = match matches
+        .subcommand
+        .create_client(Some(PROJECT_NAME.to_string()))
+    {
         Err(e) => {
             error!("Error spinning up the BasicClient: {}", e);
             std::process::exit(1);
