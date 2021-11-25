@@ -21,6 +21,16 @@ debug() {
     fi
 }
 
+MY_TMP=$(mktemp -d)
+
+cleanup () {
+    if [ -n "$MY_TMP" ]; then
+      rm -rf -- "$MY_TMP"
+    fi
+}
+
+trap cleanup EXIT
+
 delete_key() {
 # $1 - key type
 # $2 - key name
@@ -29,7 +39,7 @@ delete_key() {
     echo
     echo "- Deleting the $1 key"
     run_cmd $PARSEC_TOOL_CMD delete-key --key-name $KEY
-    rm -f /tmp/${KEY}.*
+    rm -f ${MY_TMP}/${KEY}.*
 }
 
 create_key() {
@@ -47,7 +57,7 @@ create_key() {
         EXIT_CODE=$(($EXIT_CODE+1))
     fi
 
-    run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >/tmp/${KEY}.pem
+    run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/${KEY}.pem
 }
 
 test_crypto_provider() {
@@ -74,23 +84,25 @@ test_rsa() {
     create_key "RSA" $KEY
 
     # If the key was successfully created and exported
-    if [ -s /tmp/${KEY}.pem ]; then
-        debug cat /tmp/${KEY}.pem
+    if [ -s ${MY_TMP}/${KEY}.pem ]; then
+        debug cat ${MY_TMP}/${KEY}.pem
 
         echo
         echo "- Encrypting \"$TEST_STR\" string using openssl and the exported public key"
 
         # Encrypt TEST_STR with the public key and base64-encode the result
-        echo -n "$TEST_STR" | \
-            run_cmd $OPENSSL rsautl -encrypt -pubin -inkey /tmp/${KEY}.pem | \
-            $OPENSSL base64 -A -out /tmp/${KEY}.enc
-        debug cat /tmp/${KEY}.enc
+        echo -n "$TEST_STR" >${MY_TMP}/${KEY}.test_str
+        run_cmd $OPENSSL rsautl -encrypt -pubin -inkey ${MY_TMP}/${KEY}.pem \
+                                -in ${MY_TMP}/${KEY}.test_str -out ${MY_TMP}/${KEY}.bin
+        run_cmd $OPENSSL base64 -A -in ${MY_TMP}/${KEY}.bin -out ${MY_TMP}/${KEY}.enc
+        debug cat ${MY_TMP}/${KEY}.enc
 
         echo
         echo "- Using Parsec to decrypt the result:"
-        encr_str="$(run_cmd $PARSEC_TOOL_CMD decrypt $(cat /tmp/${KEY}.enc) --key-name $KEY)"
-        echo $encr_str
-        if [ "$encr_str" != "$TEST_STR" ]; then
+        run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
+                >${MY_TMP}/${KEY}.enc_str
+        cat ${MY_TMP}/${KEY}.enc_str
+        if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
             echo "Error: The result is different from the initial string"
             EXIT_CODE=$(($EXIT_CODE+1))
         fi
@@ -106,20 +118,22 @@ test_ecc() {
     create_key "ECC" $KEY
 
     # If the key was successfully created and exported
-    if [ -s /tmp/${KEY}.pem ]; then
-        debug cat /tmp/${KEY}.pem
+    if [ -s ${MY_TMP}/${KEY}.pem ]; then
+        debug cat ${MY_TMP}/${KEY}.pem
 
         echo
         echo "- Signing \"$TEST_STR\" string using the created ECC key"
-        run_cmd $PARSEC_TOOL_CMD sign "$TEST_STR" --key-name $KEY >/tmp/${KEY}.sign
-        debug cat /tmp/${KEY}.sign
+        run_cmd $PARSEC_TOOL_CMD sign "$TEST_STR" --key-name $KEY >${MY_TMP}/${KEY}.sign
+        debug cat ${MY_TMP}/${KEY}.sign
 
         echo
         echo "- Using openssl and the exported public ECC key to verify the signature"
         # Parsec-tool produces base64-encoded signatures. Let's decode it before verifing.
-        $OPENSSL base64 -d -in /tmp/${KEY}.sign -out /tmp/${KEY}.bin
-        echo -n "$TEST_STR" | \
-            $OPENSSL dgst -sha256 -verify /tmp/${KEY}.pem -signature /tmp/${KEY}.bin
+        run_cmd $OPENSSL base64 -d -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
+
+        echo -n "$TEST_STR" >${MY_TMP}/${KEY}.test_str
+        run_cmd $OPENSSL dgst -sha256 -verify ${MY_TMP}/${KEY}.pem \
+                              -signature ${MY_TMP}/${KEY}.bin ${MY_TMP}/${KEY}.test_str
     fi
 
     delete_key "ECC" $KEY
@@ -165,7 +179,10 @@ export RUST_LOG="${RUST_LOG:-info}"
 if ! ping_parsec; then exit 1; fi
 
 EXIT_CODE=0
-run_cmd $PARSEC_TOOL list-providers 2>/dev/null|grep "^ID:"|grep -v "0x00"| \
+run_cmd $PARSEC_TOOL list-providers 2>/dev/null | grep "^ID:" | grep -v "0x00" \
+        >${MY_TMP}/providers.lst
+
+exec < ${MY_TMP}/providers.lst
 while IFS= read -r prv; do
     # Format of list-providers output:
     #ID: 0x01 (Mbed Crypto provider)
