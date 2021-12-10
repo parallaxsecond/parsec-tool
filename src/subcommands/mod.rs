@@ -3,6 +3,7 @@
 
 //! Subcommand implementations. Interacts with parsec-client-rust.
 
+mod create_csr;
 mod create_ecc_key;
 mod create_rsa_key;
 mod decrypt;
@@ -24,7 +25,7 @@ use crate::subcommands::{
     delete_client::DeleteClient, delete_key::DeleteKey, export_public_key::ExportPublicKey,
     generate_random::GenerateRandom, list_authenticators::ListAuthenticators,
     list_clients::ListClients, list_keys::ListKeys, list_opcodes::ListOpcodes,
-    list_providers::ListProviders, ping::Ping, sign::Sign,
+    list_providers::ListProviders, ping::Ping, sign::Sign, create_csr::CreateCsr,
 };
 use parsec_client::BasicClient;
 use structopt::StructOpt;
@@ -73,6 +74,9 @@ pub enum Subcommand {
 
     /// Delete all data a client has in the service (admin operation).
     DeleteClient(DeleteClient),
+
+    /// Create a Certificate Signing Request (CSR) from a keypair.
+    CreateCsr(CreateCsr),
 }
 
 impl Subcommand {
@@ -93,6 +97,7 @@ impl Subcommand {
             Subcommand::Sign(cmd) => cmd.run(client),
             Subcommand::Decrypt(cmd) => cmd.run(client),
             Subcommand::DeleteKey(cmd) => cmd.run(client),
+            Subcommand::CreateCsr(cmd) => cmd.run(client),
         }
     }
     /// Indicates if subcommand requires authentication

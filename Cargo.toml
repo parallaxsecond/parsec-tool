@@ -28,6 +28,7 @@ picky-asn1-x509 = "0.6.1"
 serde = "1.0.123"
 sha2 = "0.9.5"
 log = "0.4.14"
+rcgen = { version = "0.8.14", features = ["pem"] }
 
 [lib]
 name = "parsec_tool"
