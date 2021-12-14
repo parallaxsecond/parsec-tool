@@ -82,10 +82,10 @@ impl CreateCsr {
 
         let parsec_key_pair = ParsecRemoteKeyPair {
             key_name: self.key_name.clone(),
-            public_key_der: public_key.clone(),
+            public_key_der: public_key,
             // "Move" the client into the struct here.
             parsec_client: basic_client,
-            rcgen_algorithm: rcgen_algorithm,
+            rcgen_algorithm,
         };
 
         let remote_key_pair = KeyPair::from_remote(Box::new(parsec_key_pair))?;

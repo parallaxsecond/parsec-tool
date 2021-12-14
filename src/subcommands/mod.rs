@@ -21,11 +21,11 @@ mod sign;
 
 use crate::error::{Error::ParsecClientError, Result};
 use crate::subcommands::{
-    create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey, decrypt::Decrypt,
-    delete_client::DeleteClient, delete_key::DeleteKey, export_public_key::ExportPublicKey,
-    generate_random::GenerateRandom, list_authenticators::ListAuthenticators,
-    list_clients::ListClients, list_keys::ListKeys, list_opcodes::ListOpcodes,
-    list_providers::ListProviders, ping::Ping, sign::Sign, create_csr::CreateCsr,
+    create_csr::CreateCsr, create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey,
+    decrypt::Decrypt, delete_client::DeleteClient, delete_key::DeleteKey,
+    export_public_key::ExportPublicKey, generate_random::GenerateRandom,
+    list_authenticators::ListAuthenticators, list_clients::ListClients, list_keys::ListKeys,
+    list_opcodes::ListOpcodes, list_providers::ListProviders, ping::Ping, sign::Sign,
 };
 use parsec_client::BasicClient;
 use structopt::StructOpt;

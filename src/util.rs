@@ -19,9 +19,12 @@ struct EccSignature {
 
 /// Signs a given message using the hashing and signing policy that was associated with the given key when
 /// it was created.
+///
+/// If the signing key allows for the use of any hashing algorithm, then a default hash can optionally be passed
+/// by the caller, and this hash will be used (otherwise the function will fail).
 pub fn sign_message_with_policy(
     basic_client: &BasicClient,
-    key_name: &String,
+    key_name: &str,
     msg: &[u8],
     default_hash: Option<Hash>,
 ) -> Result<Vec<u8>> {

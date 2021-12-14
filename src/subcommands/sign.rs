@@ -23,8 +23,12 @@ pub struct Sign {
 impl Sign {
     /// Signs data.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
-        let signature =
-            sign_message_with_policy(&basic_client, &self.key_name, &self.input_data.as_bytes(), None)?;
+        let signature = sign_message_with_policy(
+            &basic_client,
+            &self.key_name,
+            self.input_data.as_bytes(),
+            None,
+        )?;
 
         let signature = base64::encode(&signature);
 
