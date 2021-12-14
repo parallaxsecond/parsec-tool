@@ -129,7 +129,7 @@ test_ecc() {
         echo
         echo "- Using openssl and the exported public ECC key to verify the signature"
         # Parsec-tool produces base64-encoded signatures. Let's decode it before verifing.
-        run_cmd $OPENSSL base64 -d -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
+        run_cmd $OPENSSL base64 -d -a -A -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
 
         printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
         run_cmd $OPENSSL dgst -sha256 -verify ${MY_TMP}/${KEY}.pem \
