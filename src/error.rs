@@ -27,6 +27,10 @@ pub enum Error {
     /// Error emanating from the base64 crate.
     #[error(transparent)]
     Base64Decode(#[from] base64::DecodeError),
+
+    /// Error emanating from the rcgen create (can occur when creating certificates or CSRs)
+    #[error(transparent)]
+    RcgenError(#[from] rcgen::RcgenError),
 }
 
 /// Errors originating in the parsec-tool.

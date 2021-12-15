@@ -75,6 +75,7 @@ test_crypto_provider() {
 
     test_rsa
     test_ecc
+    test_csr
 }
 
 test_rsa() {
@@ -91,7 +92,7 @@ test_rsa() {
         echo "- Encrypting \"$TEST_STR\" string using openssl and the exported public key"
 
         # Encrypt TEST_STR with the public key and base64-encode the result
-        echo -n "$TEST_STR" >${MY_TMP}/${KEY}.test_str
+        printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
         run_cmd $OPENSSL rsautl -encrypt -pubin -inkey ${MY_TMP}/${KEY}.pem \
                                 -in ${MY_TMP}/${KEY}.test_str -out ${MY_TMP}/${KEY}.bin
         run_cmd $OPENSSL base64 -A -in ${MY_TMP}/${KEY}.bin -out ${MY_TMP}/${KEY}.enc
@@ -129,11 +130,37 @@ test_ecc() {
         echo
         echo "- Using openssl and the exported public ECC key to verify the signature"
         # Parsec-tool produces base64-encoded signatures. Let's decode it before verifing.
-        run_cmd $OPENSSL base64 -d -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
+        run_cmd $OPENSSL base64 -d -a -A -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
 
-        echo -n "$TEST_STR" >${MY_TMP}/${KEY}.test_str
+        printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
         run_cmd $OPENSSL dgst -sha256 -verify ${MY_TMP}/${KEY}.pem \
                               -signature ${MY_TMP}/${KEY}.bin ${MY_TMP}/${KEY}.test_str
+    fi
+
+    delete_key "ECC" $KEY
+}
+
+test_csr() {
+    KEY="anta-key-ecc-csr"
+    TEST_CN="parallaxsecond.com"
+    TEST_SAN="localhost"
+
+    # CSR creation needs a signing key.
+    # At the moment, parsec-tool only creates signing keys when ECC is specified.
+    create_key "ECC" $KEY
+
+    # If the key was successfully created and exported
+    if [ -s ${MY_TMP}/${KEY}.pem ]; then
+        debug cat ${MY_TMP}/${KEY}.pem
+
+        echo
+        echo "- Creating a certificate signing request (CSR) from the test key."
+        run_cmd $PARSEC_TOOL_CMD create-csr --cn ${TEST_CN} --san ${TEST_SAN} --key-name $KEY >${MY_TMP}/${KEY}.csr
+        debug cat ${MY_TMP}/${KEY}.csr
+
+        echo
+        echo "- Using openssl to inspect the CSR content and verify the public key."
+        run_cmd $OPENSSL req -text -noout -verify -in ${MY_TMP}/${KEY}.csr
     fi
 
     delete_key "ECC" $KEY
