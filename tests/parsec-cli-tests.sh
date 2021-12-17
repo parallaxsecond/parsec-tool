@@ -43,14 +43,21 @@ delete_key() {
 }
 
 create_key() {
-# $1 - key type
+# $1 - key type ("RSA" or "ECC")
 # $2 - key name
+# $3 - key usage ("CRYPT" or "SIGN"), only consulted if $1 == "RSA"
     KEY="$2"
+
+    if [ "$3" = "SIGN" -a "$1" = "RSA" ]; then
+        EXTRA_CREATE_KEY_ARGS="--for-signing"
+    else
+        EXTRA_CREATE_KEY_ARGS=""
+    fi
 
     echo
     echo "- Creating an $1 key and exporting its public part"
     type_lower=$(echo $1 | tr '[:upper:]' '[:lower:]')
-    run_cmd $PARSEC_TOOL_CMD create-${type_lower}-key --key-name $KEY
+    run_cmd $PARSEC_TOOL_CMD create-${type_lower}-key --key-name $KEY $EXTRA_CREATE_KEY_ARGS
 
     if ! run_cmd $PARSEC_TOOL_CMD list-keys | tee /dev/stderr | grep -q "$KEY"; then
         echo "Error: $KEY is not listed"
@@ -73,16 +80,18 @@ test_crypto_provider() {
         echo "This provider doesn't support random number generation"
     fi
 
-    test_rsa
-    test_ecc
-    test_csr
+    test_encryption
+    test_signing "RSA"
+    test_signing "ECC"
+    test_csr "RSA"
+    test_csr "ECC"
 }
 
-test_rsa() {
-    KEY="anta-key-rsa"
+test_encryption() {
+    KEY="anta-key-rsa-crypt"
     TEST_STR="$(date) Parsec decryption test"
 
-    create_key "RSA" $KEY
+    create_key "RSA" $KEY "CRYPT"
 
     # If the key was successfully created and exported
     if [ -s ${MY_TMP}/${KEY}.pem ]; then
@@ -112,11 +121,12 @@ test_rsa() {
     delete_key "RSA" $KEY
 }
 
-test_ecc() {
-    KEY="anta-key-ecc"
+test_signing() {
+# $1 - key type ("RSA" or "ECC")
+    KEY="anta-key-sign"
     TEST_STR="$(date) Parsec signature test"
 
-    create_key "ECC" $KEY
+    create_key $1 $KEY "SIGN"
 
     # If the key was successfully created and exported
     if [ -s ${MY_TMP}/${KEY}.pem ]; then
@@ -137,17 +147,17 @@ test_ecc() {
                               -signature ${MY_TMP}/${KEY}.bin ${MY_TMP}/${KEY}.test_str
     fi
 
-    delete_key "ECC" $KEY
+    delete_key $1 $KEY
 }
 
 test_csr() {
-    KEY="anta-key-ecc-csr"
+# $1 - key type ("RSA" or "ECC")
+    KEY="anta-key-csr"
     TEST_CN="parallaxsecond.com"
     TEST_SAN="localhost"
 
     # CSR creation needs a signing key.
-    # At the moment, parsec-tool only creates signing keys when ECC is specified.
-    create_key "ECC" $KEY
+    create_key $1 $KEY "SIGN"
 
     # If the key was successfully created and exported
     if [ -s ${MY_TMP}/${KEY}.pem ]; then
@@ -163,7 +173,7 @@ test_csr() {
         run_cmd $OPENSSL req -text -noout -verify -in ${MY_TMP}/${KEY}.csr
     fi
 
-    delete_key "ECC" $KEY
+    delete_key $1 $KEY
 }
 
 PARSEC_SERVICE_ENDPOINT="${PARSEC_SERVICE_ENDPOINT:-unix:/run/parsec/parsec.sock}"
