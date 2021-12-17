@@ -23,7 +23,7 @@ pub struct CreateEccKey {
 impl CreateEccKey {
     /// Exports a key.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
-        info!("Creating ECC key...");
+        info!("Creating ECC signing key...");
 
         let attributes = Attributes {
             lifetime: Lifetime::Persistent,
