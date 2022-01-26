@@ -133,12 +133,12 @@ test_signing() {
         debug cat ${MY_TMP}/${KEY}.pem
 
         echo
-        echo "- Signing \"$TEST_STR\" string using the created ECC key"
+        echo "- Signing \"$TEST_STR\" string using the created $1 key"
         run_cmd $PARSEC_TOOL_CMD sign "$TEST_STR" --key-name $KEY >${MY_TMP}/${KEY}.sign
         debug cat ${MY_TMP}/${KEY}.sign
 
         echo
-        echo "- Using openssl and the exported public ECC key to verify the signature"
+        echo "- Using openssl and the exported public $1 key to verify the signature"
         # Parsec-tool produces base64-encoded signatures. Let's decode it before verifing.
         run_cmd $OPENSSL base64 -d -a -A -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
 
@@ -170,7 +170,8 @@ test_csr() {
 
         echo
         echo "- Using openssl to inspect the CSR content and verify the public key."
-        run_cmd $OPENSSL req -text -noout -verify -in ${MY_TMP}/${KEY}.csr
+        debug export TEXT_PARAM='-text'
+        run_cmd $OPENSSL req ${TEXT_PARAM} -noout -verify -in ${MY_TMP}/${KEY}.csr
     fi
 
     delete_key $1 $KEY
