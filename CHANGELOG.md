@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.5.1](https://github.com/parallaxsecond/parsec-tool/tree/0.5.1) (2022-02-21)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.0...0.5.1)
+
+**Merged pull requests:**
+
+- Update dependencies that have been yanked [\#73](https://github.com/parallaxsecond/parsec-tool/pull/73) ([ionut-arm](https://github.com/ionut-arm))
+- Bump version of PSA Crypto crates [\#72](https://github.com/parallaxsecond/parsec-tool/pull/72) ([ionut-arm](https://github.com/ionut-arm))
+
+## [0.5.0](https://github.com/parallaxsecond/parsec-tool/tree/0.5.0) (2022-02-15)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.4.0...0.5.0)
+
+**Fixed bugs:**
+
+- Some commands should not need authentication [\#49](https://github.com/parallaxsecond/parsec-tool/issues/49)
+
+**Closed issues:**
+
+- Error detection broken in parsec-cli-tests.sh  [\#66](https://github.com/parallaxsecond/parsec-tool/issues/66)
+
+**Merged pull requests:**
+
+- Prepare to release new version [\#71](https://github.com/parallaxsecond/parsec-tool/pull/71) ([ionut-arm](https://github.com/ionut-arm))
+- Small output fixes [\#70](https://github.com/parallaxsecond/parsec-tool/pull/70) ([anta5010](https://github.com/anta5010))
+- Support the creation of RSA signing keys as well as encryption keys [\#69](https://github.com/parallaxsecond/parsec-tool/pull/69) ([paulhowardarm](https://github.com/paulhowardarm))
+- Early support for certificate request generation in parsec-tool [\#68](https://github.com/parallaxsecond/parsec-tool/pull/68) ([paulhowardarm](https://github.com/paulhowardarm))
+- Avoid using pipes to run all test commands in the same sub-shell [\#67](https://github.com/parallaxsecond/parsec-tool/pull/67) ([anta5010](https://github.com/anta5010))
+- fix \#49 [\#65](https://github.com/parallaxsecond/parsec-tool/pull/65) ([jn9e9](https://github.com/jn9e9))
+- Upgrade client's version [\#64](https://github.com/parallaxsecond/parsec-tool/pull/64) ([hug-dev](https://github.com/hug-dev))
+- Update CHANGELOG.md with 0.4.0 details [\#63](https://github.com/parallaxsecond/parsec-tool/pull/63) ([anta5010](https://github.com/anta5010))
+
 ## [0.4.0](https://github.com/parallaxsecond/parsec-tool/tree/0.4.0) (2021-09-24)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.3.1...0.4.0)
