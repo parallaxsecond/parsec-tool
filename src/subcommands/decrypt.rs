@@ -24,7 +24,7 @@ pub struct Decrypt {
 impl Decrypt {
     /// Decrypts data.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
-        let input = base64::decode(self.input_data.as_bytes().to_vec())?;
+        let input = base64::decode(self.input_data.as_bytes())?;
 
         let alg = basic_client
             .key_attributes(&self.key_name)?
