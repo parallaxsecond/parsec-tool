@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.2](https://github.com/parallaxsecond/parsec-tool/tree/0.5.2) (2022-03-17)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.1...0.5.2)
+
+**Merged pull requests:**
+
+- Update `regex` to 1.5.5 [\#77](https://github.com/parallaxsecond/parsec-tool/pull/77) ([ionut-arm](https://github.com/ionut-arm))
+- Update version of `rcgen` we use [\#76](https://github.com/parallaxsecond/parsec-tool/pull/76) ([ionut-arm](https://github.com/ionut-arm))
+
 ## [0.5.1](https://github.com/parallaxsecond/parsec-tool/tree/0.5.1) (2022-02-21)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.0...0.5.1)
