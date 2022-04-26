@@ -9,6 +9,7 @@ mod create_rsa_key;
 mod decrypt;
 mod delete_client;
 mod delete_key;
+mod encrypt;
 mod export_public_key;
 mod generate_random;
 mod list_authenticators;
@@ -22,7 +23,7 @@ mod sign;
 use crate::error::{Error::ParsecClientError, Result};
 use crate::subcommands::{
     create_csr::CreateCsr, create_ecc_key::CreateEccKey, create_rsa_key::CreateRsaKey,
-    decrypt::Decrypt, delete_client::DeleteClient, delete_key::DeleteKey,
+    decrypt::Decrypt, delete_client::DeleteClient, delete_key::DeleteKey, encrypt::Encrypt,
     export_public_key::ExportPublicKey, generate_random::GenerateRandom,
     list_authenticators::ListAuthenticators, list_clients::ListClients, list_keys::ListKeys,
     list_opcodes::ListOpcodes, list_providers::ListProviders, ping::Ping, sign::Sign,
@@ -77,6 +78,9 @@ pub enum Subcommand {
 
     /// Create a Certificate Signing Request (CSR) from a keypair.
     CreateCsr(CreateCsr),
+
+    /// Encrypt data using the algorithm of the key
+    Encrypt(Encrypt),
 }
 
 impl Subcommand {
@@ -98,6 +102,7 @@ impl Subcommand {
             Subcommand::Decrypt(cmd) => cmd.run(client),
             Subcommand::DeleteKey(cmd) => cmd.run(client),
             Subcommand::CreateCsr(cmd) => cmd.run(client),
+            Subcommand::Encrypt(cmd) => cmd.run(client),
         }
     }
     /// Indicates if subcommand requires authentication
