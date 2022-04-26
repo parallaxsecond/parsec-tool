@@ -1,10 +1,13 @@
 // Copyright 2022 Contributors to the Parsec project.
 // SPDX-License-Identifier: Apache-2.0
 
-//! Encrypts data using a public key or the public part of a key pair.
+//! Encrypts some plaintext data with a specified key.
 //!
 //! Will use the algorithm set to the key's policy during creation. Currently only
-//! supports asymmetric encryption such as RSA.
+//! supports asymmetric encryption such as RSA, in which case the specified key must
+//! be a public key or an asymmetric key pair (of which the public part will be
+//! used). It is not possible to encrypt data using the private part of an asymmetric
+//! key pair. Encryption with symmetric keys will be added in the future.
 //!
 //! No salt is used.
 //!
