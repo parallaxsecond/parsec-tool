@@ -81,6 +81,7 @@ test_crypto_provider() {
     fi
 
     test_encryption
+    test_decryption
     test_signing "RSA"
     test_signing "ECC"
     test_csr "RSA"
@@ -88,6 +89,37 @@ test_crypto_provider() {
 }
 
 test_encryption() {
+    KEY="anta-key-rsa-encrypt"
+    TEST_STR="$(date) Parsec public key encryption test"
+
+    create_key "RSA" $KEY "CRYPT"
+
+    # If the key was successfully created and exported
+    if [ -s ${MY_TMP}/${KEY}.pem ]; then
+        debug cat ${MY_TMP}/${KEY}.pem
+
+        echo
+        echo "- Encrypting \"$TEST_STR\" string using Parsec public key encryption"
+
+        # Encrypt TEST_STR with the public key using Parsec rather than openssl
+        # (No need to base64 encode this, because parsec-tool already does it)
+        run_cmd $PARSEC_TOOL_CMD encrypt --key-name $KEY "$TEST_STR" > ${MY_TMP}/${KEY}.enc
+
+        echo
+        echo "- Using Parsec to decrypt the result (with the private key):"
+        run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
+                >${MY_TMP}/${KEY}.enc_str
+        cat ${MY_TMP}/${KEY}.enc_str
+        if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
+            echo "Error: The result is different from the initial string"
+            EXIT_CODE=$(($EXIT_CODE+1))
+        fi
+    fi
+
+    delete_key "RSA" $KEY
+}
+
+test_decryption() {
     KEY="anta-key-rsa-crypt"
     TEST_STR="$(date) Parsec decryption test"
 
