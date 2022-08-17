@@ -187,6 +187,7 @@ test_csr() {
     KEY="anta-key-csr"
     TEST_CN="parallaxsecond.com"
     TEST_SAN="localhost"
+    TEST_SERIAL="EZ4U2CIXL"
 
     # CSR creation needs a signing key.
     create_key $1 $KEY "SIGN"
@@ -197,13 +198,18 @@ test_csr() {
 
         echo
         echo "- Creating a certificate signing request (CSR) from the test key."
-        run_cmd $PARSEC_TOOL_CMD create-csr --cn ${TEST_CN} --san ${TEST_SAN} --key-name $KEY >${MY_TMP}/${KEY}.csr
+        run_cmd $PARSEC_TOOL_CMD create-csr --cn ${TEST_CN} --san ${TEST_SAN} --serialNumber ${TEST_SERIAL} --key-name $KEY >${MY_TMP}/${KEY}.csr
         debug cat ${MY_TMP}/${KEY}.csr
 
         echo
         echo "- Using openssl to inspect the CSR content and verify the public key."
-        debug export TEXT_PARAM='-text'
-        run_cmd $OPENSSL req ${TEXT_PARAM} -noout -verify -in ${MY_TMP}/${KEY}.csr
+        run_cmd $OPENSSL req -text -noout -verify -in ${MY_TMP}/${KEY}.csr >${MY_TMP}/${KEY}.txt
+        debug cat ${MY_TMP}/${KEY}.txt
+
+        if ! cat ${MY_TMP}/${KEY}.txt | grep "Subject:" | grep "serialNumber = ${TEST_SERIAL}"; then
+            echo "Error: The CSR does not contain the serialNumber field of the Distinguished Name"
+            EXIT_CODE=$(($EXIT_CODE+1))
+        fi
     fi
 
     delete_key $1 $KEY
