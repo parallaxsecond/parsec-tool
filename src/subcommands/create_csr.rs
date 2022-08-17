@@ -59,6 +59,10 @@ pub struct CreateCsr {
     #[structopt(long = "c")]
     country: Option<String>,
 
+    /// The serial number to be used within the Distinguished Name (DN) specification of the CSR.
+    #[structopt(long = "serialNumber")]
+    serial_number: Option<String>,
+
     /// A Subject Alternative Name (SAN) for the domain of the CSR.
     #[structopt(long = "san")]
     subject_alternative_name: Option<Vec<String>>,
@@ -123,6 +127,16 @@ impl CreateCsr {
 
         if let Some(country) = &self.country {
             dn.push(DnType::CountryName, country.clone());
+        }
+
+        if let Some(serial_number) = &self.serial_number {
+            // Rcgen does not have a DnType::SerialNumber, so use DnType::CustomDnType and supply the
+            // Object ID (OID) numerically. The OID for X509 serialNumber is 2.5.4.5 according to
+            // https://www.alvestrand.no/objectid/2.5.4.5.html and other sources.
+            dn.push(
+                DnType::CustomDnType(vec![2, 5, 4, 5]),
+                serial_number.clone(),
+            );
         }
 
         let mut params = CertificateParams::new(subject_alt_names);
