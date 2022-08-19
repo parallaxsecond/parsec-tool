@@ -26,6 +26,10 @@ pub struct CreateRsaKey {
     /// Signing keys, by default, will specify the SHA-256 hash algorithm and use PKCS#1 v1.5.
     #[structopt(short = "s", long = "for-signing")]
     is_for_signing: bool,
+
+    /// Specifies the size (strength) of the key in bits. The default size for RSA keys is 2048 bits.
+    #[structopt(short = "b", long = "bits")]
+    bits: Option<usize>,
 }
 
 impl CreateRsaKey {
@@ -63,7 +67,10 @@ impl CreateRsaKey {
         let attributes = Attributes {
             lifetime: Lifetime::Persistent,
             key_type: Type::RsaKeyPair,
-            bits: 2048,
+            // No prior validation of 'bits' argument. We have to let the service (and back-end hardware)
+            // decide what is valid. The PSA specification does not enforce any minimum/maximum/supported
+            // sizes for RSA keys.
+            bits: self.bits.unwrap_or(2048),
             policy,
         };
 

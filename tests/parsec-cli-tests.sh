@@ -86,6 +86,8 @@ test_crypto_provider() {
     test_signing "ECC"
     test_csr "RSA"
     test_csr "ECC"
+    test_rsa_key_bits
+    test_rsa_key_bits 1024
 }
 
 test_encryption() {
@@ -213,6 +215,27 @@ test_csr() {
     fi
 
     delete_key $1 $KEY
+}
+
+test_rsa_key_bits() {
+    KEY="anta-key-rsa-bits"
+    DEFAULT_SIZE=2048
+    
+    if [ -n "$1" ]; then
+       key_size=$1
+       key_param="--bits $1"
+    else
+       key_size=${DEFAULT_SIZE}
+       key_param=""
+    fi
+    
+    run_cmd $PARSEC_TOOL_CMD create-rsa-key --key-name $KEY $key_param
+    run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/checksize-${KEY}.pem
+    if ! run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem | grep -q "RSA Public-Key: (${key_size} bit)"; then
+       echo "Error: create-rsa-key should have produced a ${key_size}-bit RSA key."
+       EXIT_CODE=$(($EXIT_CODE+1))
+    fi
+    delete_key "RSA" $KEY
 }
 
 PARSEC_SERVICE_ENDPOINT="${PARSEC_SERVICE_ENDPOINT:-unix:/run/parsec/parsec.sock}"
