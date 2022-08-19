@@ -86,6 +86,8 @@ test_crypto_provider() {
     test_signing "ECC"
     test_csr "RSA"
     test_csr "ECC"
+    test_rsa_key_default_bits
+    test_rsa_key_specific_bits
 }
 
 test_encryption() {
@@ -213,6 +215,30 @@ test_csr() {
     fi
 
     delete_key $1 $KEY
+}
+
+test_rsa_key_default_bits() {
+    KEY="anta-key-rsa-default-bits"
+    create_key "RSA" $KEY
+    run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/checksize-${KEY}.pem
+    run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem >${MY_TMP}/checksize-${KEY}.txt
+    if ! cat ${MY_TMP}/checksize-${KEY}.txt | grep "RSA Public-Key: (2048 bit)"; then
+        echo "Error: create-rsa-key should have produced a 2048-bit RSA key by default."
+        EXIT_CODE=$(($EXIT_CODE+1))
+    fi
+    delete_key "RSA" $KEY
+}
+
+test_rsa_key_specific_bits() {
+    KEY="anta-key-rsa-specific-bits"
+    run_cmd $PARSEC_TOOL_CMD create-rsa-key --key-name $KEY --bits 1024
+    run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/checksize-${KEY}.pem
+    run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem >${MY_TMP}/checksize-${KEY}.txt
+    if ! cat ${MY_TMP}/checksize-${KEY}.txt | grep "RSA Public-Key: (1024 bit)"; then
+        echo "Error: create-rsa-key should have produced a 1024-bit RSA key as specified."
+        EXIT_CODE=$(($EXIT_CODE+1))
+    fi
+    delete_key "RSA" $KEY
 }
 
 PARSEC_SERVICE_ENDPOINT="${PARSEC_SERVICE_ENDPOINT:-unix:/run/parsec/parsec.sock}"
