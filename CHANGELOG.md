@@ -1,20 +1,39 @@
 # Changelog
 
-## [0.5.2](https://github.com/parallaxsecond/parsec-tool/tree/0.5.2) (2022-03-17)
+## [0.5.3](https://github.com/parallaxsecond/parsec-tool/tree/0.5.3) (2022-09-12)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.2...0.5.3)
+
+**Implemented enhancements:**
+
+- Support serialNumber attribute as part of DN for CSR [\#84](https://github.com/parallaxsecond/parsec-tool/issues/84)
+- Allow strength of RSA keys to be specified on the command-line [\#83](https://github.com/parallaxsecond/parsec-tool/issues/83)
+
+**Merged pull requests:**
+
+- Release prep 0.5.3 [\#88](https://github.com/parallaxsecond/parsec-tool/pull/88) ([mohamedasaker-arm](https://github.com/mohamedasaker-arm))
+- Support a 'bits' argument for specifying the size/strength of RSA keys. [\#86](https://github.com/parallaxsecond/parsec-tool/pull/86) ([paulhowardarm](https://github.com/paulhowardarm))
+- Support serialNumber field of Distinguished Name for CSRs. [\#85](https://github.com/parallaxsecond/parsec-tool/pull/85) ([paulhowardarm](https://github.com/paulhowardarm))
+- Update cargo audit configuration [\#81](https://github.com/parallaxsecond/parsec-tool/pull/81) ([hug-dev](https://github.com/hug-dev))
+- Add an encrypt command plus tests. [\#80](https://github.com/parallaxsecond/parsec-tool/pull/80) ([paulhowardarm](https://github.com/paulhowardarm))
+
+## [0.5.2](https://github.com/parallaxsecond/parsec-tool/tree/0.5.2) (2022-03-21)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.1...0.5.2)
 
 **Merged pull requests:**
 
+- Prepare 0.5.2 release [\#78](https://github.com/parallaxsecond/parsec-tool/pull/78) ([ionut-arm](https://github.com/ionut-arm))
 - Update `regex` to 1.5.5 [\#77](https://github.com/parallaxsecond/parsec-tool/pull/77) ([ionut-arm](https://github.com/ionut-arm))
 - Update version of `rcgen` we use [\#76](https://github.com/parallaxsecond/parsec-tool/pull/76) ([ionut-arm](https://github.com/ionut-arm))
 
-## [0.5.1](https://github.com/parallaxsecond/parsec-tool/tree/0.5.1) (2022-02-21)
+## [0.5.1](https://github.com/parallaxsecond/parsec-tool/tree/0.5.1) (2022-02-22)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.0...0.5.1)
 
 **Merged pull requests:**
 
+- Update changelog for 0.5.x [\#74](https://github.com/parallaxsecond/parsec-tool/pull/74) ([ionut-arm](https://github.com/ionut-arm))
 - Update dependencies that have been yanked [\#73](https://github.com/parallaxsecond/parsec-tool/pull/73) ([ionut-arm](https://github.com/ionut-arm))
 - Bump version of PSA Crypto crates [\#72](https://github.com/parallaxsecond/parsec-tool/pull/72) ([ionut-arm](https://github.com/ionut-arm))
 
