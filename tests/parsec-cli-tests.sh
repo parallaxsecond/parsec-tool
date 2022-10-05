@@ -231,7 +231,7 @@ test_rsa_key_bits() {
     
     run_cmd $PARSEC_TOOL_CMD create-rsa-key --key-name $KEY $key_param
     run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/checksize-${KEY}.pem
-    if ! run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem | grep -q "RSA Public-Key: (${key_size} bit)"; then
+    if ! run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem | grep -q "Public-Key: (${key_size} bit)"; then
        echo "Error: create-rsa-key should have produced a ${key_size}-bit RSA key."
        EXIT_CODE=$(($EXIT_CODE+1))
     fi
