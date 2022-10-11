@@ -1,6 +1,6 @@
 [package]
 name = "parsec-tool"
-version = "0.5.3"
+version = "0.5.4"
 authors = ["Contributors to the Parsec project"]
 description = "Parsec Command Line Interface"
 license = "Apache-2.0"
