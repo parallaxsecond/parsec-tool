@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.4](https://github.com/parallaxsecond/parsec-tool/tree/HEAD)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.3...HEAD)
+
+**Closed issues:**
+
+- parsec-cli-tests.sh incorrectly fails with openssl 3.0.5 [\#90](https://github.com/parallaxsecond/parsec-tool/issues/90)
+
+**Merged pull requests:**
+
+- Make RSA key string generic [\#92](https://github.com/parallaxsecond/parsec-tool/pull/92) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+
 ## [0.5.3](https://github.com/parallaxsecond/parsec-tool/tree/0.5.3) (2022-09-12)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.2...0.5.3)
@@ -11,6 +23,7 @@
 
 **Merged pull requests:**
 
+- Update Chanege log for the release 0.5.3 [\#89](https://github.com/parallaxsecond/parsec-tool/pull/89) ([mohamedasaker-arm](https://github.com/mohamedasaker-arm))
 - Release prep 0.5.3 [\#88](https://github.com/parallaxsecond/parsec-tool/pull/88) ([mohamedasaker-arm](https://github.com/mohamedasaker-arm))
 - Support a 'bits' argument for specifying the size/strength of RSA keys. [\#86](https://github.com/parallaxsecond/parsec-tool/pull/86) ([paulhowardarm](https://github.com/paulhowardarm))
 - Support serialNumber field of Distinguished Name for CSRs. [\#85](https://github.com/parallaxsecond/parsec-tool/pull/85) ([paulhowardarm](https://github.com/paulhowardarm))
