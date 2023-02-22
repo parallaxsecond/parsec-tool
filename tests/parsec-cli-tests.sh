@@ -45,11 +45,13 @@ delete_key() {
 create_key() {
 # $1 - key type ("RSA" or "ECC")
 # $2 - key name
-# $3 - key usage ("CRYPT" or "SIGN"), only consulted if $1 == "RSA"
+# $3 - key usage ("SIGN" or "OAEP"), only consulted if $1 == "RSA"
     KEY="$2"
 
     if [ "$3" = "SIGN" -a "$1" = "RSA" ]; then
         EXTRA_CREATE_KEY_ARGS="--for-signing"
+    elif [ "$3" = "OAEP" -a "$1" = "RSA" ]; then
+        EXTRA_CREATE_KEY_ARGS="--oaep"
     else
         EXTRA_CREATE_KEY_ARGS=""
     fi
@@ -94,65 +96,76 @@ test_encryption() {
     KEY="anta-key-rsa-encrypt"
     TEST_STR="$(date) Parsec public key encryption test"
 
-    create_key "RSA" $KEY "CRYPT"
+    # Test both RSA PKCS#1 v1.5 (default) and RSA OAEP encryption algorithms
+    for alg in "PKCS#1 v1.5" "OAEP"; do
+        create_key "RSA" "$KEY" "$alg"
 
-    # If the key was successfully created and exported
-    if [ -s ${MY_TMP}/${KEY}.pem ]; then
-        debug cat ${MY_TMP}/${KEY}.pem
+        # If the key was successfully created and exported
+        if [ -s ${MY_TMP}/${KEY}.pem ]; then
+            debug cat ${MY_TMP}/${KEY}.pem
 
-        echo
-        echo "- Encrypting \"$TEST_STR\" string using Parsec public key encryption"
+            echo
+            echo "- Encrypting \"$TEST_STR\" string using Parsec public key RSA $alg encryption"
 
-        # Encrypt TEST_STR with the public key using Parsec rather than openssl
-        # (No need to base64 encode this, because parsec-tool already does it)
-        run_cmd $PARSEC_TOOL_CMD encrypt --key-name $KEY "$TEST_STR" > ${MY_TMP}/${KEY}.enc
+            # Encrypt TEST_STR with the public key using Parsec rather than openssl
+            # (No need to base64 encode this, because parsec-tool already does it)
+            run_cmd $PARSEC_TOOL_CMD encrypt --key-name $KEY "$TEST_STR" > ${MY_TMP}/${KEY}.enc
 
-        echo
-        echo "- Using Parsec to decrypt the result (with the private key):"
-        run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
-                >${MY_TMP}/${KEY}.enc_str
-        cat ${MY_TMP}/${KEY}.enc_str
-        if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
-            echo "Error: The result is different from the initial string"
-            EXIT_CODE=$(($EXIT_CODE+1))
+            echo
+            echo "- Using Parsec to decrypt the result (with the private key):"
+            run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
+                    >${MY_TMP}/${KEY}.enc_str
+            cat ${MY_TMP}/${KEY}.enc_str
+            if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
+                echo "Error: The result is different from the initial string"
+                EXIT_CODE=$(($EXIT_CODE+1))
+            fi
         fi
-    fi
 
-    delete_key "RSA" $KEY
+        delete_key "RSA" $KEY
+    done
 }
 
 test_decryption() {
     KEY="anta-key-rsa-crypt"
     TEST_STR="$(date) Parsec decryption test"
 
-    create_key "RSA" $KEY "CRYPT"
+    # Test both RSA PKCS#1 v1.5 (default) and RSA OAEP decryption algorithms
+    for alg in "PKCS#1 v1.5" "OAEP"; do
+        create_key "RSA" "$KEY" "$alg"
 
-    # If the key was successfully created and exported
-    if [ -s ${MY_TMP}/${KEY}.pem ]; then
-        debug cat ${MY_TMP}/${KEY}.pem
+        # If the key was successfully created and exported
+        if [ -s ${MY_TMP}/${KEY}.pem ]; then
+            debug cat ${MY_TMP}/${KEY}.pem
 
-        echo
-        echo "- Encrypting \"$TEST_STR\" string using openssl and the exported public key"
+            echo
+            echo "- Encrypting \"$TEST_STR\" string using openssl with RSA $alg algorithm and the exported public key"
 
-        # Encrypt TEST_STR with the public key and base64-encode the result
-        printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
-        run_cmd $OPENSSL rsautl -encrypt -pubin -inkey ${MY_TMP}/${KEY}.pem \
-                                -in ${MY_TMP}/${KEY}.test_str -out ${MY_TMP}/${KEY}.bin
-        run_cmd $OPENSSL base64 -A -in ${MY_TMP}/${KEY}.bin -out ${MY_TMP}/${KEY}.enc
-        debug cat ${MY_TMP}/${KEY}.enc
+            # Encrypt TEST_STR with the public key and base64-encode the result
+            printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
+            if [ "$alg" = "OAEP" ]; then
+                pkeyopt="-pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256"
+            else
+                pkeyopt=""
+            fi
+            run_cmd $OPENSSL pkeyutl -encrypt $pkeyopt -pubin -inkey ${MY_TMP}/${KEY}.pem \
+                                     -in ${MY_TMP}/${KEY}.test_str -out ${MY_TMP}/${KEY}.bin
+            run_cmd $OPENSSL base64 -A -in ${MY_TMP}/${KEY}.bin -out ${MY_TMP}/${KEY}.enc
+            debug cat ${MY_TMP}/${KEY}.enc
 
-        echo
-        echo "- Using Parsec to decrypt the result:"
-        run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
-                >${MY_TMP}/${KEY}.enc_str
-        cat ${MY_TMP}/${KEY}.enc_str
-        if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
-            echo "Error: The result is different from the initial string"
-            EXIT_CODE=$(($EXIT_CODE+1))
+            echo
+            echo "- Using Parsec to decrypt the result:"
+            run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
+                    >${MY_TMP}/${KEY}.enc_str
+            cat ${MY_TMP}/${KEY}.enc_str
+            if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
+                echo "Error: The result is different from the initial string"
+                EXIT_CODE=$(($EXIT_CODE+1))
+            fi
         fi
-    fi
 
-    delete_key "RSA" $KEY
+        delete_key "RSA" $KEY
+    done
 }
 
 test_signing() {
@@ -220,7 +233,7 @@ test_csr() {
 test_rsa_key_bits() {
     KEY="anta-key-rsa-bits"
     DEFAULT_SIZE=2048
-    
+
     if [ -n "$1" ]; then
        key_size=$1
        key_param="--bits $1"
@@ -228,7 +241,7 @@ test_rsa_key_bits() {
        key_size=${DEFAULT_SIZE}
        key_param=""
     fi
-    
+
     run_cmd $PARSEC_TOOL_CMD create-rsa-key --key-name $KEY $key_param
     run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/checksize-${KEY}.pem
     if ! run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem | grep -q "Public-Key: (${key_size} bit)"; then

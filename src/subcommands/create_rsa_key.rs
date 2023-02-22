@@ -30,6 +30,11 @@ pub struct CreateRsaKey {
     /// Specifies the size (strength) of the key in bits. The default size for RSA keys is 2048 bits.
     #[structopt(short = "b", long = "bits")]
     bits: Option<usize>,
+
+    /// Specifies if the RSA key should be created with permitted RSA OAEP (SHA256) encryption algorithm
+    /// instead of the default RSA PKCS#1 v1.5 one.
+    #[structopt(short = "o", long = "oaep")]
+    oaep: bool,
 }
 
 impl CreateRsaKey {
@@ -60,7 +65,14 @@ impl CreateRsaKey {
                     let _ = usage_flags.set_encrypt().set_decrypt();
                     usage_flags
                 },
-                permitted_algorithms: AsymmetricEncryption::RsaPkcs1v15Crypt.into(),
+                permitted_algorithms: if self.oaep {
+                    AsymmetricEncryption::RsaOaep {
+                        hash_alg: Hash::Sha256,
+                    }
+                    .into()
+                } else {
+                    AsymmetricEncryption::RsaPkcs1v15Crypt.into()
+                },
             }
         };
 
