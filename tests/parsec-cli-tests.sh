@@ -82,8 +82,14 @@ test_crypto_provider() {
         echo "This provider doesn't support random number generation"
     fi
 
-    test_encryption
-    test_decryption
+    if [ -z "$NO_PKCS1_V15" ]; then
+        test_encryption "PKCS#1 v1.5"
+        test_decryption "PKCS#1 v1.5"
+    fi
+    if [ -z "$NO_OAEP" ]; then
+        test_encryption "OAEP"
+        test_decryption "OAEP"
+    fi
     test_signing "RSA"
     test_signing "ECC"
     test_csr "RSA"
@@ -93,79 +99,77 @@ test_crypto_provider() {
 }
 
 test_encryption() {
+# $1 - algorithm
     KEY="anta-key-rsa-encrypt"
     TEST_STR="$(date) Parsec public key encryption test"
+    ALG="$1"
 
-    # Test both RSA PKCS#1 v1.5 (default) and RSA OAEP encryption algorithms
-    for alg in "PKCS#1 v1.5" "OAEP"; do
-        create_key "RSA" "$KEY" "$alg"
+    create_key "RSA" "$KEY" "$ALG"
 
-        # If the key was successfully created and exported
-        if [ -s ${MY_TMP}/${KEY}.pem ]; then
-            debug cat ${MY_TMP}/${KEY}.pem
+    # If the key was successfully created and exported
+    if [ -s ${MY_TMP}/${KEY}.pem ]; then
+        debug cat ${MY_TMP}/${KEY}.pem
 
-            echo
-            echo "- Encrypting \"$TEST_STR\" string using Parsec public key RSA $alg encryption"
+        echo
+        echo "- Encrypting \"$TEST_STR\" string using Parsec public key RSA $ALG encryption"
 
-            # Encrypt TEST_STR with the public key using Parsec rather than openssl
-            # (No need to base64 encode this, because parsec-tool already does it)
-            run_cmd $PARSEC_TOOL_CMD encrypt --key-name $KEY "$TEST_STR" > ${MY_TMP}/${KEY}.enc
+        # Encrypt TEST_STR with the public key using Parsec rather than openssl
+        # (No need to base64 encode this, because parsec-tool already does it)
+        run_cmd $PARSEC_TOOL_CMD encrypt --key-name $KEY "$TEST_STR" > ${MY_TMP}/${KEY}.enc
 
-            echo
-            echo "- Using Parsec to decrypt the result (with the private key):"
-            run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
-                    >${MY_TMP}/${KEY}.enc_str
-            cat ${MY_TMP}/${KEY}.enc_str
-            if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
-                echo "Error: The result is different from the initial string"
-                EXIT_CODE=$(($EXIT_CODE+1))
-            fi
+        echo
+        echo "- Using Parsec to decrypt the result (with the private key):"
+        run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
+                >${MY_TMP}/${KEY}.enc_str
+        cat ${MY_TMP}/${KEY}.enc_str
+        if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
+            echo "Error: The result is different from the initial string"
+            EXIT_CODE=$(($EXIT_CODE+1))
         fi
+    fi
 
-        delete_key "RSA" $KEY
-    done
+    delete_key "RSA" $KEY
 }
 
 test_decryption() {
+# $1 - algorithm
     KEY="anta-key-rsa-crypt"
     TEST_STR="$(date) Parsec decryption test"
+    ALG="$1"
 
-    # Test both RSA PKCS#1 v1.5 (default) and RSA OAEP decryption algorithms
-    for alg in "PKCS#1 v1.5" "OAEP"; do
-        create_key "RSA" "$KEY" "$alg"
+    create_key "RSA" "$KEY" "$ALG"
 
-        # If the key was successfully created and exported
-        if [ -s ${MY_TMP}/${KEY}.pem ]; then
-            debug cat ${MY_TMP}/${KEY}.pem
+    # If the key was successfully created and exported
+    if [ -s ${MY_TMP}/${KEY}.pem ]; then
+        debug cat ${MY_TMP}/${KEY}.pem
 
-            echo
-            echo "- Encrypting \"$TEST_STR\" string using openssl with RSA $alg algorithm and the exported public key"
+        echo
+        echo "- Encrypting \"$TEST_STR\" string using openssl with RSA $ALG algorithm and the exported public key"
 
-            # Encrypt TEST_STR with the public key and base64-encode the result
-            printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
-            if [ "$alg" = "OAEP" ]; then
-                pkeyopt="-pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256"
-            else
-                pkeyopt=""
-            fi
-            run_cmd $OPENSSL pkeyutl -encrypt $pkeyopt -pubin -inkey ${MY_TMP}/${KEY}.pem \
-                                     -in ${MY_TMP}/${KEY}.test_str -out ${MY_TMP}/${KEY}.bin
-            run_cmd $OPENSSL base64 -A -in ${MY_TMP}/${KEY}.bin -out ${MY_TMP}/${KEY}.enc
-            debug cat ${MY_TMP}/${KEY}.enc
-
-            echo
-            echo "- Using Parsec to decrypt the result:"
-            run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
-                    >${MY_TMP}/${KEY}.enc_str
-            cat ${MY_TMP}/${KEY}.enc_str
-            if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
-                echo "Error: The result is different from the initial string"
-                EXIT_CODE=$(($EXIT_CODE+1))
-            fi
+        # Encrypt TEST_STR with the public key and base64-encode the result
+        printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
+        if [ "$ALG" = "OAEP" ]; then
+            pkeyopt="-pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256"
+        else
+            pkeyopt=""
         fi
+        run_cmd $OPENSSL pkeyutl -encrypt $pkeyopt -pubin -inkey ${MY_TMP}/${KEY}.pem \
+                                 -in ${MY_TMP}/${KEY}.test_str -out ${MY_TMP}/${KEY}.bin
+        run_cmd $OPENSSL base64 -A -in ${MY_TMP}/${KEY}.bin -out ${MY_TMP}/${KEY}.enc
+        debug cat ${MY_TMP}/${KEY}.enc
 
-        delete_key "RSA" $KEY
-    done
+        echo
+        echo "- Using Parsec to decrypt the result:"
+        run_cmd $PARSEC_TOOL_CMD decrypt $(cat ${MY_TMP}/${KEY}.enc) --key-name $KEY \
+                >${MY_TMP}/${KEY}.enc_str
+        cat ${MY_TMP}/${KEY}.enc_str
+        if [ "$(cat ${MY_TMP}/${KEY}.enc_str)" != "$TEST_STR" ]; then
+            echo "Error: The result is different from the initial string"
+            EXIT_CODE=$(($EXIT_CODE+1))
+        fi
+    fi
+
+    delete_key "RSA" $KEY
 }
 
 test_signing() {
@@ -251,18 +255,12 @@ test_rsa_key_bits() {
     delete_key "RSA" $KEY
 }
 
-PARSEC_SERVICE_ENDPOINT="${PARSEC_SERVICE_ENDPOINT:-unix:/run/parsec/parsec.sock}"
-PARSEC_TOOL="${PARSEC_TOOL:-$(which parsec-tool)}"
-OPENSSL="${OPENSSL:-$(which openssl)}"
-
-if [ -z "$PARSEC_TOOL" ] || [ -z "$OPENSSL" ]; then
-    echo "ERROR: Cannot find either parsec-tool or openssl."
-    echo "  Install the tools in PATH or define PARSEC_TOOL and OPENSSL variables"
-    exit 1
-fi
-
 PARSEC_TOOL_DEBUG=
 PROVIDER=
+
+# Test both RSA PKCS#1 v1.5 (default) and RSA OAEP encryption algorithms
+NO_OAEP=
+NO_PKCS1_V15=
 while [ "$#" -gt 0 ]; do
     case "$1" in
         -[0-9]* )
@@ -273,6 +271,12 @@ while [ "$#" -gt 0 ]; do
             RUST_LOG="${RUST_LOG:-trace}"
             set -x
         ;;
+        --no-oaep )
+            NO_OAEP="true"
+        ;;
+        --no-v1.5 )
+            NO_PKCS1_V15="true"
+        ;;
         *)
             cat <<EOF
 Usage: $0 [parameter]
@@ -280,12 +284,32 @@ Usage: $0 [parameter]
     -h:   Print help
     -d:   Debug output
     -N:   Test only the provider with N ID
+    --no-oaep: Do not test RSA-OAEP(SHA256) encryption/decryption operations
+    --no-v1.5: Do not test RSA-PKCS#1-v1.5 encryption/decryption operations
+
+  Environment variables used if defined:
+    PARSEC_SERVICE_ENDPOINT - Parsec service API endpoint
+                              default: unix:/run/parsec/parsec.sock
+    PARSEC_TOOL             - full path to parsec-tool
+                              default: "which parsec-tool"
+    OPENSSL                 - full path to openssl
+                              default: "which openssl"
 EOF
             exit
         ;;
     esac
     shift
 done
+
+PARSEC_SERVICE_ENDPOINT="${PARSEC_SERVICE_ENDPOINT:-unix:/run/parsec/parsec.sock}"
+PARSEC_TOOL="${PARSEC_TOOL:-$(which parsec-tool)}"
+OPENSSL="${OPENSSL:-$(which openssl)}"
+
+if [ -z "$PARSEC_TOOL" ] || [ -z "$OPENSSL" ]; then
+    echo "ERROR: Cannot find either parsec-tool or openssl."
+    echo "  Install the tools in PATH or define PARSEC_TOOL and OPENSSL variables"
+    exit 1
+fi
 
 export RUST_LOG="${RUST_LOG:-info}"
 if ! ping_parsec; then exit 1; fi
