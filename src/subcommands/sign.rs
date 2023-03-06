@@ -30,7 +30,7 @@ impl Sign {
             None,
         )?;
 
-        let signature = base64::encode(&signature);
+        let signature = base64::encode(signature);
 
         println!("{}", signature);
 

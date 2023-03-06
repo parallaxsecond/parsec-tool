@@ -62,7 +62,7 @@ impl Encrypt {
             }
         };
 
-        let ciphertext = base64::encode(&ciphertext);
+        let ciphertext = base64::encode(ciphertext);
 
         println!("{}", ciphertext);
 
