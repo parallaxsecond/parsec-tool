@@ -1,5 +1,5 @@
 [advisories]
-ignore = []
+ignore = ["RUSTSEC-2021-0139"] # Issue has been documented here: https://github.com/parallaxsecond/parsec-tool/security/advisories/GHSA-w88c-r29w-fv6m
 informational_warnings = ["unmaintained"] # warn for categories of informational advisories
 severity_threshold = "low" # CVSS severity ("none", "low", "medium", "high", "critical")
 
