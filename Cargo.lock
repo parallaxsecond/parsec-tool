@@ -779,9 +779,9 @@ dependencies = [
 
 [[package]]
 name = "parsec-client"
-version = "0.14.1"
+version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3c1beddc163016f6a1db85c98e2fd4699af1f6147544d4a0ff889c4081873ee"
+checksum = "5798ac04b102b074ad2a26976e53e4c918d2342ccb8ce6f31c2e71ab338b1156"
 dependencies = [
  "derivative",
  "log",
@@ -795,9 +795,9 @@ dependencies = [
 
 [[package]]
 name = "parsec-interface"
-version = "0.27.0"
+version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2aed88aac3338f48063f504539fc0f19f2c1ff32ed8c6ed37ac5451b4169c7cc"
+checksum = "f6f1b90789d4cabb8d7100a2ce632baad9683c2598f302d2387d9a45f967de56"
 dependencies = [
  "bincode",
  "derivative",
@@ -815,7 +815,7 @@ dependencies = [
 
 [[package]]
 name = "parsec-tool"
-version = "0.5.3"
+version = "0.5.4"
 dependencies = [
  "ansi_term",
  "atty",
@@ -984,9 +984,9 @@ checksum = "cf7e6d18738ecd0902d30d1ad232c9125985a3422929b16c65517b38adc14f96"
 
 [[package]]
 name = "psa-crypto"
-version = "0.9.2"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f96fc66af3a6d2cb810d08cd631d559130102657d8fc2890a4f202afebcf0cae"
+checksum = "31a7f20ebf21c7a53dd8aa24a11bd4cc9f3f838f0de1b32e17cb6cd4f88fdf7f"
 dependencies = [
  "log",
  "psa-crypto-sys",
@@ -996,9 +996,9 @@ dependencies = [
 
 [[package]]
 name = "psa-crypto-sys"
-version = "0.9.3"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bbad66b89eacc985cab3aed5c898e4b39e3d13424b0f8852a30b210f60f92fa"
+checksum = "0d3f19716e0584f8d5627712617b1cc5b9b642943fd9a61b883b8d533f5d400c"
 dependencies = [
  "cc",
  "cmake",
