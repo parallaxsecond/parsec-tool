@@ -1,8 +1,31 @@
 # Changelog
 
-## [0.5.4](https://github.com/parallaxsecond/parsec-tool/tree/HEAD)
+## [0.6.0](https://github.com/parallaxsecond/parsec-tool/tree/0.6.0) (2023-03-27)
 
-[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.3...HEAD)
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.6.0-rc2...0.6.0)
+
+## [0.6.0-rc2](https://github.com/parallaxsecond/parsec-tool/tree/0.6.0-rc2) (2023-03-27)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.6.0-rc1...0.6.0-rc2)
+
+**Merged pull requests:**
+
+- Align crates version with parsec-service [\#99](https://github.com/parallaxsecond/parsec-tool/pull/99) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+- Fix nightly CI and update lock [\#98](https://github.com/parallaxsecond/parsec-tool/pull/98) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+
+## [0.6.0-rc1](https://github.com/parallaxsecond/parsec-tool/tree/0.6.0-rc1) (2023-03-15)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.4...0.6.0-rc1)
+
+**Merged pull requests:**
+
+- Bump parsec-client [\#97](https://github.com/parallaxsecond/parsec-tool/pull/97) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+- Add support for RSA OAEP into parsec-tool and parsec-cli-tests.sh [\#96](https://github.com/parallaxsecond/parsec-tool/pull/96) ([anta5010](https://github.com/anta5010))
+- Update lib.rs to remove const\_err [\#95](https://github.com/parallaxsecond/parsec-tool/pull/95) ([marcsvll](https://github.com/marcsvll))
+
+## [0.5.4](https://github.com/parallaxsecond/parsec-tool/tree/0.5.4) (2022-10-12)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.5.3...0.5.4)
 
 **Closed issues:**
 
@@ -10,6 +33,7 @@
 
 **Merged pull requests:**
 
+- Create 0.5.4 point release [\#93](https://github.com/parallaxsecond/parsec-tool/pull/93) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
 - Make RSA key string generic [\#92](https://github.com/parallaxsecond/parsec-tool/pull/92) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
 
 ## [0.5.3](https://github.com/parallaxsecond/parsec-tool/tree/0.5.3) (2022-09-12)
