@@ -4,13 +4,20 @@ on:
   schedule:
     # Every night at midnight
     - cron:  '0 0 * * *'
-
+  workflow_dispatch:
+    inputs:
+      rev:
+        description: "Revision hash to run against"
+        required: false
+        default: ""
 jobs:
   dependencies:
     name: Check for unused dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: "${{ github.event.inputs.rev }}"
       - name: Install latest Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -25,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: "${{ github.event.inputs.rev }}"
       - name: Install latest Rust
         uses: actions-rs/toolchain@v1
         with:
