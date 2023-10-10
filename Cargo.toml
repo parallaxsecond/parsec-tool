@@ -10,12 +10,13 @@ keywords = ["parsec", "cli", "tool"]
 categories = ["development-tools", "command-line-utilities"]
 edition = "2018"
 documentation = "https://docs.rs/crate/parsec-tool"
+rust-version = "1.66.0"
 
 [dependencies]
 ansi_term = "0.12.1"
 atty = "0.2.14"
 clap = "2.34.0"
-parsec-client = "0.15.0"
+parsec-client = "0.16.0"
 structopt = "0.3.17"
 thiserror = "1.0.20"
 env_logger = "0.8.2"
