@@ -8,12 +8,14 @@ set -xeuf -o pipefail
 # Points to Parsec's Unix Domain Socket on the CI
 export PARSEC_SERVICE_ENDPOINT="unix:/tmp/parsec.sock"
 export RUST_LOG=error
+MSRV=1.66.0
 
 #########
 # Build #
 #########
-RUST_BACKTRACE=1 cargo build
-RUST_BACKTRACE=1 cargo build --features spiffe-auth
+rustup toolchain install ${MSRV}
+RUST_BACKTRACE=1 cargo +${MSRV} build
+RUST_BACKTRACE=1 cargo +${MSRV} build --features spiffe-auth
 
 #################
 # Static checks #
