@@ -823,7 +823,7 @@ dependencies = [
  "oid",
  "parsec-client",
  "pem",
- "picky-asn1 0.7.2",
+ "picky-asn1",
  "picky-asn1-der",
  "picky-asn1-x509",
  "rcgen",
@@ -856,17 +856,6 @@ checksum = "9b2a4787296e9989611394c33f193f676704af1686e70b8f8033ab5ba9a35a94"
 
 [[package]]
 name = "picky-asn1"
-version = "0.7.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6f338f1fd4f3e13e75e986ca29f2a3c62528d88d3cbadf4afdcefb6b087f2d32"
-dependencies = [
- "oid",
- "serde",
- "serde_bytes",
-]
-
-[[package]]
-name = "picky-asn1"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "295eea0f33c16be21e2a98b908fdd4d73c04dd48c8480991b76dbcf0cb58b212"
@@ -882,7 +871,7 @@ version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5df7873a9e36d42dadb393bea5e211fe83d793c172afad5fb4ec846ec582793f"
 dependencies = [
- "picky-asn1 0.8.0",
+ "picky-asn1",
  "serde",
  "serde_bytes",
 ]
@@ -895,7 +884,7 @@ checksum = "2c5f20f71a68499ff32310f418a6fad8816eac1a2859ed3f0c5c741389dd6208"
 dependencies = [
  "base64 0.21.4",
  "oid",
- "picky-asn1 0.8.0",
+ "picky-asn1",
  "picky-asn1-der",
  "serde",
 ]
