@@ -14,7 +14,6 @@ rust-version = "1.66.0"
 
 [dependencies]
 atty = "0.2.14"
-clap = "2.34.0"
 parsec-client = "0.16.0"
 structopt = "0.3.17"
 thiserror = "1.0.20"

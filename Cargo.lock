@@ -855,7 +855,6 @@ version = "0.6.0"
 dependencies = [
  "atty",
  "base64 0.13.1",
- "clap",
  "env_logger",
  "log",
  "oid",
