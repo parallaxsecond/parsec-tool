@@ -814,7 +814,6 @@ dependencies = [
 name = "parsec-tool"
 version = "0.6.0"
 dependencies = [
- "ansi_term",
  "atty",
  "base64 0.13.1",
  "clap",
