@@ -13,7 +13,6 @@ documentation = "https://docs.rs/crate/parsec-tool"
 rust-version = "1.66.0"
 
 [dependencies]
-atty = "0.2.14"
 parsec-client = "0.16.0"
 structopt = { version = "0.3.17", default-features = false }
 thiserror = "1.0.20"
