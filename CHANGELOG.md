@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.7.0](https://github.com/parallaxsecond/parsec-tool/tree/0.7.0) (2023-10-17)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.7.0-rc1...0.7.0)
+
+## [0.7.0-rc1](https://github.com/parallaxsecond/parsec-tool/tree/0.7.0-rc1) (2023-10-17)
+
+[Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.6.0...0.7.0-rc1)
+
+**Closed issues:**
+
+- Intermittent test failure for test\_csr\(\) and test\_signing\(\) [\#101](https://github.com/parallaxsecond/parsec-tool/issues/101)
+
+**Merged pull requests:**
+
+- Remove unused atty dependency [\#110](https://github.com/parallaxsecond/parsec-tool/pull/110) ([tgonzalezorlandoarm](https://github.com/tgonzalezorlandoarm))
+- Disable structopt default features [\#109](https://github.com/parallaxsecond/parsec-tool/pull/109) ([tgonzalezorlandoarm](https://github.com/tgonzalezorlandoarm))
+- Update parsec-interface [\#108](https://github.com/parallaxsecond/parsec-tool/pull/108) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+- Remove unmaintained ansi\_term, clap crates and update env\_logger [\#107](https://github.com/parallaxsecond/parsec-tool/pull/107) ([tgonzalezorlandoarm](https://github.com/tgonzalezorlandoarm))
+- Align crates with parsec service [\#106](https://github.com/parallaxsecond/parsec-tool/pull/106) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+- Bump parsec-client and other crates [\#105](https://github.com/parallaxsecond/parsec-tool/pull/105) ([gowthamsk-arm](https://github.com/gowthamsk-arm))
+- ci: Add workflow dispatch [\#104](https://github.com/parallaxsecond/parsec-tool/pull/104) ([tgonzalezorlandoarm](https://github.com/tgonzalezorlandoarm))
+- Bump ASN1 crates dependencies [\#102](https://github.com/parallaxsecond/parsec-tool/pull/102) ([anta5010](https://github.com/anta5010))
+
 ## [0.6.0](https://github.com/parallaxsecond/parsec-tool/tree/0.6.0) (2023-03-27)
 
 [Full Changelog](https://github.com/parallaxsecond/parsec-tool/compare/0.6.0-rc2...0.6.0)
