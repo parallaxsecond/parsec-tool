@@ -1,0 +1,16 @@
+name: "CI script Tests"
+description: "Install and run Parsec with the Mbed Crypto provider"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install and run Parsec with the Mbed Crypto provider
+      run: |
+        git clone https://github.com/parallaxsecond/parsec.git
+        cd parsec
+        cargo build --features "mbed-crypto-provider"
+        ./target/debug/parsec -c ../tests/test_config.toml &
+      shell: bash
+    - name: Execute CI script
+      run: ./tests/ci.sh
+      shell: bash
