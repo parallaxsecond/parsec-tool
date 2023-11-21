@@ -32,3 +32,4 @@ fi
 ./target/debug/parsec-tool --help
 
 PARSEC_TOOL="./target/debug/parsec-tool" tests/parsec-cli-tests.sh -d
+PARSEC_TOOL="./target/debug/parsec-tool" tests/parsec-cli-tests.sh -d --rsa-key-size 1024
