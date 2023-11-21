@@ -56,10 +56,16 @@ create_key() {
         EXTRA_CREATE_KEY_ARGS=""
     fi
 
+    if [ "$RSA_KEY_SIZE" -a "$1" = "RSA" ]; then
+        KEY_LEN="--bits $RSA_KEY_SIZE"
+    else
+        KEY_LEN=""
+    fi
+
     echo
     echo "- Creating an $1 key and exporting its public part"
     type_lower=$(echo $1 | tr '[:upper:]' '[:lower:]')
-    run_cmd $PARSEC_TOOL_CMD create-${type_lower}-key --key-name $KEY $EXTRA_CREATE_KEY_ARGS
+    run_cmd $PARSEC_TOOL_CMD create-${type_lower}-key --key-name $KEY $EXTRA_CREATE_KEY_ARGS $KEY_LEN
 
     if ! run_cmd $PARSEC_TOOL_CMD list-keys | tee /dev/stderr | grep -q "$KEY"; then
         echo "Error: $KEY is not listed"
@@ -101,7 +107,7 @@ test_crypto_provider() {
 test_encryption() {
 # $1 - algorithm
     KEY="anta-key-rsa-encrypt"
-    TEST_STR="$(date) Parsec public key encryption test"
+    TEST_STR="$(date) Parsec public key encryption"
     ALG="$1"
 
     create_key "RSA" "$KEY" "$ALG"
@@ -236,16 +242,19 @@ test_csr() {
 
 test_rsa_key_bits() {
     KEY="anta-key-rsa-bits"
-    DEFAULT_SIZE=2048
 
-    if [ -n "$1" ]; then
+    if [ "$RSA_KEY_SIZE" ]; then
+       key_size="$RSA_KEY_SIZE"
+       key_param="--bits $RSA_KEY_SIZE"
+    elif [ -n "$1" ]; then
        key_size=$1
        key_param="--bits $1"
     else
-       key_size=${DEFAULT_SIZE}
+       key_size=2048
        key_param=""
     fi
 
+    echo "Creating ${key_size}-bit RSA key."
     run_cmd $PARSEC_TOOL_CMD create-rsa-key --key-name $KEY $key_param
     run_cmd $PARSEC_TOOL_CMD export-public-key --key-name $KEY >${MY_TMP}/checksize-${KEY}.pem
     if ! run_cmd $OPENSSL rsa -pubin -text -noout -in ${MY_TMP}/checksize-${KEY}.pem | grep -q "Public-Key: (${key_size} bit)"; then
@@ -261,6 +270,7 @@ PROVIDER=
 # Test both RSA PKCS#1 v1.5 (default) and RSA OAEP encryption algorithms
 NO_OAEP=
 NO_PKCS1_V15=
+RSA_KEY_SIZE=
 while [ "$#" -gt 0 ]; do
     case "$1" in
         -[0-9]* )
@@ -277,6 +287,9 @@ while [ "$#" -gt 0 ]; do
         --no-v1.5 )
             NO_PKCS1_V15="true"
         ;;
+        --rsa-key-size )
+            shift; RSA_KEY_SIZE=$1
+        ;;
         *)
             cat <<EOF
 Usage: $0 [parameter]
@@ -286,6 +299,7 @@ Usage: $0 [parameter]
     -N:   Test only the provider with N ID
     --no-oaep: Do not test RSA-OAEP(SHA256) encryption/decryption operations
     --no-v1.5: Do not test RSA-PKCS#1-v1.5 encryption/decryption operations
+    --rsa-key-size: Perform all RSA operations with the specified key length
 
   Environment variables used if defined:
     PARSEC_SERVICE_ENDPOINT - Parsec service API endpoint
