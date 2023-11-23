@@ -42,3 +42,20 @@ jobs:
         run: cargo install cargo-audit
       - name: Execute cargo audit
         run: cargo audit
+
+  mismatcher:
+    name: Check for mismatched dependencies (those that have more than one version)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: "${{ github.event.inputs.rev }}"
+      - name: Install Rust MSRV
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          rustflags: ""
+      - name: Execute CI script
+        uses: ./.github/actions/ci_script
+        with:
+          ci-flags: "mismatcher"
