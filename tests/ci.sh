@@ -35,11 +35,6 @@ done
 #########################
 if [ "$MISMATCHER" = "True" ]; then
     python3 $(pwd)/utils/dependency_cross_matcher.py --deps_dir $(pwd)
-    mismatcher_result=$?
-    if [ "$mismatcher_result" -ne 0 ]; then
-        error_msg "Found dependencies version mismatches"
-    fi
-
     exit 0
 fi
 

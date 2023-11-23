@@ -54,6 +54,9 @@ def main(argv=[], prog_name=''):
 
     mismatches = get_deps_with_more_than_1v(mismatches)
 
+    print('---------------------exceptions-----------------------\n\n')
+    print_deps(exceptions)
+
     print('---------------------mistmatches----------------------\n\n')
     print_deps(mismatches)
 
@@ -65,8 +68,7 @@ def main(argv=[], prog_name=''):
         'yasna': ['v0.4.0', 'v0.5.2'],
     }
 
-    if exceptions != mismatches:
-        return 1
+    assert exceptions == mismatches, "Found dependencies version mismatches in parsec-tool"
 
     return 0
 
