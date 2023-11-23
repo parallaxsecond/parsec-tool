@@ -34,7 +34,9 @@ done
 # Dependency mismatcher #
 #########################
 if [ "$MISMATCHER" = "True" ]; then
+
     python3 $(pwd)/utils/dependency_cross_matcher.py --deps_dir $(pwd)
+
     exit 0
 fi
 
