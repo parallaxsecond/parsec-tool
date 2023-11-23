@@ -1,5 +1,10 @@
 name: "CI script Tests"
 description: "Install and run Parsec with the Mbed Crypto provider"
+inputs:
+    ci-flags:
+      required: true
+      default: ""
+      description: "Flags with which to run the ci.sh tests"
 
 runs:
   using: "composite"
@@ -12,5 +17,5 @@ runs:
         ./target/debug/parsec -c ../tests/test_config.toml &
       shell: bash
     - name: Execute CI script
-      run: ./tests/ci.sh
+      run: ./tests/ci.sh ${{ inputs.ci-flags }}
       shell: bash
