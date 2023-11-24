@@ -18,10 +18,14 @@ export RUST_LOG=error
 # Get Parameters #
 ##################
 MISMATCHER=
+TEST_NEXT_BRANCH_TRACKING=
 while [ "$#" -gt 0 ]; do
     case "$1" in
         mismatcher )
             MISMATCHER="True"
+        ;;
+        --test-next-branch-tracking )
+            TEST_NEXT_BRANCH_TRACKING="True"
         ;;
         *)
             error_msg "Unknown argument: $1"
@@ -42,6 +46,13 @@ if [ "$MISMATCHER" = "True" ]; then
     exit 0
 fi
 
+#########################
+# Next branch tracking  #
+#########################
+if [ "$TEST_NEXT_BRANCH_TRACKING" ]; then
+    echo "Track next branches for parallaxsecond repositories"
+    python3 $(pwd)/parsec/utils/release_tracking.py $(pwd)/Cargo.toml
+fi
 #########
 # Build #
 #########
