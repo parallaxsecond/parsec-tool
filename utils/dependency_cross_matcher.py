@@ -93,8 +93,7 @@ def main(argv=[], prog_name=''):
             'yasna': ['v0.4.0', 'v0.5.2'],
         }
         mismatches = run_deps_mismatcher(run_cargo_tree(args.deps_dir[0], parsec_tool_flags))
-
-    mismatches = get_deps_with_more_than_1v(mismatches)
+        mismatches = get_deps_with_more_than_1v(mismatches)
 
     print('---------------------exceptions-----------------------\n\n')
     print_deps(exceptions)
