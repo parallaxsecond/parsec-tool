@@ -66,11 +66,12 @@ def main(argv=[], prog_name=''):
     if args.compare:
         # Versions should be sorted!
         exceptions = {
-            'bindgen': ['v0.57.0', 'v0.66.1'],
+            'bindgen': ['v0.66.1'],
+            'cexpr': ['v0.6.0'],
         }
         parsec_repo, parsec_tool_repo = args.deps_dir
         parsec_flags = '--all-features' + ' '
-        parsec_flags = '--features tss-esapi/generate-bindings,cryptoki/generate-bindings -d'
+        parsec_flags += '--features tss-esapi/generate-bindings,cryptoki/generate-bindings -d'
         mismatches_parsec = run_deps_mismatcher(run_cargo_tree(parsec_repo, parsec_flags))
         mismatches_parsec_tool = run_deps_mismatcher(run_cargo_tree(parsec_tool_repo,
                                                                     parsec_tool_flags)
