@@ -64,8 +64,9 @@ def main(argv=[], prog_name=''):
     parsec_tool_flags = '--all-features -d'
 
     if args.compare:
+        # Versions should be sorted!
         exceptions = {
-            'bindgen': ['v0.66.1', 'v0.57.0'],
+            'bindgen': ['v0.57.0', 'v0.66.1'],
         }
         parsec_repo, parsec_tool_repo = args.deps_dir
         parsec_flags = '--all-features' + ' '
@@ -79,10 +80,11 @@ def main(argv=[], prog_name=''):
         common_deps = list(set(mismatches_parsec.keys()) & set(mismatches_parsec_tool.keys()))
         for dep in common_deps:
             # Symmetric difference of repos parsec_repo and parsec_tool_repo
-            mistmatch = list(set(mismatches_parsec[dep]) ^ set(mismatches_parsec_tool[dep]))
+            mistmatch = sorted(set(mismatches_parsec[dep]) ^ set(mismatches_parsec_tool[dep]))
             if len(mistmatch) > 0:
                 mismatches[dep] = mistmatch
     else:
+        # Versions should be sorted!
         exceptions = {
             'base64': ['v0.13.1', 'v0.21.4'],
             'bitflags': ['v1.3.2', 'v2.4.1'],
