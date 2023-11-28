@@ -35,9 +35,9 @@ done
 #########################
 if [ "$MISMATCHER" = "True" ]; then
 
-    python3 $(pwd)/utils/dependency_cross_matcher.py --deps_dir $(pwd)
+    python3 $(pwd)/parsec/utils/dependency_cross_matcher.py --deps_dir $(pwd)
 
-    python3 $(pwd)/utils/dependency_cross_matcher.py -c --deps_dir $(pwd)/parsec $(pwd)
+    python3 $(pwd)/parsec/utils/dependency_cross_matcher.py -c --deps_dir $(pwd)/parsec $(pwd)
 
     exit 0
 fi
