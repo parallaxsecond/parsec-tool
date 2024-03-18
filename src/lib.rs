@@ -5,29 +5,29 @@
 //! with the Parsec service.
 
 #![deny(
-    nonstandard_style,
     dead_code,
     improper_ctypes,
-    non_shorthand_field_patterns,
+    missing_debug_implementations,
+    missing_docs,
     no_mangle_generic_items,
+    non_shorthand_field_patterns,
+    nonstandard_style,
     overflowing_literals,
     path_statements,
     patterns_in_fns_without_body,
     private_in_public,
+    trivial_casts,
+    trivial_numeric_casts,
     unconditional_recursion,
     unused,
     unused_allocation,
     unused_comparisons,
-    unused_parens,
-    while_true,
-    missing_debug_implementations,
-    missing_docs,
-    trivial_casts,
-    trivial_numeric_casts,
     unused_extern_crates,
     unused_import_braces,
+    unused_parens,
     unused_qualifications,
-    unused_results
+    unused_results,
+    while_true
 )]
 // This one is hard to avoid.
 #![allow(clippy::multiple_crate_versions)]
