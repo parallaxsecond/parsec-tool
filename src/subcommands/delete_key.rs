@@ -4,14 +4,14 @@
 //! Delete a key.
 
 use crate::error::Result;
+use clap::StructOpt;
 use log::info;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Delete a key.
 #[derive(Debug, StructOpt)]
 pub struct DeleteKey {
-    #[structopt(short = "k", long = "key-name")]
+    #[structopt(short = 'k', long = "key-name")]
     key_name: String,
 }
 

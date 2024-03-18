@@ -16,15 +16,15 @@
 //! The output is base64-encoded ciphertext.
 
 use crate::error::{Result, ToolErrorKind};
+use clap::StructOpt;
 use log::{error, info};
 use parsec_client::core::interface::operations::psa_algorithm::Algorithm;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Encrypts data.
 #[derive(Debug, StructOpt)]
 pub struct Encrypt {
-    #[structopt(short = "k", long = "key-name")]
+    #[structopt(short = 'k', long = "key-name")]
     key_name: String,
 
     /// Plaintext input string.

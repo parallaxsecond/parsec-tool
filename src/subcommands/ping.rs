@@ -4,9 +4,9 @@
 //! Pings the Parsec service.
 
 use crate::error::Result;
+use clap::StructOpt;
 use log::info;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Pings the Parsec service.
 #[derive(Debug, StructOpt)]

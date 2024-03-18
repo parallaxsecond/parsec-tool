@@ -5,14 +5,14 @@
 
 use crate::error::Result;
 
+use clap::StructOpt;
 use log::info;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Delete all data a client has in the service (admin operation).
 #[derive(Debug, StructOpt)]
 pub struct DeleteClient {
-    #[structopt(short = "c", long = "client")]
+    #[structopt(short = 'c', long = "client")]
     client: String,
 }
 

@@ -5,6 +5,7 @@
 
 use crate::error::{Error, Result, ToolErrorKind};
 use crate::util::sign_message_with_policy;
+use clap::StructOpt;
 use log::error;
 use parsec_client::core::interface::operations::psa_algorithm::{
     Algorithm, AsymmetricSignature, Hash, SignHash,
@@ -16,7 +17,6 @@ use rcgen::{
     SignatureAlgorithm, PKCS_ECDSA_P256_SHA256, PKCS_ECDSA_P384_SHA384, PKCS_RSA_SHA256,
     PKCS_RSA_SHA384, PKCS_RSA_SHA512,
 };
-use structopt::StructOpt;
 
 /// Creates an X509 Certificate Signing Request (CSR) from a keypair, using the signing algorithm
 /// that is associated with the key.
@@ -28,7 +28,7 @@ pub struct CreateCsr {
     /// to the user, and it must be a signing key (either an RSA key or an elliptic curve key).
     ///
     /// Elliptic curve keys must use the NIST P256 or P384 curves.
-    #[structopt(short = "k", long = "key-name")]
+    #[structopt(short = 'k', long = "key-name")]
     key_name: String,
 
     /// The common name to be used within the Distinguished Name (DN) specification of

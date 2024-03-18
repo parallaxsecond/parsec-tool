@@ -28,8 +28,8 @@ use crate::subcommands::{
     list_authenticators::ListAuthenticators, list_clients::ListClients, list_keys::ListKeys,
     list_opcodes::ListOpcodes, list_providers::ListProviders, ping::Ping, sign::Sign,
 };
+use clap::StructOpt;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Command-line interface to Parsec operations.
 #[derive(Debug, StructOpt)]
