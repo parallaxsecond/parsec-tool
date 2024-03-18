@@ -6,6 +6,7 @@
 //! The key will be 2048 bits long. Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
 
 use crate::error::Result;
+use clap::StructOpt;
 use log::info;
 use parsec_client::core::interface::operations::psa_algorithm::{
     AsymmetricEncryption, AsymmetricSignature, Hash, SignHash,
@@ -14,26 +15,25 @@ use parsec_client::core::interface::operations::psa_key_attributes::{
     Attributes, Lifetime, Policy, Type, UsageFlags,
 };
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Create a RSA key pair.
 #[derive(Debug, StructOpt)]
 pub struct CreateRsaKey {
-    #[structopt(short = "k", long = "key-name")]
+    #[structopt(short = 'k', long = "key-name")]
     key_name: String,
 
     /// This command creates RSA encryption keys by default. Supply this flag to create a signing key instead.
     /// Signing keys, by default, will specify the SHA-256 hash algorithm and use PKCS#1 v1.5.
-    #[structopt(short = "s", long = "for-signing")]
+    #[structopt(short = 's', long = "for-signing")]
     is_for_signing: bool,
 
     /// Specifies the size (strength) of the key in bits. The default size for RSA keys is 2048 bits.
-    #[structopt(short = "b", long = "bits")]
+    #[structopt(short = 'b', long = "bits")]
     bits: Option<usize>,
 
     /// Specifies if the RSA key should be created with permitted RSA OAEP (SHA256) encryption algorithm
     /// instead of the default RSA PKCS#1 v1.5 one.
-    #[structopt(short = "o", long = "oaep")]
+    #[structopt(short = 'o', long = "oaep")]
     oaep: bool,
 }
 

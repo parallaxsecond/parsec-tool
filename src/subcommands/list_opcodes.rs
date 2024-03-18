@@ -2,18 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Lists the supported opcodes for a given provider.
-
 use crate::error::Result;
+use clap::StructOpt;
 use log::info;
 use parsec_client::BasicClient;
 use std::convert::TryInto;
-use structopt::StructOpt;
 
 /// Lists the supported opcodes for a given provider.
 #[derive(Debug, StructOpt)]
 pub struct ListOpcodes {
     /// ID of the provider.
-    #[structopt(short = "p", long = "provider")]
+    #[structopt(short = 'p', long = "provider")]
     pub provider: Option<u8>,
 }
 

@@ -6,15 +6,15 @@
 //! Will use the algorithm set to the key's policy during creation.
 
 use crate::error::{Result, ToolErrorKind};
+use clap::StructOpt;
 use log::{error, info};
 use parsec_client::core::interface::operations::psa_algorithm::Algorithm;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Decrypts data.
 #[derive(Debug, StructOpt)]
 pub struct Decrypt {
-    #[structopt(short = "k", long = "key-name")]
+    #[structopt(short = 'k', long = "key-name")]
     key_name: String,
 
     /// Ciphertext base64 encoded

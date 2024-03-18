@@ -7,13 +7,13 @@
 
 use crate::error::Result;
 use crate::util::sign_message_with_policy;
+use clap::StructOpt;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Signs data.
 #[derive(Debug, StructOpt)]
 pub struct Sign {
-    #[structopt(short = "k", long = "key-name")]
+    #[structopt(short = 'k', long = "key-name")]
     key_name: String,
 
     /// String of UTF-8 text

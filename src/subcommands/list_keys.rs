@@ -4,9 +4,9 @@
 //! Lists all keys belonging to the application.
 
 use crate::error::Result;
+use clap::StructOpt;
 use log::info;
 use parsec_client::BasicClient;
-use structopt::StructOpt;
 
 /// Lists all keys belonging to the application.
 #[derive(Debug, StructOpt)]

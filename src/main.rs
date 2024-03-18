@@ -3,11 +3,11 @@
 
 //! parsec-tool: a tool for interfacing with the Parsec service from the command-line.
 
+use clap::StructOpt;
 use log::error;
 use parsec_tool::cli;
 use parsec_tool::common::PROJECT_NAME;
 use std::convert::TryInto;
-use structopt::StructOpt;
 
 fn main() {
     let mut env_log_builder = env_logger::Builder::new();
