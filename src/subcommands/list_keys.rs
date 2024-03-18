@@ -4,12 +4,12 @@
 //! Lists all keys belonging to the application.
 
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::BasicClient;
 
 /// Lists all keys belonging to the application.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct ListKeys {}
 
 impl ListKeys {

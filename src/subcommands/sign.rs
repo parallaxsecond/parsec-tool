@@ -7,11 +7,11 @@
 
 use crate::error::Result;
 use crate::util::sign_message_with_policy;
-use clap::StructOpt;
+use clap::Parser;
 use parsec_client::BasicClient;
 
 /// Signs data.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct Sign {
     #[structopt(short = 'k', long = "key-name")]
     key_name: String,

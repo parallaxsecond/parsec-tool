@@ -4,12 +4,12 @@
 //! Generates a sequence of random bytes.
 
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::BasicClient;
 
 /// Generates a sequence of random bytes.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct GenerateRandom {
     #[structopt(short = 'n', long = "nbytes")]
     nbytes: usize,

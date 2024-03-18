@@ -5,10 +5,10 @@
 
 use crate::common::{PROJECT_AUTHOR, PROJECT_DESC, PROJECT_NAME, PROJECT_VERSION};
 use crate::subcommands::Subcommand;
-use clap::StructOpt;
+use clap::Parser;
 
 /// Struct representing the command-line interface of parsec-tool.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 #[structopt(name=PROJECT_NAME, about=PROJECT_DESC, author=PROJECT_AUTHOR, version=PROJECT_VERSION)]
 pub struct ParsecToolApp {
     /// The ID of the provider to target for the command. Will use the default provider if not specified.

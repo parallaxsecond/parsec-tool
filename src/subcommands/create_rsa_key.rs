@@ -6,7 +6,7 @@
 //! The key will be 2048 bits long. Used by default for asymmetric encryption with RSA PKCS#1 v1.5.
 
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::core::interface::operations::psa_algorithm::{
     AsymmetricEncryption, AsymmetricSignature, Hash, SignHash,
@@ -17,7 +17,7 @@ use parsec_client::core::interface::operations::psa_key_attributes::{
 use parsec_client::BasicClient;
 
 /// Create a RSA key pair.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct CreateRsaKey {
     #[structopt(short = 'k', long = "key-name")]
     key_name: String,
