@@ -4,12 +4,12 @@
 //! Lists the available providers supported by the Parsec service.
 
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::BasicClient;
 
 /// Lists the available providers supported by the Parsec service.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct ListProviders {}
 
 impl ListProviders {

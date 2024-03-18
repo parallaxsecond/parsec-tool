@@ -3,13 +3,13 @@
 
 //! Lists the supported opcodes for a given provider.
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::BasicClient;
 use std::convert::TryInto;
 
 /// Lists the supported opcodes for a given provider.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct ListOpcodes {
     /// ID of the provider.
     #[structopt(short = 'p', long = "provider")]

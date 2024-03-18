@@ -5,7 +5,7 @@
 
 use crate::error::{Error, Result, ToolErrorKind};
 use crate::util::sign_message_with_policy;
-use clap::StructOpt;
+use clap::Parser;
 use log::error;
 use parsec_client::core::interface::operations::psa_algorithm::{
     Algorithm, AsymmetricSignature, Hash, SignHash,
@@ -22,7 +22,7 @@ use rcgen::{
 /// that is associated with the key.
 ///
 /// The CSR is written to the standard output in PEM format by default.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct CreateCsr {
     /// The name of the key to use for signing. This must be an existing key that is accessible
     /// to the user, and it must be a signing key (either an RSA key or an elliptic curve key).

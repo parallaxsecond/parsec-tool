@@ -14,7 +14,8 @@ rust-version = "1.66.0"
 
 [dependencies]
 parsec-client = "0.16.0"
-clap = { version = "3.2.22", features = ["derive", "std"] }
+# TODO: Fixed until the MSRV is bumped!
+clap = { version = "=4.3.24", features = ["derive", "std"] }
 thiserror = "1.0.20"
 env_logger = "0.10.0"
 oid = { version = "0.2", features = ["serde_support"] }

@@ -4,7 +4,7 @@
 //! Exports a public key.
 
 use crate::error::{Result, ToolErrorKind};
-use clap::StructOpt;
+use clap::Parser;
 use log::error;
 use oid::prelude::*;
 use parsec_client::core::interface::operations::psa_key_attributes::{EccFamily, Type};
@@ -15,7 +15,7 @@ use picky_asn1_x509::{
 };
 
 /// Exports a PEM-encoded public key.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct ExportPublicKey {
     #[structopt(short = 'k', long = "key-name")]
     key_name: String,

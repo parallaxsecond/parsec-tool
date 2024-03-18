@@ -4,12 +4,12 @@
 //! Lists all clients currently having data in the service (admin operation).
 
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::BasicClient;
 
 /// Lists all clients currently having data in the service (admin operation).
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct ListClients {}
 
 impl ListClients {

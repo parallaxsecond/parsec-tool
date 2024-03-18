@@ -3,7 +3,7 @@
 
 //! parsec-tool: a tool for interfacing with the Parsec service from the command-line.
 
-use clap::StructOpt;
+use clap::Parser;
 use log::error;
 use parsec_tool::cli;
 use parsec_tool::common::PROJECT_NAME;
@@ -20,7 +20,7 @@ fn main() {
     env_log_builder.parse_default_env();
     env_log_builder.init();
 
-    let matches = cli::ParsecToolApp::from_args();
+    let matches = cli::ParsecToolApp::parse();
 
     let mut client = match matches
         .subcommand

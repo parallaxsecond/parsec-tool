@@ -4,12 +4,12 @@
 //! List the authenticators supported by the Parsec service.
 
 use crate::error::Result;
-use clap::StructOpt;
+use clap::Parser;
 use log::info;
 use parsec_client::BasicClient;
 
 /// List the authenticators supported by the Parsec service.
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct ListAuthenticators {}
 
 impl ListAuthenticators {
