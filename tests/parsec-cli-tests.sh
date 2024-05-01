@@ -45,11 +45,13 @@ delete_key() {
 create_key() {
 # $1 - key type ("RSA" or "ECC")
 # $2 - key name
-# $3 - key usage ("SIGN" or "OAEP"), only consulted if $1 == "RSA"
+# $3 - key usage ("SIGN_PKCS1_V15", "SIGN_PSS" or "OAEP"), only consulted if $1 == "RSA"
     KEY="$2"
 
-    if [ "$3" = "SIGN" -a "$1" = "RSA" ]; then
+    if [ "$3" = "SIGN_PKCS1_V15" -a "$1" = "RSA" ]; then
         EXTRA_CREATE_KEY_ARGS="--for-signing"
+    elif [ "$3" = "SIGN_PSS" -a "$1" = "RSA" ]; then
+        EXTRA_CREATE_KEY_ARGS="--for-signing-pss"
     elif [ "$3" = "OAEP" -a "$1" = "RSA" ]; then
         EXTRA_CREATE_KEY_ARGS="--oaep"
     else
@@ -96,9 +98,10 @@ test_crypto_provider() {
         test_encryption "OAEP"
         test_decryption "OAEP"
     fi
-    test_signing "RSA"
+
     test_signing "ECC"
-    test_csr "RSA"
+    test_csr "RSA" "SIGN_PKCS1_V15"
+    test_csr "RSA" "SIGN_PSS"
     test_csr "ECC"
     test_rsa_key_bits
     test_rsa_key_bits 1024
@@ -180,10 +183,16 @@ test_decryption() {
 
 test_signing() {
 # $1 - key type ("RSA" or "ECC")
+# $2 - RSA scheme ("SIGN_PKCS1_V15" or "SIGN_PSS")
     KEY="anta-key-sign"
     TEST_STR="$(date) Parsec signature test"
 
-    create_key $1 $KEY "SIGN"
+    create_key $1 $KEY $2
+
+    EXTRA_VERIFY_ARGS=
+    if [ "$2" = "SIGN_PSS" -a "$1" = "RSA" ]; then
+        EXTRA_VERIFY_ARGS="-sigopt rsa_padding_mode:pss"
+    fi
 
     # If the key was successfully created and exported
     if [ -s ${MY_TMP}/${KEY}.pem ]; then
@@ -200,7 +209,7 @@ test_signing() {
         run_cmd $OPENSSL base64 -d -a -A -in ${MY_TMP}/${KEY}.sign -out ${MY_TMP}/${KEY}.bin
 
         printf "$TEST_STR" >${MY_TMP}/${KEY}.test_str
-        run_cmd $OPENSSL dgst -sha256 -verify ${MY_TMP}/${KEY}.pem \
+        run_cmd $OPENSSL dgst -sha256 -verify ${MY_TMP}/${KEY}.pem ${EXTRA_VERIFY_ARGS} \
                               -signature ${MY_TMP}/${KEY}.bin ${MY_TMP}/${KEY}.test_str
     fi
 
@@ -209,13 +218,14 @@ test_signing() {
 
 test_csr() {
 # $1 - key type ("RSA" or "ECC")
+# $2 - RSA scheme ("SIGN_PKCS1_V15" or "SIGN_PSS")
     KEY="anta-key-csr"
     TEST_CN="parallaxsecond.com"
     TEST_SAN="localhost"
     TEST_SERIAL="EZ4U2CIXL"
 
     # CSR creation needs a signing key.
-    create_key $1 $KEY "SIGN"
+    create_key $1 $KEY $2
 
     # If the key was successfully created and exported
     if [ -s ${MY_TMP}/${KEY}.pem ]; then
@@ -286,6 +296,9 @@ while [ "$#" -gt 0 ]; do
         ;;
         --no-v1.5 )
             NO_PKCS1_V15="true"
+        ;;
+        --no-pss )
+            NO_PSS="true"
         ;;
         --rsa-key-size )
             shift; RSA_KEY_SIZE=$1
