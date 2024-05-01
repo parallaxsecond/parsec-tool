@@ -182,10 +182,17 @@ impl CreateCsr {
                     error!("Signing key specifies raw signing only, which is not supported for certificate requests.");
                     Err(ToolErrorKind::NotSupported.into())
                 }
-                AsymmetricSignature::RsaPss { .. } => {
-                    error!("Signing key specifies RSA PSS scheme, which is not supported for certificate requests.");
-                    Err(ToolErrorKind::NotSupported.into())
-                }
+                AsymmetricSignature::RsaPss { hash_alg } => match hash_alg {
+                    SignHash::Specific(Hash::Sha256) => Ok(&PKCS_RSA_SHA256),
+                    SignHash::Specific(Hash::Sha384) => Ok(&PKCS_RSA_SHA384),
+                    SignHash::Specific(Hash::Sha512) => Ok(&PKCS_RSA_SHA512),
+                    SignHash::Any => Ok(&PKCS_RSA_SHA256), // Default hash algorithm for the tool.
+                    _ => {
+                        // The algorithm is specific, but not one that RCGEN can use, so fail the operation.
+                        error!("Signing key requires use of hashing algorithm ({:?}), which is not supported for certificate requests.", alg);
+                        Err(ToolErrorKind::NotSupported.into())
+                    }
+                },
                 AsymmetricSignature::Ecdsa { hash_alg } => {
                     if !matches!(
                         attributes.key_type,

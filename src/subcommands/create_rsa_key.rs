@@ -24,8 +24,13 @@ pub struct CreateRsaKey {
 
     /// This command creates RSA encryption keys by default. Supply this flag to create a signing key instead.
     /// Signing keys, by default, will specify the SHA-256 hash algorithm and use PKCS#1 v1.5.
+    /// This has priority over ("r", "for-signing-pss") option.
     #[structopt(short = 's', long = "for-signing")]
     is_for_signing: bool,
+
+    /// Supply this flag to create a signing key with PSS scheme and SHA-256 hash algorithm.
+    #[structopt(short = 'r', long = "for-signing-pss")]
+    is_for_signing_pss: bool,
 
     /// Specifies the size (strength) of the key in bits. The default size for RSA keys is 2048 bits.
     #[structopt(short = 'b', long = "bits")]
@@ -41,7 +46,8 @@ impl CreateRsaKey {
     /// Exports a key.
     pub fn run(&self, basic_client: BasicClient) -> Result<()> {
         let policy = if self.is_for_signing {
-            info!("Creating RSA signing key...");
+            // If both "-s" and "-r" flags are set, then "-s" takes precedence
+            info!("Creating RSA signing key with PKCS1 v1.5 scheme...");
             Policy {
                 usage_flags: {
                     let mut usage_flags = UsageFlags::default();
@@ -53,6 +59,23 @@ impl CreateRsaKey {
                     usage_flags
                 },
                 permitted_algorithms: AsymmetricSignature::RsaPkcs1v15Sign {
+                    hash_alg: SignHash::Specific(Hash::Sha256),
+                }
+                .into(),
+            }
+        } else if self.is_for_signing_pss {
+            info!("Creating RSA signing key with PSS scheme...");
+            Policy {
+                usage_flags: {
+                    let mut usage_flags = UsageFlags::default();
+                    let _ = usage_flags
+                        .set_sign_hash()
+                        .set_verify_hash()
+                        .set_sign_message()
+                        .set_verify_message();
+                    usage_flags
+                },
+                permitted_algorithms: AsymmetricSignature::RsaPss {
                     hash_alg: SignHash::Specific(Hash::Sha256),
                 }
                 .into(),
