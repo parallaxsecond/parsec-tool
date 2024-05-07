@@ -29,6 +29,12 @@ sha2 = "0.9.9"
 log = "0.4.14"
 rcgen = { version = "0.9.2", features = ["pem"] }
 
+[package.metadata.patch]
+crates=["rcgen"]
+
+[patch.crates-io]
+rcgen = { path = './target/patch/rcgen-0.9.3' }
+
 [lib]
 name = "parsec_tool"
 path = "src/lib.rs"

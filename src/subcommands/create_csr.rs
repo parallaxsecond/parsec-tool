@@ -14,8 +14,8 @@ use parsec_client::core::interface::operations::psa_key_attributes::{EccFamily, 
 use parsec_client::BasicClient;
 use rcgen::{
     Certificate, CertificateParams, DistinguishedName, DnType, KeyPair, RcgenError, RemoteKeyPair,
-    SignatureAlgorithm, PKCS_ECDSA_P256_SHA256, PKCS_ECDSA_P384_SHA384, PKCS_RSA_SHA256,
-    PKCS_RSA_SHA384, PKCS_RSA_SHA512,
+    SignatureAlgorithm, PKCS_ECDSA_P256_SHA256, PKCS_ECDSA_P384_SHA384, PKCS_RSA_PSS_SHA256,
+    PKCS_RSA_PSS_SHA384, PKCS_RSA_SHA256, PKCS_RSA_SHA384, PKCS_RSA_SHA512,
 };
 
 /// Creates an X509 Certificate Signing Request (CSR) from a keypair, using the signing algorithm
@@ -183,10 +183,9 @@ impl CreateCsr {
                     Err(ToolErrorKind::NotSupported.into())
                 }
                 AsymmetricSignature::RsaPss { hash_alg } => match hash_alg {
-                    SignHash::Specific(Hash::Sha256) => Ok(&PKCS_RSA_SHA256),
-                    SignHash::Specific(Hash::Sha384) => Ok(&PKCS_RSA_SHA384),
-                    SignHash::Specific(Hash::Sha512) => Ok(&PKCS_RSA_SHA512),
-                    SignHash::Any => Ok(&PKCS_RSA_SHA256), // Default hash algorithm for the tool.
+                    SignHash::Specific(Hash::Sha256) => Ok(&PKCS_RSA_PSS_SHA256),
+                    SignHash::Specific(Hash::Sha384) => Ok(&PKCS_RSA_PSS_SHA384),
+                    SignHash::Any => Ok(&PKCS_RSA_PSS_SHA256), // Default hash algorithm for the tool.
                     _ => {
                         // The algorithm is specific, but not one that RCGEN can use, so fail the operation.
                         error!("Signing key requires use of hashing algorithm ({:?}), which is not supported for certificate requests.", alg);
