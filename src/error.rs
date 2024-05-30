@@ -30,7 +30,7 @@ pub enum Error {
 
     /// Error emanating from the rcgen create (can occur when creating certificates or CSRs)
     #[error(transparent)]
-    RcgenError(#[from] rcgen::RcgenError),
+    RcgenError(#[from] rcgen::Error),
 }
 
 /// Errors originating in the parsec-tool.

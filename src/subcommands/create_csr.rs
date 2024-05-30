@@ -12,10 +12,11 @@ use parsec_client::core::interface::operations::psa_algorithm::{
 };
 use parsec_client::core::interface::operations::psa_key_attributes::{EccFamily, Type};
 use parsec_client::BasicClient;
+use rcgen::Error as RcgenError;
 use rcgen::{
-    Certificate, CertificateParams, DistinguishedName, DnType, KeyPair, RcgenError, RemoteKeyPair,
-    SignatureAlgorithm, PKCS_ECDSA_P256_SHA256, PKCS_ECDSA_P384_SHA384, PKCS_RSA_PSS_SHA256,
-    PKCS_RSA_PSS_SHA384, PKCS_RSA_SHA256, PKCS_RSA_SHA384, PKCS_RSA_SHA512,
+    CertificateParams, DistinguishedName, DnType, KeyPair, RemoteKeyPair, SignatureAlgorithm,
+    PKCS_ECDSA_P256_SHA256, PKCS_ECDSA_P384_SHA384, PKCS_RSA_PSS_SHA256, PKCS_RSA_PSS_SHA384,
+    PKCS_RSA_SHA256, PKCS_RSA_SHA384, PKCS_RSA_SHA512,
 };
 
 /// Creates an X509 Certificate Signing Request (CSR) from a keypair, using the signing algorithm
@@ -139,15 +140,13 @@ impl CreateCsr {
             );
         }
 
-        let mut params = CertificateParams::new(subject_alt_names);
-        params.alg = rcgen_algorithm;
-        params.key_pair = Some(remote_key_pair);
+        let mut params = CertificateParams::new(subject_alt_names)?;
         params.distinguished_name = dn;
 
-        let cert = Certificate::from_params(params)?;
+        let cert = params.self_signed(&remote_key_pair)?;
+        let csr = cert.params().serialize_request(&remote_key_pair)?;
 
-        let pem_string = cert.serialize_request_pem()?;
-
+        let pem_string = csr.pem()?;
         println!("{}", pem_string);
 
         Ok(())
