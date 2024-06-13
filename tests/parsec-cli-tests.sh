@@ -238,10 +238,10 @@ test_csr() {
 
         echo
         echo "- Using openssl to inspect the CSR content and verify the public key."
-        run_cmd $OPENSSL req -text -noout -verify -in ${MY_TMP}/${KEY}.csr >${MY_TMP}/${KEY}.txt
+        run_cmd $OPENSSL req -text -nameopt utf8,space_eq -noout -verify -in ${MY_TMP}/${KEY}.csr >${MY_TMP}/${KEY}.txt
         debug cat ${MY_TMP}/${KEY}.txt
 
-        if ! cat ${MY_TMP}/${KEY}.txt | grep "Subject:" | grep -e "serialNumber = ${TEST_SERIAL}" -e "serialNumber=${TEST_SERIAL}"; then
+        if ! cat ${MY_TMP}/${KEY}.txt | grep "Subject:" | grep "serialNumber = ${TEST_SERIAL}"; then
             echo "Error: The CSR does not contain the serialNumber field of the Distinguished Name"
             EXIT_CODE=$(($EXIT_CODE+1))
         fi
